@@ -5,19 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5a157e05-b8f8-4c17-95b4-16c28978d8f4" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API-Gateway/src/test/java/com/example/API_Gateway/ApiGatewayApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/API-Gateway/src/test/java/com/example/API_Gateway/ApiGatewayApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CEO/src/main/java/com/example/CEO/CEOControllerForTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/CEO/src/main/java/com/example/User/CEOControllerForTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CEO/src/main/java/com/example/CEO/CeoApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/CEO/src/main/java/com/example/User/CeoApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CEO/src/main/java/com/example/CEO/TestwithEmployee.java" beforeDir="false" afterPath="$PROJECT_DIR$/CEO/src/main/java/com/example/User/TestwithEmployee.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CEO/src/test/java/com/example/CEO/CeoApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/CEO/src/test/java/com/example/User/CeoApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Employee/src/main/java/com/example/Employee/EmployeeApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/Employee/src/main/java/com/example/Attendance/EmployeeApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Employee/src/main/java/com/example/Employee/EmployeeTestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Employee/src/main/java/com/example/Attendance/EmployeeTestController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Employee/src/main/java/com/example/Employee/FeignwithFinance.java" beforeDir="false" afterPath="$PROJECT_DIR$/Employee/src/main/java/com/example/Attendance/FeignwithFinance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Employee/src/test/java/com/example/Employee/EmployeeApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/Employee/src/test/java/com/example/Attendance/EmployeeApplicationTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
