@@ -11,19 +11,19 @@ public class President {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "president_id")
+    @Column(name = "president_id", nullable = false)
     private Integer presidentId;
 
-    @Column(name = "name", nullable = false, length = 50)
+    @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(name = "address", nullable = false, length = 150)
+    @Column(nullable = false, length = 150)
     private String address;
 
     @Column(name = "business_number", nullable = false, length = 50, unique = true)
     private String businessNumber;
 
-    @Column(name = "email", nullable = false, length = 50, unique = true)
+    @Column(nullable = false, length = 50, unique = true)
     private String email;
 
     @Column(name = "birth_date", nullable = false)
@@ -32,11 +32,11 @@ public class President {
     @Column(name = "account_number", nullable = false, length = 50, unique = true)
     private String accountNumber;
 
-    @Column(name = "phone_number", nullable = false, length = 50)
+    @Column(name = "phone_number", nullable = false, length = 50, unique = true)
     private String phoneNumber;
 
     @Column(name = "temrs_accept", nullable = false)
-    private Boolean temrsAccept;
+    private Boolean temrsAccept; // tinyInt를 boolean으로 설정
 
     @OneToMany(mappedBy = "president")
     private List<Employee> employees;
