@@ -2,7 +2,6 @@ package com.example.Attendance.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.List;
 @Entity
 @Table(name = "employee_sub")
 @Getter
-@Setter
+
 public class employee_sub {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
