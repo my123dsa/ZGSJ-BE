@@ -17,6 +17,14 @@ public class Classfication {
     @Column(name = "classfication_id")
     private int id;
 
-    @Column(name = "classfication_name", nullable = false)
-    private LocalDate classficationName;
+    @Column(name = "classfication_name", nullable = false,length = 50)
+    private String classficationName;
+
+    private Classfication(String classficationName) {
+        this.classficationName = classficationName;
+    }
+
+    public static Classfication createClassfication(String classficationName) {
+        return new Classfication(classficationName);
+    }
 }

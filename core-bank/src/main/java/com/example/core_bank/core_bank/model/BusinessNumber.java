@@ -17,4 +17,12 @@ public class BusinessNumber {
 
     @Column(name = "business_number", nullable = false , length = 50)
     private String businessNumber;
+
+    private BusinessNumber(String businessNumber) {
+        this.businessNumber = businessNumber;
+    }
+
+    public static BusinessNumber createBusinessNumber(String businessNumber) {
+        return new BusinessNumber(businessNumber);
+    }
 }

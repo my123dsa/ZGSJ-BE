@@ -31,21 +31,25 @@ public class TransactionHistory {
     @Column(name = "transaction_type", nullable = false, length = 50)
     private String transactionType;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "classfication_id")
     private Classfication classfication;
 
-    @Builder
-    public TransactionHistory(LocalDate transactionDate, boolean isDeposit, String transactionType, @NonNull Account account, @NonNull Classfication classfication) {
+    public TransactionHistory(LocalDate transactionDate, boolean isDeposit, String transactionType, Account account, Classfication classfication) {
         this.transactionDate = transactionDate;
         this.isDeposit = isDeposit;
         this.transactionType = transactionType;
         this.account = account;
         this.classfication = classfication;
+    }
+
+    public static TransactionHistory createTransactionHistory(LocalDate transactionDate, boolean isDeposit, String transactionType, Account account, Classfication classfication)
+    {
+        return new TransactionHistory(transactionDate,isDeposit,transactionType,account,classfication);
     }
 
 }

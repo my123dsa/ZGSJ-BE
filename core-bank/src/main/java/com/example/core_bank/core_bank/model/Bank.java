@@ -22,10 +22,13 @@ public class Bank {
     @Column(name= "bank_name", nullable = false, length = 50)
     private String bankName ;
 
-    @Builder
-    public Bank(String bankCode, String bankName) {
+    private Bank(String bankCode, String bankName) {
         this.bankCode = bankCode;
         this.bankName = bankName;
+    }
+
+    public static Bank createBank(String bankCode, String bankName) {
+        return new Bank(bankCode, bankName);
     }
 
 }

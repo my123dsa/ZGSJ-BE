@@ -1,6 +1,7 @@
 package com.example.core_bank.core_bank.model;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +24,16 @@ public class Authentication {
 
     @Column(name = "secret_key", nullable = false, length = 150)
     private String secretKey;
+
+    private Authentication(String email, String pinNumber, String secretKey) {
+        this.email = email;
+        this.pinNumber = pinNumber;
+        this.secretKey = secretKey;
+    }
+
+    public static Authentication createAuthentication(String email, String pinNumber, String secretKey)
+    {
+        return new Authentication(email, pinNumber, secretKey);
+    }
+
 }
