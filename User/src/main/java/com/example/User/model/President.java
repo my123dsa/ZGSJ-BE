@@ -1,12 +1,17 @@
 package com.example.User.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "president")
+@Getter
+@NoArgsConstructor
 public class President {
 
     @Id
@@ -36,8 +41,21 @@ public class President {
     private String phoneNumber;
 
     @Column(name = "temrs_accept", nullable = false)
-    private Boolean temrsAccept; // tinyInt를 boolean으로 설정
+    private Boolean temrsAccept;
 
     @OneToMany(mappedBy = "president")
-    private List<Employee> employees;
+    private List<Employee> employees = new ArrayList<>();
+
+    public static President createPresident(String name, String address, String businessNumber, String email, LocalDate birthDate, String accountNumber, String phoneNumber, Boolean temrsAccept) {
+        President president = new President();
+        president.name = name;
+        president.address = address;
+        president.businessNumber = businessNumber;
+        president.email = email;
+        president.birthDate = birthDate;
+        president.accountNumber = accountNumber;
+        president.phoneNumber = phoneNumber;
+        president.temrsAccept = temrsAccept;
+        return president;
+    }
 }
