@@ -59,22 +59,26 @@ public class Employee {
     @JoinColumn(name = "president_id", nullable = false)
     private President president;
 
-    public static Employee of(String name, Boolean sex, String address, LocalDate birthDate,
+    private Employee(String name, Boolean sex, String address, LocalDate birthDate,
+                    Boolean employmentType, String phoneNumber, Integer paymentDate, Integer salary,
+                     String accountNumber, String bankCode, String email, President president) {
+        this.name = name;
+        this.sex = sex;
+        this.address = address;
+        this.birthDate = birthDate;
+        this.employmentType = employmentType;
+        this.phoneNumber = phoneNumber;
+        this.paymentDate = paymentDate;
+        this.salary = salary;
+        this.accountNumber = accountNumber;
+        this.bankCode = bankCode;
+        this.email = email;
+        this.president = president;
+    }
+
+    public static Employee createEmployee(String name, Boolean sex, String address, LocalDate birthDate,
                               Boolean employmentType, String phoneNumber, Integer paymentDate, Integer salary,
                               String accountNumber, String bankCode, String email, President president) {
-        Employee employee = new Employee();
-        employee.name = name;
-        employee.sex = sex;
-        employee.address = address;
-        employee.birthDate = birthDate;
-        employee.employmentType = employmentType;
-        employee.phoneNumber = phoneNumber;
-        employee.paymentDate = paymentDate;
-        employee.salary = salary;
-        employee.accountNumber = accountNumber;
-        employee.bankCode = bankCode;
-        employee.email = email;
-        employee.president = president;
-        return employee;
+        return new Employee(name, sex, address, birthDate, employmentType, phoneNumber, paymentDate, salary, accountNumber, bankCode, email, president);
     }
 }

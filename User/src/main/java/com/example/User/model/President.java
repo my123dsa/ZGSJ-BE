@@ -46,17 +46,23 @@ public class President {
     @OneToMany(mappedBy = "president")
     private List<Employee> employees = new ArrayList<>();
 
-    public static President of(String name, String address, String businessNumber, String email,
-                               LocalDate birthDate, String accountNumber, String phoneNumber, Boolean termsAccept) {
-        President president = new President();
-        president.name = name;
-        president.address = address;
-        president.businessNumber = businessNumber;
-        president.email = email;
-        president.birthDate = birthDate;
-        president.accountNumber = accountNumber;
-        president.phoneNumber = phoneNumber;
-        president.termsAccept = termsAccept;
-        return president;
+    private President(String name, String address, String businessNumber, String email,
+                      LocalDate birthDate, String accountNumber, String phoneNumber,
+                      Boolean termsAccept, List<Employee> employees) {
+        this.name = name;
+        this.address = address;
+        this.businessNumber = businessNumber;
+        this.email = email;
+        this.birthDate = birthDate;
+        this.accountNumber = accountNumber;
+        this.phoneNumber = phoneNumber;
+        this.termsAccept = termsAccept;
+        this.employees = employees;
+    }
+
+    public static President createPresident(String name, String address, String businessNumber, String email,
+                                            LocalDate birthDate, String accountNumber, String phoneNumber,
+                                            Boolean termsAccept, List<Employee> employees) {
+        return new President(name, address, businessNumber, email, birthDate, accountNumber, phoneNumber, termsAccept, employees);
     }
 }
