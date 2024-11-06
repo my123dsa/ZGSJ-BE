@@ -29,4 +29,14 @@ public class Salary {
 
     @OneToMany(mappedBy = "salary")
     private List<PayStatement> payStatements = new ArrayList<>();
+
+    private Salary(LocalDate transferDate, Integer amount, EmployeeSub employee) {
+        this.transferDate = transferDate;
+        this.amount = amount;
+        this.employee = employee;
+    }
+
+    public static Salary createSalary(EmployeeSub employee) {
+        return new Salary(LocalDate.now(), 0, employee);
+    }
 }

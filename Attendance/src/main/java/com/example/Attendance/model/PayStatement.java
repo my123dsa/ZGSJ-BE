@@ -24,4 +24,14 @@ public class PayStatement {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "salary_id")
     private Salary salary;
+
+    private PayStatement(String url, LocalDate issuanceDate, Salary salary) {
+        this.url = url;
+        this.issuanceDate = issuanceDate;
+        this.salary = salary;
+    }
+
+    public static PayStatement createPayStatement(String url, LocalDate issuanceDate, Salary salary) {
+        return new PayStatement(url, issuanceDate, salary);
+    }
 }
