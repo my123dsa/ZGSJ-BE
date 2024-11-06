@@ -24,7 +24,7 @@ public class EmployeeSub {
     private String name;
 
     @Column(name = "employment_type", nullable = false)
-    private boolean employmentType;
+    private Boolean employmentType;
 
     @Column(name = "phone_number", length = 30, nullable = false, unique = true)
     private String phoneNumber;
