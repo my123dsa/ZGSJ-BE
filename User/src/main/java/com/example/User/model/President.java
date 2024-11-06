@@ -16,7 +16,7 @@ public class President {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "president_id", nullable = false)
+    @Column(name = "president_id")
     private Integer presidentId;
 
     @Column(nullable = false, length = 50)
