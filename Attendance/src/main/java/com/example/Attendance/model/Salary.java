@@ -2,6 +2,7 @@ package com.example.Attendance.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "salary")
 @Getter
+@NoArgsConstructor
 public class Salary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

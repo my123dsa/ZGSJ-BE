@@ -2,13 +2,14 @@ package com.example.Attendance.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "pay_statement")
 @Getter
-
+@NoArgsConstructor
 public class PayStatement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
