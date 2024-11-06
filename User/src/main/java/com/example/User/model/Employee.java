@@ -1,6 +1,7 @@
 package com.example.User.model;
 
 import jakarta.persistence.*;
+
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;
@@ -58,7 +59,9 @@ public class Employee {
     @JoinColumn(name = "president_id", nullable = false)
     private President president;
 
-    public static Employee createEmployee(String name, Boolean sex, String address, LocalDate birthDate, Boolean employmentType, String phoneNumber, Integer paymentDate, Integer salary, String accountNumber, String bankCode, String email, President president) {
+    public static Employee of(String name, Boolean sex, String address, LocalDate birthDate,
+                              Boolean employmentType, String phoneNumber, Integer paymentDate, Integer salary,
+                              String accountNumber, String bankCode, String email, President president) {
         Employee employee = new Employee();
         employee.name = name;
         employee.sex = sex;

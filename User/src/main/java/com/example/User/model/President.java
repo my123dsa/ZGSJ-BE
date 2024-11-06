@@ -41,12 +41,13 @@ public class President {
     private String phoneNumber;
 
     @Column(name = "temrs_accept", nullable = false)
-    private Boolean temrsAccept;
+    private Boolean termsAccept;
 
     @OneToMany(mappedBy = "president")
     private List<Employee> employees = new ArrayList<>();
 
-    public static President createPresident(String name, String address, String businessNumber, String email, LocalDate birthDate, String accountNumber, String phoneNumber, Boolean temrsAccept) {
+    public static President of(String name, String address, String businessNumber, String email,
+                               LocalDate birthDate, String accountNumber, String phoneNumber, Boolean termsAccept) {
         President president = new President();
         president.name = name;
         president.address = address;
@@ -55,7 +56,7 @@ public class President {
         president.birthDate = birthDate;
         president.accountNumber = accountNumber;
         president.phoneNumber = phoneNumber;
-        president.temrsAccept = temrsAccept;
+        president.termsAccept = termsAccept;
         return president;
     }
 }
