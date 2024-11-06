@@ -36,7 +36,7 @@ class ValidationControllerTest {
     @DisplayName("사업자번호 검증 성공 테스트")
     void validateBusinessNumber_Success() throws Exception {
 
-        BusinessNumberResponse response = new BusinessNumberResponse(true, false, "등록된 사업자번호입니다.");
+        BusinessNumberResponse response = BusinessNumberResponse.of(true,false,"등록된 사업자번호입니다.");
 
         when(validationService.validateBusinessNumber(any(BusinessNumberRequest.class)))
                 .thenReturn(response);
@@ -51,7 +51,8 @@ class ValidationControllerTest {
     @DisplayName("사업자번호 검증 중 내부 오류")
     void validateBusinessNumber_error() throws Exception {
 
-        BusinessNumberResponse response = new BusinessNumberResponse(false, true, "오류발생");
+        BusinessNumberResponse response =
+                BusinessNumberResponse.of(false,true,"오류발생");
 
         when(validationService.validateBusinessNumber(any(BusinessNumberRequest.class)))
                 .thenReturn(response);

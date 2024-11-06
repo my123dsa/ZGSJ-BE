@@ -14,8 +14,8 @@ public class BusinessNumberService {
     public BusinessNumberResponse existsByBusinessNumber(String businessNumber) {
         try {
             boolean exists = businessNumberRepository.existsByBusinessNumber(businessNumber);
-            return new BusinessNumberResponse(exists, false,
-                    exists ? "등록된 사업자번호입니다." : "미등록된 사업자번호입니다.");
+            return BusinessNumberResponse.of(exists,false,exists ?
+                    "등록된 사업자번호입니다." : "미등록된 사업자번호입니다.");
         } catch (Exception e) {
             throw new BusinessNumberException();
         }

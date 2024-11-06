@@ -14,11 +14,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessNumberException.class)
     public ResponseEntity<BusinessNumberResponse> handleBusinessNumberException(BusinessNumberException e) {
-        BusinessNumberResponse errorResponse = new BusinessNumberResponse(
-                false,  // exists
-                true,   // hasError
-                "사업자 정보 확인 중 오류 발생!" // message
-        );
+        BusinessNumberResponse errorResponse =
+                BusinessNumberResponse.of(false,true,"사업자 정보 확인 중 오류 발생!" );
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
