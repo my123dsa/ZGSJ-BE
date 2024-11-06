@@ -9,11 +9,11 @@ import java.time.LocalDate;
 @Table(name = "pay_statement")
 @Getter
 
-public class pay_statement {
+public class PayStatement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ps_id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "url", length = 150, nullable = false)
     private String url;
@@ -23,5 +23,5 @@ public class pay_statement {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "salary_id")
-    private salary salary;
+    private Salary salary;
 }

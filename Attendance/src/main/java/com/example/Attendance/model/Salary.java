@@ -11,11 +11,11 @@ import java.util.List;
 @Entity
 @Table(name = "salary")
 @Getter
-public class salary {
+public class Salary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "salary_id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "transfer_date", nullable = false)
     private LocalDate transferDate;
@@ -25,8 +25,8 @@ public class salary {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
-    private employee_sub employee;
+    private EmployeeSub employee;
 
     @OneToMany(mappedBy = "salary")
-    private List<pay_statement> payStatements = new ArrayList<>();
+    private List<PayStatement> payStatements = new ArrayList<>();
 }

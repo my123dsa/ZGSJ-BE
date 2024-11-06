@@ -11,11 +11,11 @@ import java.util.List;  // List import 추가
 @Table(name = "president_sub")
 @Getter
 
-public class president_sub {
+public class PresidentSub {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "president_id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "name", length = 50, nullable = false)
     private String name;
@@ -27,5 +27,5 @@ public class president_sub {
     private String accountNumber;
 
     @OneToMany(mappedBy = "president")
-    private List<employee_sub> employees = new ArrayList<>();
+    private List<EmployeeSub> employees = new ArrayList<>();
 }

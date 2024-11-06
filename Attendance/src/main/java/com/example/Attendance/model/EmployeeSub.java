@@ -1,7 +1,9 @@
 package com.example.Attendance.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,18 +11,20 @@ import java.util.List;
 @Entity
 @Table(name = "employee_sub")
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 
-public class employee_sub {
+public class EmployeeSub {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employee_id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "name", length = 30, nullable = false)
     private String name;
 
     @Column(name = "employment_type", nullable = false)
-    private Boolean employmentType;
+    private boolean employmentType;
 
     @Column(name = "phone_number", length = 30, nullable = false, unique = true)
     private String phoneNumber;
@@ -42,11 +46,12 @@ public class employee_sub {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "president_id")
-    private president_sub president;
+    private PresidentSub president;
 
     @OneToMany(mappedBy = "employee")
     private List<Working> workings = new ArrayList<>();
 
     @OneToMany(mappedBy = "employee")
-    private List<salary> salaries = new ArrayList<>();
+    private List<Salary> salaries = new ArrayList<>();
+
 }

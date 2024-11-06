@@ -15,7 +15,7 @@ public class Working {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "working_id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "work_day", nullable = false)
     private LocalDate workDay;
@@ -31,5 +31,5 @@ public class Working {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
-    private employee_sub employee;
+    private EmployeeSub employee;
 }
