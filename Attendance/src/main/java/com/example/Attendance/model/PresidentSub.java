@@ -26,6 +26,6 @@ public class PresidentSub {
     @Column(name = "account_number", length = 50, nullable = false, unique = true)
     private String accountNumber;
 
-    @OneToMany(mappedBy = "president")
+    @OneToMany(mappedBy = "presidentSub")
     private List<EmployeeSub> employees = new ArrayList<>();
 }

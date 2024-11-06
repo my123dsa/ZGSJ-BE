@@ -27,18 +27,18 @@ public class Salary {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
-    private EmployeeSub employee;
+    private EmployeeSub employeeSub;
 
     @OneToMany(mappedBy = "salary")
     private List<PayStatement> payStatements = new ArrayList<>();
 
-    private Salary(LocalDate transferDate, Integer amount, EmployeeSub employee) {
+    private Salary(LocalDate transferDate, Integer amount, EmployeeSub employeeSub) {
         this.transferDate = transferDate;
         this.amount = amount;
-        this.employee = employee;
+        this.employeeSub = employeeSub;
     }
 
-    public static Salary createSalary(EmployeeSub employee) {
-        return new Salary(LocalDate.now(), 0, employee);
+    public static Salary createSalary(EmployeeSub employeeSub) {
+        return new Salary(LocalDate.now(), 0, employeeSub);
     }
 }

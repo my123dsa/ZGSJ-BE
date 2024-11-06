@@ -46,12 +46,12 @@ public class EmployeeSub {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "president_id")
-    private PresidentSub president;
+    private PresidentSub presidentSub;
 
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "employeeSub")
     private List<Working> workings = new ArrayList<>();
 
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "employeeSub")
     private List<Salary> salaries = new ArrayList<>();
 
 }
