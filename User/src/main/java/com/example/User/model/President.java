@@ -40,7 +40,7 @@ public class President {
     @Column(name = "phone_number", nullable = false, length = 50, unique = true)
     private String phoneNumber;
 
-    @Column(name = "temrs_accept", nullable = false)
+    @Column(name = "terms_accept", nullable = false)
     private Boolean termsAccept;
 
     @OneToMany(mappedBy = "president")
