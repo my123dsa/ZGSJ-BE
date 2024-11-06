@@ -14,7 +14,7 @@ public class Authentication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "authentication_id")
-    private int id;
+    private Integer id;
 
     @Column(name = "email", nullable = false, unique = true, length = 50)
     private String email;

@@ -12,7 +12,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
-    private int id;
+    private Integer id;
 
     @Column(name = "account_number", nullable = false, unique = true, length = 50)
     private String accountNumber;
@@ -21,7 +21,7 @@ public class Account {
     private String name;
 
     @Column(name = "balance", nullable = false)
-    private int balance;
+    private Integer balance;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bank_id", nullable = false)

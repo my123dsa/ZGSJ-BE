@@ -15,7 +15,7 @@ public class Classfication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "classfication_id")
-    private int id;
+    private Integer id;
 
     @Column(name = "classfication_name", nullable = false,length = 50)
     private String classficationName;
