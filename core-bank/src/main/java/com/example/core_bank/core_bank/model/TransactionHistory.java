@@ -17,16 +17,16 @@ public class TransactionHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "th_id")
-    private int id;
+    private Integer id;
 
     @Column(name= "transaction_date", nullable = false)
     private LocalDate transactionDate ;
 
     @Column(name= "amount", nullable = false)
-    private int amount;
+    private Integer amount;
 
     @Column(columnDefinition = "TINYINT(1)", name = "is_deposit", nullable = false)
-    private boolean isDeposit;
+    private Boolean isDeposit;
 
     @Column(name = "transaction_type", nullable = false, length = 50)
     private String transactionType;

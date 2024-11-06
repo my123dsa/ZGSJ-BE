@@ -13,7 +13,7 @@ public class BusinessNumber {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bs_id")
-    private int id;
+    private Integer id;
 
     @Column(name = "business_number", nullable = false , length = 50)
     private String businessNumber;

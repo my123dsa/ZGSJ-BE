@@ -14,7 +14,7 @@ public class Bank {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bank_id")
-    private int id;
+    private Integer id;
 
     @Column(name= "bank_code", nullable = false, length = 50)
     private String bankCode ;
