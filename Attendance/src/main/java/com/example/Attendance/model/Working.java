@@ -13,7 +13,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class Working {
     @Id
-    @Column(name = "working_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "work_day", nullable = false)
