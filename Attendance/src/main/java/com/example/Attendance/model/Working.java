@@ -32,7 +32,7 @@ public class Working {
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    private Working(LocalDate workDay, LocalDate workDuration, LocalDate startTime, Employee employee) {
+    private Working(LocalDate workDay, LocalTime workDuration, LocalTime startTime, Employee employee) {
         this.workDay = workDay;
         this.workDuration = workDuration;
         this.startTime = startTime;
@@ -40,7 +40,7 @@ public class Working {
     }
 
 
-    public static Working createWorking(LocalDate workDay, LocalDate workDuration, LocalDate startTime,Employee employee) {
+    public static Working createWorking(LocalDate workDay, LocalTime workDuration, LocalTime startTime,Employee employee) {
         return new Working(workDay, workDuration, startTime, employee);
     }
 }
