@@ -30,18 +30,17 @@ public class Working {
     private LocalTime endTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
+    @JoinColumn(name = "se_id")
+    private StoreEmployee storeEmployee;
 
-    private Working(LocalDate workDay, LocalTime startTime, Employee employee) {
+    private Working(LocalDate workDay, LocalTime startTime, StoreEmployee storeEmployee) {
         this.workDay = workDay;
         this.workDuration = LocalTime.of(0, 0);
         this.startTime = startTime;
-        this.employee = employee;
+        this.storeEmployee = storeEmployee;
     }
 
-
-    public static Working createWorking(LocalDate workDay, LocalTime startTime,Employee employee) {
-        return new Working(workDay, startTime, employee);
+    public static Working createWorking(LocalDate workDay, LocalTime startTime, StoreEmployee storeEmployee) {
+        return new Working(workDay, startTime, storeEmployee);
     }
 }
