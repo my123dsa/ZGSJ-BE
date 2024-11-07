@@ -1,5 +1,6 @@
 package com.example.User.model;
 
+import com.example.User.dto.login.ReqRegist;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,7 @@ public class President {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "president_id")
+//    @Column(name = "president_id")
     private Integer id;
 
     @Column(nullable = false, length = 50)
@@ -27,6 +28,9 @@ public class President {
 
     @Column(nullable = false, length = 50, unique = true)
     private String email;
+
+    @Column(nullable = false, length = 200)
+    private String password;
 
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
@@ -40,21 +44,21 @@ public class President {
     @OneToMany(mappedBy = "president")
     private List<Store> stores = new ArrayList<>();
 
-    private President(String name, String address, String email,
+    private President(String name, String address, String email,String password,
                       LocalDate birthDate, String phoneNumber,
-                      Boolean termsAccept, List<Store> stores) {
+                      Boolean termsAccept) {
         this.name = name;
         this.address = address;
         this.email = email;
+        this.password = password;
         this.birthDate = birthDate;
         this.phoneNumber = phoneNumber;
         this.termsAccept = termsAccept;
-        this.stores = stores;
     }
 
-    public static President createPresident(String name, String address, String email,
+    public static President createPresident(String name, String address, String email,String password,
                                             LocalDate birthDate, String phoneNumber,
-                                            Boolean termsAccept, List<Store> stores) {
-        return new President(name, address, email, birthDate, phoneNumber, termsAccept, stores);
+                                            Boolean termsAccept) {
+        return new President(name, address, email,password, birthDate, phoneNumber, termsAccept);
     }
 }
