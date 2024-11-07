@@ -25,17 +25,11 @@ public class President {
     @Column(nullable = false, length = 150)
     private String address;
 
-    @Column(name = "business_number", nullable = false, length = 50, unique = true)
-    private String businessNumber;
-
     @Column(nullable = false, length = 50, unique = true)
     private String email;
 
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
-
-    @Column(name = "account_number", nullable = false, length = 50, unique = true)
-    private String accountNumber;
 
     @Column(name = "phone_number", nullable = false, length = 50, unique = true)
     private String phoneNumber;
@@ -44,25 +38,23 @@ public class President {
     private Boolean termsAccept;
 
     @OneToMany(mappedBy = "president")
-    private List<Employee> employees = new ArrayList<>();
+    private List<Store> stores = new ArrayList<>();
 
-    private President(String name, String address, String businessNumber, String email,
-                      LocalDate birthDate, String accountNumber, String phoneNumber,
-                      Boolean termsAccept, List<Employee> employees) {
+    private President(String name, String address, String email,
+                      LocalDate birthDate, String phoneNumber,
+                      Boolean termsAccept, List<Store> stores) {
         this.name = name;
         this.address = address;
-        this.businessNumber = businessNumber;
         this.email = email;
         this.birthDate = birthDate;
-        this.accountNumber = accountNumber;
         this.phoneNumber = phoneNumber;
         this.termsAccept = termsAccept;
-        this.employees = employees;
+        this.stores = stores;
     }
 
-    public static President createPresident(String name, String address, String businessNumber, String email,
-                                            LocalDate birthDate, String accountNumber, String phoneNumber,
-                                            Boolean termsAccept, List<Employee> employees) {
-        return new President(name, address, businessNumber, email, birthDate, accountNumber, phoneNumber, termsAccept, employees);
+    public static President createPresident(String name, String address, String email,
+                                            LocalDate birthDate, String phoneNumber,
+                                            Boolean termsAccept, List<Store> stores) {
+        return new President(name, address, email, birthDate, phoneNumber, termsAccept, stores);
     }
 }
