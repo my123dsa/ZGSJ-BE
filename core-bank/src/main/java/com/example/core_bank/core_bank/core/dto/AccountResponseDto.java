@@ -2,6 +2,7 @@ package com.example.core_bank.core_bank.core.dto;
 
 import com.example.core_bank.core_bank.core.model.Account;
 
+
 public class AccountResponseDto {
 
     private String accountNumber;

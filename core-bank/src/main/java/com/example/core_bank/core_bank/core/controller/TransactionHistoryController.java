@@ -1,6 +1,7 @@
 package com.example.core_bank.core_bank.core.controller;
 
 import com.example.core_bank.core_bank.core.dto.TransactionHistoryRequestDto;
+import com.example.core_bank.core_bank.core.dto.TransactionHistoryResponse;
 import com.example.core_bank.core_bank.core.model.Account;
 import com.example.core_bank.core_bank.core.model.Classfication;
 import com.example.core_bank.core_bank.core.model.TransactionHistory;
@@ -21,22 +22,19 @@ public class TransactionHistoryController {
 
     private final TransactionHistoryService transactionHistoryService;
     private final AccountRepository accountRepository;
-    private final BankRepository bankRepository;
     private final ClassficationRepository classficationRepository;
 
     @Autowired
     public TransactionHistoryController(TransactionHistoryService transactionHistoryService,
                                         AccountRepository accountRepository,
-                                        BankRepository bankRepository,
                                         ClassficationRepository classficationRepository) {
         this.transactionHistoryService = transactionHistoryService;
         this.accountRepository = accountRepository;
-        this.bankRepository = bankRepository;
         this.classficationRepository = classficationRepository;
     }
 
     @PostMapping("/list")
-    public ResponseEntity<List<TransactionHistory>> getTransactionHistory(@RequestBody TransactionHistoryRequestDto request) {
+    public ResponseEntity<List<TransactionHistoryResponse>> getTransactionHistory(@RequestBody TransactionHistoryRequestDto request) {
 
         // 요청에서 bankCode, accountNumber, depositor 정보를 받아옴
         String bankCode = request.getBankCode();
@@ -48,8 +46,18 @@ public class TransactionHistoryController {
         List<Classfication> classfication = classficationRepository.findByClassficationName(depositor);  // 예시로 classficationName을 depositor로 사용
 
         // 거래 내역을 조회하고 반환
-        List<TransactionHistory> transactionHistoryList = transactionHistoryService.getTransactionHistoryByAccountId(account.getId());
+//        List<TransactionHistory> transactionHistoryList = transactionHistoryService.
+//                getTransactionHistoryByAccountId(account.getId());
+//        List<TransactionHistoryResponse> transactionHistoryres = transactionHistoryList
+//                .stream()
+//                .map(history-> TransactionHistoryResponse.of(history)).toList();
 
-        return ResponseEntity.ok(transactionHistoryList);
+        List<TransactionHistoryResponse> transactionHistoryres = transactionHistoryService
+                .getTransactionHistoryByAccountId(account.getId())
+                .stream()
+                .map(TransactionHistoryResponse::of)
+                .toList();
+
+        return ResponseEntity.ok(transactionHistoryres);
     }
 }
