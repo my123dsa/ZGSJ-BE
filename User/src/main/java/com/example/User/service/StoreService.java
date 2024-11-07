@@ -75,4 +75,8 @@ public class StoreService {
 
         storeRepository.save(existedStore);
     }
+
+    public void deleteStore(Integer storeId) {
+        storeRepository.deleteById(storeId);
+    }
 }

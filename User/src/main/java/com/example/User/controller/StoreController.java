@@ -33,4 +33,10 @@ public class StoreController {
         storeService.updateStore(storeId, storeRequest);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping
+    private ResponseEntity<Void> deleteStore(@RequestParam Integer storeId) {
+        storeService.deleteStore(storeId);
+        return ResponseEntity.ok().build();
+    }
 }
