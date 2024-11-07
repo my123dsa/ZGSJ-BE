@@ -21,7 +21,7 @@ public class AuthenticationController {
     private final VerificationNumberStorage verificationNumberStorage;
     private final EmailService emailService;
 
-    @PostMapping("/verify/pinNumber")
+    @PostMapping("/pincheck")
     public ResponseEntity<?> verifyPinNumberAndEmail(@RequestBody ReqAuthentication reqAuthentication) {
         log.info("Check email pin number" + reqAuthentication.getEmail());
         boolean result = authenticationService.checkEmailAndPinNumber(reqAuthentication);
@@ -34,7 +34,7 @@ public class AuthenticationController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/verify/emailCode")
+    @PostMapping("/emailcheck")
     public ResponseEntity<?> verifyEmailCode(@RequestBody ReqAuthentication reqAuthentication) {
         log.info("Check email pin number: " + reqAuthentication.getEmail());
         boolean result = verificationNumberStorage.verifyNumber(reqAuthentication);
