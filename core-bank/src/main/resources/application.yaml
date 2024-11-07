@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: core-bank
+  datasource:
+    url: jdbc:mysql://localhost:3306/banking
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: j525252p
+    password: lfyywzrymhinrbug
+    properties:
+      mail:
+        smtp:
+          auth: true # 5
+          timeout: 5000 # 6
+          starttls:
+            enable: true # 7
+
+server:
+  port: 3030
