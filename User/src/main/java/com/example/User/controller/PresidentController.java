@@ -7,6 +7,7 @@ import com.example.User.dto.login.ResNewAccessToken;
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
 
+import com.example.User.model.President;
 import com.example.User.service.AuthService;
 import com.example.User.service.PresidentService;
 import com.example.User.service.RedisTokenService;
@@ -31,32 +32,28 @@ public class PresidentController {
     ResponseEntity<ResNewAccessToken> login(@RequestBody ReqLoginData reqLoginData) {
         log.info("reqLoginData: "+reqLoginData);
 
-        if (!presidentService.validateLogin(reqLoginData)){
-            throw new CustomException(ErrorCode.PASSWORD_NOT_CORRECT);
-        }
+        Integer id= presidentService.validateLogin(reqLoginData);
 
-        String accessToken = authService.onAuthenticationSuccess(reqLoginData.getEmail());
+        String accessToken = authService.onAuthenticationSuccess(id);
         return ResponseEntity.ok(ResNewAccessToken.from(accessToken));
     }
 
     @GetMapping("/logout")
     ResponseEntity<Void> logout(HttpServletRequest request) {
-        String email =request.getHeader("email");
-//        String email = "hyeri1126@google.com";
-        redisTokenService.removeRefreshToken(email);
+        Integer id=Integer.parseInt(request.getHeader("id"));
+
+        redisTokenService.removeRefreshToken(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/refresh")
     ResponseEntity<ResNewAccessToken> refresh(HttpServletRequest request) {
-        String token=request.getHeader("Authorization")
-                .replace("Bearer ", "");
-        log.info("token: "+token);
+        String token=request.getHeader("Authorization").replace("Bearer ", "");
 
-        String email= jwtUtil.getEmailFromToken(token);
-        log.info("email: "+email);
+        Integer id= jwtUtil.getIdFromToken(token);
+        log.info("id: "+id);
 
-        String accessToken =redisTokenService.checkRefreshToken(email);
+        String accessToken =redisTokenService.checkRefreshToken(id);
 
         return ResponseEntity.ok(ResNewAccessToken.from(accessToken));
     }
@@ -70,18 +67,18 @@ public class PresidentController {
 
     @DeleteMapping("/secession")
     public ResponseEntity<Void> secession(HttpServletRequest request){
-        String email =request.getHeader("email");
+        Integer id=Integer.parseInt(request.getHeader("id"));
 //        String email= "hyeri1126@google.com";
-        presidentService.remove(email);
+        presidentService.remove(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/test10")
-    ResponseEntity<String> test(HttpServletRequest request) {
+    ResponseEntity<Integer> test(HttpServletRequest request) {
 
-        String email= request.getHeader("email");
-        log.info("email: "+email);
+        Integer id=Integer.parseInt(request.getHeader("id"));
+        log.info("id: "+id);
 
-        return ResponseEntity.ok(email);
+        return ResponseEntity.ok(id);
     }
 }

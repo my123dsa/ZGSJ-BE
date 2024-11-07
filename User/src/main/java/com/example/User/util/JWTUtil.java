@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.ByteBuffer;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Base64;
@@ -38,13 +39,13 @@ public class JWTUtil {
         this.secretKey = new SecretKeySpec(keyBytes, ALGORITHM);
     }
 
-    public String generateToken(String encryptedEmail, int days) {
+    public String generateToken(Integer id, int days) {
 
         Map<String, Object> headers = new HashMap<>();
         headers.put("typ", "JWT");
         headers.put("alg", "HS256");
 
-        Map<String, Object> encrypted = encrypt(encryptedEmail);
+        Map<String, Object> encrypted = encrypt(id);
 
         int time = 60 * 24 * days; //테스트는 분단위로 나중에 60*24 (일)단위변경
 
@@ -68,11 +69,15 @@ public class JWTUtil {
         return claim;
     }
 
-    public Map<String, Object> encrypt(String plainText) {
+    public Map<String, Object> encrypt(Integer id) {
         try {
+            ByteBuffer buffer = ByteBuffer.allocate(4); // Integer는 4바이트
+            buffer.putInt(id);
+            byte[] idBytes = buffer.array();
+
             Cipher cipher = Cipher.getInstance(ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, this.secretKey);
-            byte[] encryptedBytes = cipher.doFinal(plainText.getBytes());
+            byte[] encryptedBytes = cipher.doFinal(idBytes);
             String s = Base64.getEncoder().encodeToString(encryptedBytes);
             return Map.of("payload", s);
         } catch (Exception e) {
@@ -80,19 +85,20 @@ public class JWTUtil {
         }
     }
 
-    public String decrypt(String encryptedText) {
+    public Integer decrypt(String encryptedText) {
         try {
             Cipher cipher = Cipher.getInstance(ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, this.secretKey);
             byte[] decodedBytes = Base64.getDecoder().decode(encryptedText);
             byte[] decryptedBytes = cipher.doFinal(decodedBytes);
-            return new String(decryptedBytes);
+            ByteBuffer buffer = ByteBuffer.wrap(decryptedBytes);
+            return buffer.getInt();
         } catch (Exception e) {
             throw new CustomException(ErrorCode.INVALID_DECRYPTION);
         }
     }
 
-    public String getEmailFromToken(String token) {
+    public Integer getIdFromToken(String token) {
         String[] chunks = token.split("\\.");
         String payloadBase64 = chunks[1];
         String payloads = new String(Base64.getUrlDecoder().decode(payloadBase64));
@@ -100,7 +106,7 @@ public class JWTUtil {
         Map<String, String> payload = new Gson().fromJson(payloads, Map.class);
 
         log.info("payload" + payload.get("payload"));
-        String email = decrypt(payload.get("payload"));
-        return email;
+        Integer id = decrypt(payload.get("payload"));
+        return id;
     }
 }

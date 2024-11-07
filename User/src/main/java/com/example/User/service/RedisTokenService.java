@@ -12,6 +12,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -26,13 +27,13 @@ public class RedisTokenService {
         this.jwtUtil = jwtUtil;
     }
 
-    public void removeRefreshToken(String email) {
-        if (redisTemplate.hasKey(email))
-            redisTemplate.delete(email);
+    public void removeRefreshToken(Integer id) {
+        if (redisTemplate.hasKey(id.toString()))
+            redisTemplate.delete(id.toString());
     }
 
-    public void setValues(String key, String value, Duration duration) {
-        valueOps.set(key, value, duration);
+    public void setValues(Integer id, String value, Duration duration) {
+        valueOps.set(id.toString(), value, duration);
     }
 
     public String getValue(String key) {
@@ -41,9 +42,9 @@ public class RedisTokenService {
         return String.valueOf(valueOps.get(key));
     }
 
-    public String checkRefreshToken(String key) {
+    public String checkRefreshToken(Integer accessTokenId) {
         ValueOperations<String, Object> values = redisTemplate.opsForValue();
-        String refreshToken =(String)values.get(key);
+        String refreshToken =(String)values.get(accessTokenId);
         if (refreshToken == null)
             throw new CustomException(ErrorCode.EMPTY_REFRESH_TOKEN);
 
@@ -52,15 +53,15 @@ public class RedisTokenService {
         Integer exp = (Integer) claims.get("exp");
         log.info("encrypt"+encrypt +"exp"+exp);
 
-        String email = jwtUtil.decrypt(encrypt);
+        Integer id = jwtUtil.decrypt(encrypt);
 
-        if(!email.equals(key))
+        if(Objects.equals(id, accessTokenId))
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
 
-        checkAndRenewRefreshToken(email,exp);
-        return jwtUtil.generateToken(email, 1);
+        checkAndRenewRefreshToken(id,exp);
+        return jwtUtil.generateToken(id, 1);
     }
-    public void checkAndRenewRefreshToken(String email,Integer exp){
+    public void checkAndRenewRefreshToken(Integer id,Integer exp){
         Date expTime = new Date(Instant.ofEpochMilli(exp).toEpochMilli() * 1000);
         Date current = new Date(System.currentTimeMillis());
         long gapTime = (expTime.getTime() - current.getTime());
@@ -69,8 +70,8 @@ public class RedisTokenService {
         if (gapTime < (1000 * 60 * 60)) {
             //if(gapTime < (1000 * 60 * 60 * 24 * 3  ) ){
             log.info("new Refresh Token required...  ");
-            String userRefreshToken = jwtUtil.generateToken(email, 30);
-            setValues(email, userRefreshToken, Duration.ofDays(100));
+            String userRefreshToken = jwtUtil.generateToken(id, 30);
+            setValues(id, userRefreshToken, Duration.ofDays(100));
         }
     }
 }

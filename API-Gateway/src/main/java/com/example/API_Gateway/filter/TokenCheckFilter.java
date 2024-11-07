@@ -67,11 +67,11 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
                 return onError(exchange, HttpStatus.BAD_GATEWAY);
             }
 
-            String email = jwtUtil.decrypt((String) payload.get("payload"));
-            log.info("email: {}", email);
+            Integer id = jwtUtil.decrypt((String) payload.get("payload"));
+            log.info("id: {}", id);
 
             ServerHttpRequest mutatedRequest = request.mutate()
-                    .header("email", email)
+                    .header("id", id.toString())
                     .build();
 
             return chain.filter(exchange.mutate().request(mutatedRequest).build());
