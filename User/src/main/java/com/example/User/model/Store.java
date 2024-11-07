@@ -15,7 +15,6 @@ public class Store {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "store_id")
     private Integer id;
 
     @Column(name = "store_name", nullable = false, length = 50, unique = true)

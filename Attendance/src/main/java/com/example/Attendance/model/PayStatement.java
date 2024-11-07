@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class PayStatement {
     @Id
-    @Column(name = "ps_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "url", length = 150, nullable = false)

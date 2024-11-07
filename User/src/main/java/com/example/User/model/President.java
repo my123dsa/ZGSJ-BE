@@ -1,6 +1,5 @@
 package com.example.User.model;
 
-import com.example.User.dto.login.ReqRegist;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +16,6 @@ public class President {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "president_id")
     private Integer id;
 
     @Column(nullable = false, length = 50)
@@ -54,6 +52,7 @@ public class President {
         this.birthDate = birthDate;
         this.phoneNumber = phoneNumber;
         this.termsAccept = termsAccept;
+        this.stores = stores;
     }
 
     public static President createPresident(String name, String address, String email,String password,

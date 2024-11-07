@@ -1,9 +1,6 @@
 package com.example.Attendance.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class President {
     @Id
-    @Column(name = "president_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "name", length = 50, nullable = false)

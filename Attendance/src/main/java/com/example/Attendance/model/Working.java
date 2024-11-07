@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "working")
@@ -12,26 +13,26 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Working {
     @Id
-    @Column(name = "working_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "work_day", nullable = false)
     private LocalDate workDay;
 
     @Column(name = "work_duration")
-    private LocalDate workDuration;
+    private LocalTime workDuration;
 
     @Column(name = "start_time")
-    private LocalDate startTime;
+    private LocalTime startTime;
 
     @Column(name = "end_time")
-    private LocalDate endTime;
+    private LocalTime endTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    private Working(LocalDate workDay, LocalDate workDuration, LocalDate startTime, Employee employee) {
+    private Working(LocalDate workDay, LocalTime workDuration, LocalTime startTime, Employee employee) {
         this.workDay = workDay;
         this.workDuration = workDuration;
         this.startTime = startTime;
@@ -39,7 +40,7 @@ public class Working {
     }
 
 
-    public static Working createWorking(LocalDate workDay, LocalDate workDuration, LocalDate startTime,Employee employee) {
+    public static Working createWorking(LocalDate workDay, LocalTime workDuration, LocalTime startTime,Employee employee) {
         return new Working(workDay, workDuration, startTime, employee);
     }
 }
