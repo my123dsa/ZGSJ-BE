@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class PayStatement {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ps_id")
     private Integer id;
 
@@ -23,16 +22,16 @@ public class PayStatement {
     private LocalDate issuanceDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "salary_id")
-    private Salary salary;
+    @JoinColumn(name = "se_id")
+    private StoreEmployee storeEmployee;
 
-    private PayStatement(String url, LocalDate issuanceDate, Salary salary) {
+    private PayStatement(String url, LocalDate issuanceDate, StoreEmployee storeEmployee) {
         this.url = url;
         this.issuanceDate = issuanceDate;
-        this.salary = salary;
+        this.storeEmployee = storeEmployee;
     }
 
-    public static PayStatement createPayStatement(String url, LocalDate issuanceDate, Salary salary) {
-        return new PayStatement(url, issuanceDate, salary);
+    public static PayStatement createPayStatement(String url, LocalDate issuanceDate, StoreEmployee storeEmployee) {
+        return new PayStatement(url, issuanceDate, storeEmployee);
     }
 }
