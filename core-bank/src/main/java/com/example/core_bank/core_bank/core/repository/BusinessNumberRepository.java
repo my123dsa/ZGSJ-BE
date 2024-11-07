@@ -1,6 +1,6 @@
-package com.example.core_bank.core_bank.repository;
+package com.example.core_bank.core_bank.core.repository;
 
-import com.example.core_bank.core_bank.model.BusinessNumber;
+import com.example.core_bank.core_bank.core.model.BusinessNumber;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

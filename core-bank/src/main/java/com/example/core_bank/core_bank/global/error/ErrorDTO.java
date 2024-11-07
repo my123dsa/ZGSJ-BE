@@ -1,4 +1,4 @@
-package src.main.java.com.example.core_bank.core_bank.error;
+package com.example.core_bank.core_bank.global.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

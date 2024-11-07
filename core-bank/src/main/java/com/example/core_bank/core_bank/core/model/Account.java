@@ -1,4 +1,4 @@
-package com.example.core_bank.core_bank.model;
+package com.example.core_bank.core_bank.core.model;
 
 import jakarta.persistence.*;
 import lombok.*;

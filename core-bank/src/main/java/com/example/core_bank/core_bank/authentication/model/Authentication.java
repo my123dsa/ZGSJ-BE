@@ -1,7 +1,6 @@
-package com.example.core_bank.core_bank.model;
+package com.example.core_bank.core_bank.authentication.model;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class Authentication {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "authentication_id")
@@ -22,18 +20,13 @@ public class Authentication {
     @Column(name = "pin_number", nullable = false, length = 50)
     private String pinNumber;
 
-    @Column(name = "secret_key", nullable = false, length = 150)
-    private String secretKey;
-
-    private Authentication(String email, String pinNumber, String secretKey) {
+    private Authentication(String email, String pinNumber) {
         this.email = email;
         this.pinNumber = pinNumber;
-        this.secretKey = secretKey;
     }
 
-    public static Authentication createAuthentication(String email, String pinNumber, String secretKey)
-    {
-        return new Authentication(email, pinNumber, secretKey);
+    public static Authentication createAuthentication(String email, String pinNumber) {
+        return new Authentication(email, pinNumber);
     }
 
 }

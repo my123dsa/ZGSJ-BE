@@ -1,4 +1,4 @@
-package com.example.core_bank.core_bank.dto.businessnumber;
+package com.example.core_bank.core_bank.core.businessnumber;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
