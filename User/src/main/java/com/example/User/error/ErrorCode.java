@@ -16,6 +16,7 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(404, "존재하지 않는 사용자 ID 입니다."),
     SNAPSHOT_NOT_FOUND(404, "존재하지 않는 스냅샷 ID 입니다."),
     PRESIDENT_NOT_FOUND(404, "사장님을 찾을 수 없습니다."),
+    STORE_NOT_FOUND(404, "가게를 찾을 수 없습니다."),
 
     DUPLICATE_STORE_NAME(409, "이미 존재하는 가게 이름입니다."),
 

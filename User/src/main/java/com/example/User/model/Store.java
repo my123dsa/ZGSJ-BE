@@ -37,8 +37,9 @@ public class Store {
     @JoinColumn(name = "president_id", nullable = false)
     private President president;
 
-    private Store(String storeName, String businessNumber, String accountNumber,
+    private Store(Integer id, String storeName, String businessNumber, String accountNumber,
                   String bankCode, List<StoreEmployee> storeEmployees, President president) {
+        this.id = id;
         this.storeName = storeName;
         this.businessNumber = businessNumber;
         this.accountNumber = accountNumber;
@@ -47,8 +48,8 @@ public class Store {
         this.president = president;
     }
 
-    public static Store createStore(String storeName, String businessNumber, String accountNumber,
+    public static Store createStore(Integer id, String storeName, String businessNumber, String accountNumber,
                                     String bankCode, List<StoreEmployee> storeEmployees, President president) {
-        return new Store(storeName, businessNumber, accountNumber, bankCode, storeEmployees, president);
+        return new Store(id, storeName, businessNumber, accountNumber, bankCode, storeEmployees, president);
     }
 }
