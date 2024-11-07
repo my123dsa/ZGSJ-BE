@@ -39,6 +39,14 @@ public class PresidentController {
         return ResponseEntity.ok(ResNewAccessToken.from(accessToken));
     }
 
+    @GetMapping("/logout")
+    ResponseEntity<Void> logout() {
+        //헤더에서 이메일 꺼냄
+        String email = "test1@gmail.com";
+        redisTokenService.removeRefreshToken(email);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/refresh")
     ResponseEntity<ResNewAccessToken> refresh(HttpServletRequest request) {
         String token=request.getHeader("Authorization")

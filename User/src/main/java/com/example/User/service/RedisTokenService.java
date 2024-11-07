@@ -3,7 +3,6 @@ package com.example.User.service;
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
 import com.example.User.util.JWTUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -15,22 +14,31 @@ import java.util.Date;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class RedisTokenService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final JWTUtil jwtUtil;
+    private final ValueOperations<String, Object> valueOps;
+
+    public RedisTokenService(RedisTemplate<String, Object> redisTemplate, JWTUtil jwtUtil) {
+        this.redisTemplate = redisTemplate;
+        this.valueOps = redisTemplate.opsForValue();
+        this.jwtUtil = jwtUtil;
+    }
+
+    public void removeRefreshToken(String email) {
+        if (redisTemplate.hasKey(email))
+            redisTemplate.delete(email);
+    }
 
     public void setValues(String key, String value, Duration duration) {
-        ValueOperations<String, Object> values = redisTemplate.opsForValue();
-        values.set(key, value, duration);
+        valueOps.set(key, value, duration);
     }
 
     public String getValue(String key) {
-        ValueOperations<String, Object> values = redisTemplate.opsForValue();
-        if (values.get(key) == null)
+        if (valueOps.get(key) == null)
             return "none";
-        return String.valueOf(values.get(key));
+        return String.valueOf(valueOps.get(key));
     }
 
     public String checkRefreshToken(String key) {
