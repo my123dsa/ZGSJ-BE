@@ -1,6 +1,6 @@
 package com.example.core_bank.core_bank.core.controller;
 
-import com.example.core_bank.core_bank.core.businessnumber.BusinessNumberResponse;
+import com.example.core_bank.core_bank.core.dto.businessnumber.BusinessNumberResponse;
 import com.example.core_bank.core_bank.core.service.BusinessNumberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
