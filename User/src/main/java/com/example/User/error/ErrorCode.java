@@ -15,6 +15,9 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND(404, "존재하지 않는 메세지 ID 입니다."),
     MEMBER_NOT_FOUND(404, "존재하지 않는 사용자 ID 입니다."),
     SNAPSHOT_NOT_FOUND(404, "존재하지 않는 스냅샷 ID 입니다."),
+    PRESIDENT_NOT_FOUND(404, "사장님을 찾을 수 없습니다."),
+
+    DUPLICATE_STORE_NAME(409, "이미 존재하는 가게 이름입니다."),
 
     INVALID_EMAIL_FORMAT(431, "이메일 형식 잘못되었습니다."),
     EMAIL_ALREADY_EXISTS(432, "존재하는 이메일입니다."),
