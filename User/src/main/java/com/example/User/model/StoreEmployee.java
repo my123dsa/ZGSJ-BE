@@ -7,7 +7,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "store_employee")
+@Table(name = "store_employee",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        columnNames = {"store_id", "employee_id"}
+                )
+        }
+)
 @Getter
 @NoArgsConstructor
 public class StoreEmployee {
@@ -18,10 +24,10 @@ public class StoreEmployee {
     private Integer id;
 
     @Column(nullable = false)
-    private Integer salary; // 시급 or 월급
+    private Integer salary;
 
     @Column(name = "employment_type", nullable = false)
-    private Boolean employmentType; // 직원 유형 (직원 or 알바)
+    private Boolean employmentType;
 
     @Column(name = "bank_code", nullable = false, length = 50)
     private String bankCode;
@@ -57,5 +63,4 @@ public class StoreEmployee {
                                                     String accountNumber, Integer paymentDate, Store store, Employee employee) {
         return new StoreEmployee(salary, employmentType, bankCode, accountNumber, paymentDate, store, employee);
     }
-
 }
