@@ -30,7 +30,7 @@ public class PresidentController {
     @PostMapping("/login")
     ResponseEntity<ResNewAccessToken> login(@RequestBody ReqLoginData reqLoginData) {
         log.info("reqLoginData: "+reqLoginData);
-        // 사용자 로그인 체크 로직 필요
+
         if (!presidentService.validateLogin(reqLoginData)){
             throw new CustomException(ErrorCode.PASSWORD_NOT_CORRECT);
         }
@@ -40,9 +40,9 @@ public class PresidentController {
     }
 
     @GetMapping("/logout")
-    ResponseEntity<Void> logout() {
-        //헤더에서 이메일 꺼냄
-        String email = "test1@gmail.com";
+    ResponseEntity<Void> logout(HttpServletRequest request) {
+        String email =request.getHeader("email");
+//        String email = "hyeri1126@google.com";
         redisTokenService.removeRefreshToken(email);
         return ResponseEntity.ok().build();
     }
@@ -69,10 +69,9 @@ public class PresidentController {
     }
 
     @DeleteMapping("/secession")
-    public ResponseEntity<Void> secession(){
-
-        //헤더에서 가져와야함.
-        String email= "hyeri1126@google.com";
+    public ResponseEntity<Void> secession(HttpServletRequest request){
+        String email =request.getHeader("email");
+//        String email= "hyeri1126@google.com";
         presidentService.remove(email);
         return ResponseEntity.ok().build();
     }
