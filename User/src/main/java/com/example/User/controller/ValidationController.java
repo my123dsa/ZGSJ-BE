@@ -2,6 +2,8 @@ package com.example.User.controller;
 
 import com.example.User.dto.businessnumber.BusinessNumberRequest;
 import com.example.User.dto.businessnumber.BusinessNumberResponse;
+import com.example.User.error.CustomException;
+import com.example.User.error.ErrorCode;
 import com.example.User.service.ValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +22,9 @@ public class ValidationController {
     {
         BusinessNumberResponse response = validationService.validateBusinessNumber(businessNumberRequest);
 
-        if (response.isExists()) {
-            return ResponseEntity.ok(null);
-        } else {
-            return ResponseEntity.badRequest().body(response.getMessage());
-        }
+        //이 에러 처리 부분 위에 통합하는게 좋을 듯?
+        if (!response.isExists())
+            throw new CustomException(ErrorCode.BUSINESSNUMBER_NOT_FOUND);
+        return ResponseEntity.ok().build();
     }
 }

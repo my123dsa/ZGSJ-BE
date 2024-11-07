@@ -21,10 +21,19 @@ public enum ErrorCode {
     DUPLICATE_STORE_NAME(409, "이미 존재하는 가게 이름입니다."),
 
     INVALID_EMAIL_FORMAT(431, "이메일 형식 잘못되었습니다."),
-    EMAIL_ALREADY_EXISTS(432, "존재하는 이메일입니다."),
     INVALID_PASSWORD_FORMAT(433, "비밀번호 형식이 잘못되었습니다."),
 
-    SERVER_ERROR(500, "서버 에러입니다. 서버 팀에 연락주세요!");
+    SERVER_ERROR(500, "서버 에러입니다. 서버 팀에 연락주세요!"),
+
+    USER_NOT_FOUND(404, "해당 아이디에 일치하는 유저가 없습니다"),
+    PASSWORD_NOT_CORRECT(400, "비밀번호가 다릅니다"),
+    BUSINESSNUMBER_NOT_FOUND(404, "해당 사업자 번호가 없습니다"),
+    EMAIL_ALREADY_EXISTS(409 , "존재하는 이메일입니다."),
+    EMPTY_REFRESH_TOKEN(400 , "리프레시 토큰이 없습니다."),
+    INVALID_REFRESH_TOKEN(401,"리프레시 토큰이 유효하지 않습니다."),
+    INVALID_ENCRYPTION(401,"암호화가 유효하지 않습니다."),
+    INVALID_DECRYPTION(401,"복호화가 유효하지 않습니다.")
+    ;
 
 
     private final int status;
