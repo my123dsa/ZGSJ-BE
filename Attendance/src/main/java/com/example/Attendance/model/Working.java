@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Entity
 @Table(name = "working")
@@ -14,7 +12,6 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class Working {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "working_id")
     private Integer id;
 
@@ -22,25 +19,27 @@ public class Working {
     private LocalDate workDay;
 
     @Column(name = "work_duration")
-    private LocalTime workDuration;
+    private LocalDate workDuration;
 
     @Column(name = "start_time")
-    private LocalTime startTime;
+    private LocalDate startTime;
 
     @Column(name = "end_time")
-    private LocalTime endTime;
+    private LocalDate endTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
-    private EmployeeSub employeeSub;
+    private Employee employee;
 
-    private Working(LocalDate workDay, LocalTime startTime, EmployeeSub employeeSub) {
+    private Working(LocalDate workDay, LocalDate workDuration, LocalDate startTime, Employee employee) {
         this.workDay = workDay;
+        this.workDuration = workDuration;
         this.startTime = startTime;
-        this.employeeSub = employeeSub;
+        this.employee = employee;
     }
 
-    public static Working createWorking(LocalDate workDay, LocalTime startTime, EmployeeSub employeeSub){
-     return new Working(workDay, startTime, employeeSub);
+
+    public static Working createWorking(LocalDate workDay, LocalDate workDuration, LocalDate startTime,Employee employee) {
+        return new Working(workDay, workDuration, startTime, employee);
     }
 }
