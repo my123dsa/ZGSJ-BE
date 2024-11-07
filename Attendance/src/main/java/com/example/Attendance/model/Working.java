@@ -32,15 +32,15 @@ public class Working {
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    private Working(LocalDate workDay, LocalTime workDuration, LocalTime startTime, Employee employee) {
+    private Working(LocalDate workDay, LocalTime startTime, Employee employee) {
         this.workDay = workDay;
-        this.workDuration = workDuration;
+        this.workDuration = LocalTime.of(0, 0);
         this.startTime = startTime;
         this.employee = employee;
     }
 
 
-    public static Working createWorking(LocalDate workDay, LocalTime workDuration, LocalTime startTime,Employee employee) {
-        return new Working(workDay, workDuration, startTime, employee);
+    public static Working createWorking(LocalDate workDay, LocalTime startTime,Employee employee) {
+        return new Working(workDay, startTime, employee);
     }
 }
