@@ -6,12 +6,11 @@ import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 @Entity
 @Table(name = "store_employee",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        columnNames = {"store_id", "employee_id"}
+                        columnNames = {"store_id", "email"}
                 )
         }
 )
@@ -23,13 +22,11 @@ public class StoreEmployee {
     @Column(name = "se_id")
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id")
-    private Store store;
+    @Column(name = "name", length = 50, nullable = false)
+    private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
+    @Column(name = "email", length = 50, nullable = false)
+    private String email;
 
     @Column(name = "salary", nullable = false)
     private Long salary;
@@ -47,4 +44,8 @@ public class StoreEmployee {
     @Min(1)
     @Max(28)
     private Integer paymentDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    private Store store;
 }
