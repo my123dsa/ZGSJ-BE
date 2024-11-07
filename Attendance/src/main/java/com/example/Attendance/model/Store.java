@@ -16,6 +16,9 @@ public class Store {
     @Column(name = "store_name", length = 50, nullable = false, unique = true)
     private String storeName;
 
+    @Column(name = "account_number", length = 50, nullable = false)
+    private String accountNumber;
+
     @Column(name = "bank_code", length = 50, nullable = false)
     private String bankCode;
 

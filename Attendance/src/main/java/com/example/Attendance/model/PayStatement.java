@@ -22,7 +22,7 @@ public class PayStatement {
     private LocalDate issuanceDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "salary_id")
+    @JoinColumn(name = "se_id")
     private StoreEmployee storeEmployee;
 
     private PayStatement(String url, LocalDate issuanceDate, StoreEmployee storeEmployee) {

@@ -22,6 +22,4 @@ public class President {
     @Column(name = "email", length = 50, nullable = false, unique = true)
     private String email;
 
-    @Column(name = "account_number", length = 50, nullable = false)
-    private String accountNumber;
 }
