@@ -1,8 +1,9 @@
-package com.example.core_bank.core_bank.service;
+package com.example.core_bank.core_bank.core.service;
 
-import com.example.core_bank.core_bank.dto.businessnumber.BusinessNumberResponse;
-import com.example.core_bank.core_bank.exception.BusinessNumberException;
-import com.example.core_bank.core_bank.repository.BusinessNumberRepository;
+import com.example.core_bank.core_bank.core.businessnumber.BusinessNumberResponse;
+import com.example.core_bank.core_bank.global.error.CustomException;
+import com.example.core_bank.core_bank.global.error.ErrorCode;
+import com.example.core_bank.core_bank.core.repository.BusinessNumberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public class BusinessNumberService {
             return BusinessNumberResponse.of(exists,false,exists ?
                     "등록된 사업자번호입니다." : "미등록된 사업자번호입니다.");
         } catch (Exception e) {
-            throw new BusinessNumberException();
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
         }
     }
 

@@ -1,10 +1,8 @@
-package com.example.core_bank.core_bank.model;
+package com.example.core_bank.core_bank.core.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "classfication")
