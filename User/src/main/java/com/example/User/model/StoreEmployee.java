@@ -37,7 +37,7 @@ public class StoreEmployee {
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
 
-    @Column(name = "phone_number", nullable = false, length = 50, unique = true)
+    @Column(name = "phone_number", nullable = false, length = 50)
     private String phoneNumber;
 
     @Column(nullable = false, length = 50)
