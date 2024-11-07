@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "store_id")
     private Integer id;
 
     @Column(name = "store_name", length = 50, nullable = false, unique = true)

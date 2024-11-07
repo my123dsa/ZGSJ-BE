@@ -13,6 +13,7 @@ import java.time.LocalDate;
 public class PayStatement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ps_id")
     private Integer id;
 
     @Column(name = "url", length = 150, nullable = false)

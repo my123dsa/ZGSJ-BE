@@ -20,6 +20,7 @@ import lombok.NoArgsConstructor;
 public class StoreEmployee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "se_id")
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
