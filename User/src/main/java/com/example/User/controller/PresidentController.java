@@ -59,26 +59,23 @@ public class PresidentController {
     }
 
     @PostMapping("/regist")
-    ResponseEntity<Void> regist(@RequestBody ReqRegist reqRegist){
+    ResponseEntity<ResNewAccessToken> regist(@RequestBody ReqRegist reqRegist){
         log.info("reqRegist: "+reqRegist);
-        presidentService.regist(reqRegist);
-        return ResponseEntity.ok().build();
+        Integer id= presidentService.regist(reqRegist);
+        String accessToken =authService.onAuthenticationSuccess(id);
+        return ResponseEntity.ok(ResNewAccessToken.from(accessToken));
     }
 
     @DeleteMapping("/secession")
     public ResponseEntity<Void> secession(HttpServletRequest request){
         Integer id=Integer.parseInt(request.getHeader("id"));
-//        String email= "hyeri1126@google.com";
         presidentService.remove(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/test10")
     ResponseEntity<Integer> test(HttpServletRequest request) {
-
         Integer id=Integer.parseInt(request.getHeader("id"));
-        log.info("id: "+id);
-
         return ResponseEntity.ok(id);
     }
 }

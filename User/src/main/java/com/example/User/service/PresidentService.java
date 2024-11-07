@@ -28,7 +28,7 @@ public class PresidentService {
     }
 
     @Transactional
-    public void regist(ReqRegist reqRegist) {
+    public Integer regist(ReqRegist reqRegist) {
 
         boolean result= presidentRepository.existsByEmailAndPhoneNumber(
                 reqRegist.getEmail(), reqRegist.getPhoneNumber());
@@ -38,6 +38,7 @@ public class PresidentService {
         reqRegist.setPassword(passwordEncoder.encode(reqRegist.getPassword()));
         President president= reqRegist.toEntity();
         presidentRepository.save(president);
+        return president.getId();
     }
 
     @Transactional
