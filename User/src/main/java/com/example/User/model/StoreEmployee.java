@@ -37,7 +37,7 @@ public class StoreEmployee {
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
 
-    @Column(name = "phone_number", nullable = false, length = 50, unique = true)
+    @Column(name = "phone_number", nullable = false, length = 50)
     private String phoneNumber;
 
     @Column(nullable = false, length = 50)
@@ -87,5 +87,22 @@ public class StoreEmployee {
                                                     Integer paymentDate, Store store) {
         return new StoreEmployee(name, sex, address, birthDate, phoneNumber, email, salary,
                 employmentType, bankCode, accountNumber, paymentDate, store);
+    }
+
+    public StoreEmployee toEntity(Store store) {
+        return StoreEmployee.createStoreEmployee(
+                this.name,
+                this.sex,
+                this.address,
+                this.birthDate,
+                this.phoneNumber,
+                this.email,
+                this.salary,
+                this.employmentType,
+                this.bankCode,
+                this.accountNumber,
+                this.paymentDate,
+                store
+        );
     }
 }
