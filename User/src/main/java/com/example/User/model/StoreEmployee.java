@@ -17,12 +17,6 @@ public class StoreEmployee {
     @Column(name = "se_id")
     private Integer id;
 
-    @Column(name = "store_id", nullable = false)
-    private Integer storeId;
-
-    @Column(name = "employee_id", nullable = false)
-    private Integer employeeId;
-
     @Column(nullable = false)
     private Integer salary; // 시급 or 월급
 
@@ -48,11 +42,8 @@ public class StoreEmployee {
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
-    private StoreEmployee(Integer storeId, Integer employeeId, Integer salary,
-                         Boolean employmentType, String bankCode, String accountNumber,
-                         Integer paymentDate, Store store, Employee employee) {
-        this.storeId = storeId;
-        this.employeeId = employeeId;
+    private StoreEmployee(Integer salary, Boolean employmentType, String bankCode,
+                          String accountNumber, Integer paymentDate, Store store, Employee employee) {
         this.salary = salary;
         this.employmentType = employmentType;
         this.bankCode = bankCode;
@@ -62,10 +53,9 @@ public class StoreEmployee {
         this.employee = employee;
     }
 
-    public static StoreEmployee createStoreEmployee(Integer storeId, Integer employeeId, Integer salary,
-                                                    Boolean employmentType, String bankCode, String accountNumber,
-                                                    Integer paymentDate, Store store, Employee employee) {
-        return new StoreEmployee(storeId, employeeId, salary, employmentType, bankCode, accountNumber, paymentDate, store, employee);
+    public static StoreEmployee createStoreEmployee(Integer salary, Boolean employmentType, String bankCode,
+                                                    String accountNumber, Integer paymentDate, Store store, Employee employee) {
+        return new StoreEmployee(salary, employmentType, bankCode, accountNumber, paymentDate, store, employee);
     }
 
 }
