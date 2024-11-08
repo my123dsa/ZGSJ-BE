@@ -91,9 +91,9 @@ public class PresidentController {
 
 
     //사장 정보수정 폰번호,생년월일
-    @PutMapping("/modify/{id}")
-    ResponseEntity<Void> updatePresident(@PathVariable Integer id,
-                                         @RequestBody PresidentUpdateRequest presidentUpdateRequest) {;
+    @PutMapping("/modify")
+    ResponseEntity<Void> updatePresident(@RequestBody PresidentUpdateRequest presidentUpdateRequest) {
+        Integer id = 1;
         presidentService.updatePresident(id, presidentUpdateRequest.getPhoneNumber(),presidentUpdateRequest.getBirthDate());
         return ResponseEntity.ok().build();
     }
