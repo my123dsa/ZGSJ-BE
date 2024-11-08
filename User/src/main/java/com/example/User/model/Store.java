@@ -1,5 +1,6 @@
 package com.example.User.model;
 
+import com.example.User.dto.store.StoreRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,17 +39,23 @@ public class Store {
     private President president;
 
     private Store(String storeName, String businessNumber, String accountNumber,
-                  String bankCode, List<StoreEmployee> storeEmployees, President president) {
+                  String bankCode, President president) {
         this.storeName = storeName;
         this.businessNumber = businessNumber;
         this.accountNumber = accountNumber;
         this.bankCode = bankCode;
-        this.storeEmployees = storeEmployees;
         this.president = president;
     }
 
     public static Store createStore(String storeName, String businessNumber, String accountNumber,
-                                    String bankCode, List<StoreEmployee> storeEmployees, President president) {
-        return new Store(storeName, businessNumber, accountNumber, bankCode, storeEmployees, president);
+                                    String bankCode, President president) {
+        return new Store(storeName, businessNumber, accountNumber, bankCode, president);
+    }
+
+    public void updateByStoreRequest(StoreRequest storeRequest) {
+        this.storeName = storeRequest.getStoreName();
+        this.businessNumber = storeRequest.getBusinessNumber();
+        this.accountNumber = storeRequest.getAccountNumber();
+        this.bankCode = storeRequest.getBankCode();
     }
 }
