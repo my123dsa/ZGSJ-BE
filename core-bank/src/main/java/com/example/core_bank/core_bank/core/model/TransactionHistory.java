@@ -50,4 +50,8 @@ public class TransactionHistory {
         return new TransactionHistory(transactionDate,isDeposit,transactionType,account,classfication);
     }
 
+    // classfication 객체 반환 메소드
+    public Classfication getClassification() {
+        return this.classfication;
+    }
 }

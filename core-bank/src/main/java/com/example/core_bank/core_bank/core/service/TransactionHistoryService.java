@@ -1,35 +1,54 @@
 package com.example.core_bank.core_bank.core.service;
 
 import com.example.core_bank.core_bank.core.dto.AccountResponseDto;
+import com.example.core_bank.core_bank.core.dto.TransactionHistoryResponse;
 import com.example.core_bank.core_bank.core.model.Account;
 import com.example.core_bank.core_bank.core.model.TransactionHistory;
 import com.example.core_bank.core_bank.core.repository.TransactionHistoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.core_bank.core_bank.core.repository.AccountRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class TransactionHistoryService {
 
     private final TransactionHistoryRepository transactionHistoryRepository;
+    private final AccountRepository accountRepository;
 
-    @Autowired
-    public TransactionHistoryService(TransactionHistoryRepository transactionHistoryRepository) {
-        this.transactionHistoryRepository = transactionHistoryRepository;
-    }
-
-    public List<TransactionHistory> getTransactionHistoryByAccountId(Integer accountId) {
-        return transactionHistoryRepository.findByAccountId(accountId);
-    }
-
+    /**
+     * 계좌 ID로 거래 내역을 조회하고, AccountResponseDto 리스트 반환
+     */
     public List<AccountResponseDto> getAccountsWithTransactionHistory(Integer accountId) {
-        List<TransactionHistory> transactionHistories = getTransactionHistoryByAccountId(accountId);
-
-        // AccountResponseDto로 변환
+        List<TransactionHistory> transactionHistories = transactionHistoryRepository.findByAccountId(accountId);
         return transactionHistories.stream()
                 .map(transactionHistory -> AccountResponseDto.from(transactionHistory.getAccount()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * bankCode, accountNumber, depositor로 거래 내역 조회
+     */
+    public List<TransactionHistoryResponse> getTransactionHistory(String bankCode, String accountNumber, String depositor) {
+        // 계좌 조회
+        Optional<Account> accountOpt = accountRepository.findByAccountNumber(accountNumber);
+
+        // 계좌가 존재하지 않거나 bankCode가 일치하지 않으면 빈 리스트 반환
+        if (accountOpt.isEmpty() || !accountOpt.get().getBank().getBankCode().equals(bankCode)) {
+            return List.of();
+        }
+
+        // 계좌가 존재하고 bankCode가 일치하는 경우, 거래 내역 조회
+        Account account = accountOpt.get();
+        List<TransactionHistory> transactionHistories = transactionHistoryRepository.findByAccountId(account.getId());
+
+        // 거래 내역을 TransactionHistoryResponse로 변환하여 반환
+        return transactionHistories.stream()
+                .map(TransactionHistoryResponse::from)
                 .collect(Collectors.toList());
     }
 }
