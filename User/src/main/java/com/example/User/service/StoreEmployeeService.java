@@ -1,7 +1,6 @@
 package com.example.User.service;
 
-import com.example.User.dto.storeemployee.EmployeeAutoTransferResponse;
-import com.example.User.dto.storeemployee.EmployeeDetailResponse;
+import com.example.User.dto.storeemployee.EmployeeInfoResponse;
 import com.example.User.dto.storeemployee.StoreEmployeeRequest;
 import com.example.User.dto.storeemployee.StoreEmployeeUpdateRequest;
 import com.example.User.error.CustomException;
@@ -52,16 +51,10 @@ public class StoreEmployeeService {
     }
 
     @Transactional
-    public List<EmployeeDetailResponse> getEmployeeDetailsByStore(Integer storeId)
+    public List<EmployeeInfoResponse> getEmployeeInfoByStore(Integer storeId)
     {
         return storeEmployeeRepository.findByStoreIdWithFetch(storeId)
-                .stream().map(EmployeeDetailResponse::from).toList();
+                .stream().map(EmployeeInfoResponse::from).toList();
     }
 
-    @Transactional
-    public List<EmployeeAutoTransferResponse> getEmployeesAutoTransferInfo(Integer storeId)
-    {
-        return storeEmployeeRepository.findByStoreIdWithFetch(storeId)
-                .stream().map(EmployeeAutoTransferResponse::from).toList();
-    }
 }

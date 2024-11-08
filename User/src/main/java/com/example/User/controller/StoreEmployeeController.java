@@ -1,7 +1,6 @@
 package com.example.User.controller;
 
-import com.example.User.dto.storeemployee.EmployeeDetailResponse;
-import com.example.User.dto.storeemployee.EmployeeAutoTransferResponse;
+import com.example.User.dto.storeemployee.EmployeeInfoResponse;
 import com.example.User.dto.storeemployee.StoreEmployeeRequest;
 import com.example.User.dto.storeemployee.StoreEmployeeUpdateRequest;
 import com.example.User.service.StoreEmployeeService;
@@ -47,17 +46,10 @@ public class StoreEmployeeController {
     }
 
     @GetMapping("/details")
-    public ResponseEntity<List<EmployeeDetailResponse>> getEmployeeDetailsByStore(@RequestParam Integer storeid)
+    public ResponseEntity<List<EmployeeInfoResponse>> getEmployeeInfoByStore(@RequestParam Integer storeid)
     {
-        return ResponseEntity.ok(storeemployeeService.getEmployeeDetailsByStore(storeid));
+        return ResponseEntity.ok(storeemployeeService.getEmployeeInfoByStore(storeid));
     }
-
-    @GetMapping("/autotransfer")
-    public ResponseEntity<List<EmployeeAutoTransferResponse>> getEmployeeAutoTransferInfo(@RequestParam Integer storeid)
-    {
-        return ResponseEntity.ok(storeemployeeService.getEmployeesAutoTransferInfo(storeid));
-    }
-
 
 }
 

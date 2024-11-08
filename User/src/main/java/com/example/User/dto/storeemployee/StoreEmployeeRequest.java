@@ -5,13 +5,14 @@ import com.example.User.model.StoreEmployee;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor (access = AccessLevel.PRIVATE)
 public class StoreEmployeeRequest {
 
     private String email;
@@ -27,23 +28,6 @@ public class StoreEmployeeRequest {
     @Max(28)
     private Integer paymentDate;
     private String address;
-
-    private StoreEmployeeRequest(String email, String name, LocalDate birthDate,
-                                 Boolean sex, String phoneNumber, Boolean employmentType,
-                                 String bankCode, String accountNumber, Integer salary,
-                                 Integer paymentDate, String address) {
-        this.email = email;
-        this.name = name;
-        this.birthDate = birthDate;
-        this.sex = sex;
-        this.phoneNumber = phoneNumber;
-        this.employmentType = employmentType;
-        this.bankCode = bankCode;
-        this.accountNumber = accountNumber;
-        this.salary = salary;
-        this.paymentDate = paymentDate;
-        this.address = address;
-    }
 
     public static StoreEmployeeRequest of(String email, String name, LocalDate birthDate,
                                           Boolean sex, String phoneNumber, Boolean employmentType,
