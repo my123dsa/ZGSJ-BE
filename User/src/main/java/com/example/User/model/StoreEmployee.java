@@ -88,4 +88,21 @@ public class StoreEmployee {
         return new StoreEmployee(name, sex, address, birthDate, phoneNumber, email, salary,
                 employmentType, bankCode, accountNumber, paymentDate, store);
     }
+
+    public StoreEmployee toEntity(Store store) {
+        return StoreEmployee.createStoreEmployee(
+                this.name,
+                this.sex,
+                this.address,
+                this.birthDate,
+                this.phoneNumber,
+                this.email,
+                this.salary,
+                this.employmentType,
+                this.bankCode,
+                this.accountNumber,
+                this.paymentDate,
+                store
+        );
+    }
 }
