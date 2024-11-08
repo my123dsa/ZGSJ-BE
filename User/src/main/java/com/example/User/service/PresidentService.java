@@ -18,14 +18,17 @@ public class PresidentService {
     private final PresidentRepository presidentRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public boolean validateLogin(ReqLoginData reqLoginData) {
+    public Integer validateLogin(ReqLoginData reqLoginData) {
         President president =presidentRepository.findByEmail(reqLoginData.getEmail())
                 .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
-        return passwordEncoder.matches(reqLoginData.getPassword(), president.getPassword());
+        if (!passwordEncoder.matches(reqLoginData.getPassword(), president.getPassword())){
+            throw new CustomException(ErrorCode.PASSWORD_NOT_CORRECT);
+        }
+        return president.getId();
     }
 
     @Transactional
-    public void regist(ReqRegist reqRegist) {
+    public Integer regist(ReqRegist reqRegist) {
 
         boolean result= presidentRepository.existsByEmailAndPhoneNumber(
                 reqRegist.getEmail(), reqRegist.getPhoneNumber());
@@ -35,10 +38,11 @@ public class PresidentService {
         reqRegist.setPassword(passwordEncoder.encode(reqRegist.getPassword()));
         President president= reqRegist.toEntity();
         presidentRepository.save(president);
+        return president.getId();
     }
 
     @Transactional
-    public void remove(String email){
-        presidentRepository.deleteByEmail(email);
+    public void remove(Integer id){
+        presidentRepository.deleteById(id);
     }
 }

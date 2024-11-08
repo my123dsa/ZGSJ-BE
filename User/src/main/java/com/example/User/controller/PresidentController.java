@@ -7,6 +7,7 @@ import com.example.User.dto.login.ResNewAccessToken;
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
 
+import com.example.User.model.President;
 import com.example.User.service.AuthService;
 import com.example.User.service.PresidentService;
 import com.example.User.service.RedisTokenService;
@@ -30,59 +31,51 @@ public class PresidentController {
     @PostMapping("/login")
     ResponseEntity<ResNewAccessToken> login(@RequestBody ReqLoginData reqLoginData) {
         log.info("reqLoginData: "+reqLoginData);
-        // 사용자 로그인 체크 로직 필요
-        if (!presidentService.validateLogin(reqLoginData)){
-            throw new CustomException(ErrorCode.PASSWORD_NOT_CORRECT);
-        }
 
-        String accessToken = authService.onAuthenticationSuccess(reqLoginData.getEmail());
+        Integer id= presidentService.validateLogin(reqLoginData);
+
+        String accessToken = authService.onAuthenticationSuccess(id);
         return ResponseEntity.ok(ResNewAccessToken.from(accessToken));
     }
 
     @GetMapping("/logout")
-    ResponseEntity<Void> logout() {
-        //헤더에서 이메일 꺼냄
-        String email = "test1@gmail.com";
-        redisTokenService.removeRefreshToken(email);
+    ResponseEntity<Void> logout(HttpServletRequest request) {
+        Integer id=Integer.parseInt(request.getHeader("id"));
+
+        redisTokenService.removeRefreshToken(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/refresh")
     ResponseEntity<ResNewAccessToken> refresh(HttpServletRequest request) {
-        String token=request.getHeader("Authorization")
-                .replace("Bearer ", "");
-        log.info("token: "+token);
+        String token=request.getHeader("Authorization").replace("Bearer ", "");
 
-        String email= jwtUtil.getEmailFromToken(token);
-        log.info("email: "+email);
+        Integer id= jwtUtil.getIdFromToken(token);
+        log.info("id: "+id);
 
-        String accessToken =redisTokenService.checkRefreshToken(email);
+        String accessToken =redisTokenService.checkRefreshToken(id);
 
         return ResponseEntity.ok(ResNewAccessToken.from(accessToken));
     }
 
     @PostMapping("/regist")
-    ResponseEntity<Void> regist(@RequestBody ReqRegist reqRegist){
+    ResponseEntity<ResNewAccessToken> regist(@RequestBody ReqRegist reqRegist){
         log.info("reqRegist: "+reqRegist);
-        presidentService.regist(reqRegist);
-        return ResponseEntity.ok().build();
+        Integer id= presidentService.regist(reqRegist);
+        String accessToken =authService.onAuthenticationSuccess(id);
+        return ResponseEntity.ok(ResNewAccessToken.from(accessToken));
     }
 
     @DeleteMapping("/secession")
-    public ResponseEntity<Void> secession(){
-
-        //헤더에서 가져와야함.
-        String email= "hyeri1126@google.com";
-        presidentService.remove(email);
+    public ResponseEntity<Void> secession(HttpServletRequest request){
+        Integer id=Integer.parseInt(request.getHeader("id"));
+        presidentService.remove(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/test10")
-    ResponseEntity<String> test(HttpServletRequest request) {
-
-        String email= request.getHeader("email");
-        log.info("email: "+email);
-
-        return ResponseEntity.ok(email);
+    ResponseEntity<Integer> test(HttpServletRequest request) {
+        Integer id=Integer.parseInt(request.getHeader("id"));
+        return ResponseEntity.ok(id);
     }
 }
