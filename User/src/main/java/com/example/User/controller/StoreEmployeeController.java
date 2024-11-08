@@ -1,5 +1,7 @@
 package com.example.User.controller;
 
+import com.example.User.dto.storeemployee.EmployeeDetailResponse;
+import com.example.User.dto.storeemployee.EmployeeAutoTransferResponse;
 import com.example.User.dto.storeemployee.StoreEmployeeRequest;
 import com.example.User.dto.storeemployee.StoreEmployeeUpdateRequest;
 import com.example.User.service.StoreEmployeeService;
@@ -7,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/employee")
@@ -19,29 +23,40 @@ public class StoreEmployeeController {
     @PostMapping
     public ResponseEntity<String> registerEmployee(
             @RequestBody StoreEmployeeRequest request,
-            @RequestParam Integer storeId
+            @RequestParam Integer storeid
     ) {
-        storeemployeeService.register(request, storeId);
+        storeemployeeService.register(request, storeid);
         return ResponseEntity.ok("직원 등록 성공");
     }
 
     @PutMapping
     public ResponseEntity<String> updateEmployee(
-            @RequestParam Integer seId,
+            @RequestParam Integer seid,
             @RequestBody StoreEmployeeUpdateRequest request
     ) {
-        storeemployeeService.updateEmployee(seId, request);
+        storeemployeeService.updateEmployee(seid, request);
         return ResponseEntity.ok("직원 수정 성공");
     }
 
     @DeleteMapping
     public ResponseEntity<String> deleteEmployee(
-            @RequestParam Integer seId
+            @RequestParam Integer seid
     ) {
-        storeemployeeService.deleteEmployee(seId);
+        storeemployeeService.deleteEmployee(seid);
         return ResponseEntity.ok("직원 삭제 성공");
     }
 
+    @GetMapping("/details")
+    public ResponseEntity<List<EmployeeDetailResponse>> getEmployeeDetailsByStore(@RequestParam Integer storeid)
+    {
+        return ResponseEntity.ok(storeemployeeService.getEmployeeDetailsByStore(storeid));
+    }
+
+    @GetMapping("/autotransfer")
+    public ResponseEntity<List<EmployeeAutoTransferResponse>> getEmployeeAutoTransferInfo(@RequestParam Integer storeid)
+    {
+        return ResponseEntity.ok(storeemployeeService.getEmployeesAutoTransferInfo(storeid));
+    }
 
 
 }

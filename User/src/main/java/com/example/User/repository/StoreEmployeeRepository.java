@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public interface StoreEmployeeRepository extends JpaRepository<StoreEmployee, Integer> {
@@ -21,4 +22,7 @@ public interface StoreEmployeeRepository extends JpaRepository<StoreEmployee, In
             @Param("address") String address, @Param("birthDate") LocalDate birthDate, @Param("phoneNumber") String phoneNumber,
             @Param("email") String email, @Param("salary") Integer salary, @Param("employmentType") Boolean employmentType, @Param("bankCode") String bankCode,
             @Param("accountNumber") String accountNumber, @Param("paymentDate") Integer paymentDate);
+
+    @Query("SELECT se FROM StoreEmployee se JOIN FETCH se.store WHERE se.store.id = :storeId")
+    List<StoreEmployee> findByStoreIdWithFetch(@Param("storeId") Integer storeId);
 }

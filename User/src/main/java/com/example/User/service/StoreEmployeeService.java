@@ -1,5 +1,7 @@
 package com.example.User.service;
 
+import com.example.User.dto.storeemployee.EmployeeAutoTransferResponse;
+import com.example.User.dto.storeemployee.EmployeeDetailResponse;
 import com.example.User.dto.storeemployee.StoreEmployeeRequest;
 import com.example.User.dto.storeemployee.StoreEmployeeUpdateRequest;
 import com.example.User.error.CustomException;
@@ -14,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Validated
@@ -21,6 +25,7 @@ public class StoreEmployeeService {
     private final StoreRepository storeRepository;
     private final StoreEmployeeRepository storeEmployeeRepository;
 
+    @Transactional
     public void register(@Valid StoreEmployeeRequest request, Integer storeId) {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NO_STORE));
@@ -43,7 +48,20 @@ public class StoreEmployeeService {
     public void deleteEmployee(int storeEmployeeId) {
         StoreEmployee employee = storeEmployeeRepository.findById(storeEmployeeId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-
         storeEmployeeRepository.delete(employee);
+    }
+
+    @Transactional
+    public List<EmployeeDetailResponse> getEmployeeDetailsByStore(Integer storeId)
+    {
+        return storeEmployeeRepository.findByStoreIdWithFetch(storeId)
+                .stream().map(EmployeeDetailResponse::from).toList();
+    }
+
+    @Transactional
+    public List<EmployeeAutoTransferResponse> getEmployeesAutoTransferInfo(Integer storeId)
+    {
+        return storeEmployeeRepository.findByStoreIdWithFetch(storeId)
+                .stream().map(EmployeeAutoTransferResponse::from).toList();
     }
 }
