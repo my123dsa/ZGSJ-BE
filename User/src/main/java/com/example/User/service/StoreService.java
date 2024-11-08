@@ -9,6 +9,7 @@ import com.example.User.model.Store;
 import com.example.User.model.StoreEmployee;
 import com.example.User.repository.PresidentRepository;
 import com.example.User.repository.StoreRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,14 +20,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class StoreService {
     private final StoreRepository storeRepository;
     private final PresidentRepository presidentRepository;
-
-    public StoreService(StoreRepository storeRepository, PresidentRepository presidentRepository) {
-        this.storeRepository = storeRepository;
-        this.presidentRepository = presidentRepository;
-    }
 
     @Transactional
     public void registerStore(StoreRequest storeRequest) {
@@ -58,7 +55,7 @@ public class StoreService {
         Store existedStore = storeRepository.findById(storeId)
                 .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
-        existedStore.updateStore(storeRequest);
+        existedStore.updateByStoreRequest(storeRequest);
 
         storeRepository.save(existedStore);
     }

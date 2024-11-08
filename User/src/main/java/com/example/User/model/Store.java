@@ -52,7 +52,7 @@ public class Store {
         return new Store(storeName, businessNumber, accountNumber, bankCode, president);
     }
 
-    public void updateStore(StoreRequest storeRequest) {
+    public void updateByStoreRequest(StoreRequest storeRequest) {
         this.storeName = storeRequest.getStoreName();
         this.businessNumber = storeRequest.getBusinessNumber();
         this.accountNumber = storeRequest.getAccountNumber();
