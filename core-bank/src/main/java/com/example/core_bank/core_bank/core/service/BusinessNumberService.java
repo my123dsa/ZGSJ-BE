@@ -1,6 +1,6 @@
 package com.example.core_bank.core_bank.core.service;
 
-import com.example.core_bank.core_bank.core.businessnumber.BusinessNumberResponse;
+import com.example.core_bank.core_bank.core.dto.businessnumber.BusinessNumberResponse;
 import com.example.core_bank.core_bank.global.error.CustomException;
 import com.example.core_bank.core_bank.global.error.ErrorCode;
 import com.example.core_bank.core_bank.core.repository.BusinessNumberRepository;

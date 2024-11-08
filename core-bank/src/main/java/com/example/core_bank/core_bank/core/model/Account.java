@@ -1,5 +1,6 @@
 package com.example.core_bank.core_bank.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
