@@ -43,7 +43,7 @@ public class TransactionHistoryController {
 
         Account account = accountRepository.findByAccountNumber(accountNumber);
         log.info("account"+ account.getName());
-        List<Classfication> classfication = classficationRepository.findByClassficationName(depositor);  // 예시로 classficationName을 depositor로 사용
+//        List<Classfication> classfication = classficationRepository.findByClassficationName(depositor);  // 예시로 classficationName을 depositor로 사용
 
         // 거래 내역을 조회하고 반환
 //        List<TransactionHistory> transactionHistoryList = transactionHistoryService.
