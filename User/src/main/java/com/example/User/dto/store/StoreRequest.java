@@ -28,9 +28,8 @@ public class StoreRequest {
     @NotBlank
     private String bankCode;
 
-    public Store toEntity(Integer storeId, President president) {
+    public Store toEntity(President president) {
         return Store.createStore(
-                storeId,
                 this.getStoreName(),
                 this.getBusinessNumber(),
                 this.getAccountNumber(),

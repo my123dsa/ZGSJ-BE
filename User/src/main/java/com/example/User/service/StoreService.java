@@ -39,7 +39,7 @@ public class StoreService {
             throw new CustomException(ErrorCode.DUPLICATE_STORE_NAME);
         }
 
-        Store store = storeRequest.toEntity(storeRequest.getId(), president);
+        Store store = storeRequest.toEntity(president);
         storeRepository.save(store);
     }
 
@@ -58,7 +58,7 @@ public class StoreService {
         Store existedStore = storeRepository.findById(storeId)
                 .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
-        existedStore = storeRequest.toEntity(storeId, existedStore.getPresident());
+        existedStore.updateStore(storeRequest);
 
         storeRepository.save(existedStore);
     }

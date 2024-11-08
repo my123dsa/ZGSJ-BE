@@ -1,5 +1,6 @@
 package com.example.User.model;
 
+import com.example.User.dto.store.StoreRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,9 +38,8 @@ public class Store {
     @JoinColumn(name = "president_id", nullable = false)
     private President president;
 
-    private Store(Integer id, String storeName, String businessNumber, String accountNumber,
+    private Store(String storeName, String businessNumber, String accountNumber,
                   String bankCode, President president) {
-        this.id = id;
         this.storeName = storeName;
         this.businessNumber = businessNumber;
         this.accountNumber = accountNumber;
@@ -47,8 +47,15 @@ public class Store {
         this.president = president;
     }
 
-    public static Store createStore(Integer id, String storeName, String businessNumber, String accountNumber,
+    public static Store createStore(String storeName, String businessNumber, String accountNumber,
                                     String bankCode, President president) {
-        return new Store(id, storeName, businessNumber, accountNumber, bankCode, president);
+        return new Store(storeName, businessNumber, accountNumber, bankCode, president);
+    }
+
+    public void updateStore(StoreRequest storeRequest) {
+        this.storeName = storeRequest.getStoreName();
+        this.businessNumber = storeRequest.getBusinessNumber();
+        this.accountNumber = storeRequest.getAccountNumber();
+        this.bankCode = storeRequest.getBankCode();
     }
 }

@@ -3,9 +3,7 @@ package com.example.User.dto.store;
 import com.example.User.model.Store;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 public class StoreResponse {
