@@ -22,17 +22,21 @@ public class PayStatement {
     @Column(name = "issuance_date", nullable = false)
     private LocalDate issuanceDate;
 
+    @Column(name = "amount", nullable = false)
+    private Integer amount;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "se_id")
     private StoreEmployee storeEmployee;
 
-    private PayStatement(String url, LocalDate issuanceDate, StoreEmployee storeEmployee) {
+    private PayStatement(String url, LocalDate issuanceDate, StoreEmployee storeEmployee, Integer amount) {
         this.url = url;
         this.issuanceDate = issuanceDate;
         this.storeEmployee = storeEmployee;
+        this.amount = amount;
     }
 
-    public static PayStatement createPayStatement(String url, LocalDate issuanceDate, StoreEmployee storeEmployee) {
-        return new PayStatement(url, issuanceDate, storeEmployee);
+    public static PayStatement createPayStatement(String url, LocalDate issuanceDate, StoreEmployee storeEmployee, Integer amount) {
+        return new PayStatement(url, issuanceDate, storeEmployee,amount);
     }
 }
