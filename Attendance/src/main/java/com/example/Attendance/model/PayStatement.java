@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class PayStatement {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ps_id")
     private Integer id;
 
