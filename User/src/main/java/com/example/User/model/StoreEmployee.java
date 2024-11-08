@@ -6,11 +6,13 @@ import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "store_employee",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        columnNames = {"store_id", "employee_id"}
+                        columnNames = {"store_id", "email"}
                 )
         }
 )
@@ -22,6 +24,24 @@ public class StoreEmployee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "se_id")
     private Integer id;
+
+    @Column(nullable = false, length = 50)
+    private String name;
+
+    @Column(nullable = false)
+    private Boolean sex;
+
+    @Column(nullable = false, length = 150)
+    private String address;
+
+    @Column(name = "birth_date", nullable = false)
+    private LocalDate birthDate;
+
+    @Column(name = "phone_number", nullable = false, length = 50)
+    private String phoneNumber;
+
+    @Column(nullable = false, length = 50)
+    private String email;
 
     @Column(nullable = false)
     private Integer salary;
@@ -35,7 +55,7 @@ public class StoreEmployee {
     @Column(name = "account_number", nullable = false, length = 50)
     private String accountNumber;
 
-    @Column(nullable = false)
+    @Column(name = "payment_date", nullable = false)
     @Min(1)
     @Max(28)
     private Integer paymentDate;
@@ -44,23 +64,45 @@ public class StoreEmployee {
     @JoinColumn(name = "store_id", nullable = false)
     private Store store;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id", nullable = false)
-    private Employee employee;
-
-    private StoreEmployee(Integer salary, Boolean employmentType, String bankCode,
-                          String accountNumber, Integer paymentDate, Store store, Employee employee) {
+    private StoreEmployee(String name, Boolean sex, String address, LocalDate birthDate, String phoneNumber,
+                          String email, Integer salary, Boolean employmentType, String bankCode,
+                          String accountNumber, Integer paymentDate, Store store) {
+        this.name = name;
+        this.sex = sex;
+        this.address = address;
+        this.birthDate = birthDate;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
         this.salary = salary;
         this.employmentType = employmentType;
         this.bankCode = bankCode;
         this.accountNumber = accountNumber;
         this.paymentDate = paymentDate;
         this.store = store;
-        this.employee = employee;
     }
 
-    public static StoreEmployee createStoreEmployee(Integer salary, Boolean employmentType, String bankCode,
-                                                    String accountNumber, Integer paymentDate, Store store, Employee employee) {
-        return new StoreEmployee(salary, employmentType, bankCode, accountNumber, paymentDate, store, employee);
+    public static StoreEmployee createStoreEmployee(String name, Boolean sex, String address, LocalDate birthDate,
+                                                    String phoneNumber, String email, Integer salary,
+                                                    Boolean employmentType, String bankCode, String accountNumber,
+                                                    Integer paymentDate, Store store) {
+        return new StoreEmployee(name, sex, address, birthDate, phoneNumber, email, salary,
+                employmentType, bankCode, accountNumber, paymentDate, store);
+    }
+
+    public StoreEmployee toEntity(Store store) {
+        return StoreEmployee.createStoreEmployee(
+                this.name,
+                this.sex,
+                this.address,
+                this.birthDate,
+                this.phoneNumber,
+                this.email,
+                this.salary,
+                this.employmentType,
+                this.bankCode,
+                this.accountNumber,
+                this.paymentDate,
+                store
+        );
     }
 }
