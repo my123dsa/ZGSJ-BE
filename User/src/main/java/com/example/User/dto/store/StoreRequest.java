@@ -1,5 +1,7 @@
 package com.example.User.dto.store;
 
+import com.example.User.model.President;
+import com.example.User.model.Store;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -26,6 +28,14 @@ public class StoreRequest {
     @NotBlank
     private String bankCode;
 
-    @NotNull
-    private Integer presidentId;
+    public Store toEntity(Integer storeId, President president) {
+        return Store.createStore(
+                storeId,
+                this.getStoreName(),
+                this.getBusinessNumber(),
+                this.getAccountNumber(),
+                this.getBankCode(),
+                president
+        );
+    }
 }

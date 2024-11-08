@@ -9,7 +9,9 @@ import com.example.User.model.Store;
 import com.example.User.model.StoreEmployee;
 import com.example.User.repository.PresidentRepository;
 import com.example.User.repository.StoreRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
@@ -26,9 +28,10 @@ public class StoreService {
         this.presidentRepository = presidentRepository;
     }
 
-    public void registerStore(@RequestBody StoreRequest storeRequest) {
-        List<StoreEmployee> employees = new ArrayList<>();
-        President president = presidentRepository.findById(1)
+    @Transactional
+    public void registerStore(StoreRequest storeRequest) {
+        Integer presidentId = 1;
+        President president = presidentRepository.findById(presidentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRESIDENT_NOT_FOUND));
 
         boolean isStoreNameExists = storeRepository.existsByStoreName(storeRequest.getStoreName());
@@ -36,46 +39,31 @@ public class StoreService {
             throw new CustomException(ErrorCode.DUPLICATE_STORE_NAME);
         }
 
-        Store store = Store.createStore(
-                storeRequest.getId(),
-                storeRequest.getStoreName(),
-                storeRequest.getBusinessNumber(),
-                storeRequest.getAccountNumber(),
-                storeRequest.getBankCode(),
-                employees,
-                president
-        );
+        Store store = storeRequest.toEntity(storeRequest.getId(), president);
         storeRepository.save(store);
     }
 
     public List<StoreResponse> showStores() {
         // President 존재 여부 확인
-        President president = presidentRepository.findById(2)
-                .orElseThrow(() -> new CustomException(ErrorCode.PRESIDENT_NOT_FOUND));
-        List<Store> stores = storeRepository.findAllByPresidentId(president.getId());
+        Integer presidentId = 1;
+        List<Store> stores = storeRepository.findAllByPresidentId(presidentId);
         return stores.stream()
                 .map(StoreResponse::from)
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void updateStore(Integer storeId, StoreRequest storeRequest) {
         // 기존 store 조회
         Store existedStore = storeRepository.findById(storeId)
                 .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
-        existedStore = Store.createStore(
-                existedStore.getId(),
-                storeRequest.getStoreName(),
-                storeRequest.getBusinessNumber(),
-                storeRequest.getAccountNumber(),
-                storeRequest.getBankCode(),
-                existedStore.getStoreEmployees(),
-                existedStore.getPresident()
-        );
+        existedStore = storeRequest.toEntity(storeId, existedStore.getPresident());
 
         storeRepository.save(existedStore);
     }
 
+    @Transactional
     public void deleteStore(Integer storeId) {
         storeRepository.deleteById(storeId);
     }

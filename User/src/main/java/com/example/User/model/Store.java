@@ -38,18 +38,17 @@ public class Store {
     private President president;
 
     private Store(Integer id, String storeName, String businessNumber, String accountNumber,
-                  String bankCode, List<StoreEmployee> storeEmployees, President president) {
+                  String bankCode, President president) {
         this.id = id;
         this.storeName = storeName;
         this.businessNumber = businessNumber;
         this.accountNumber = accountNumber;
         this.bankCode = bankCode;
-        this.storeEmployees = storeEmployees;
         this.president = president;
     }
 
     public static Store createStore(Integer id, String storeName, String businessNumber, String accountNumber,
-                                    String bankCode, List<StoreEmployee> storeEmployees, President president) {
-        return new Store(id, storeName, businessNumber, accountNumber, bankCode, storeEmployees, president);
+                                    String bankCode, President president) {
+        return new Store(id, storeName, businessNumber, accountNumber, bankCode, president);
     }
 }
