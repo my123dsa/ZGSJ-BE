@@ -17,11 +17,11 @@ import java.util.Objects;
 @Service
 @Slf4j
 public class RedisTokenService {
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
     private final JWTUtil jwtUtil;
-    private final ValueOperations<String, Object> valueOps;
+    private final ValueOperations<String, String> valueOps;
 
-    public RedisTokenService(RedisTemplate<String, Object> redisTemplate, JWTUtil jwtUtil) {
+    public RedisTokenService(RedisTemplate<String, String> redisTemplate, JWTUtil jwtUtil) {
         this.redisTemplate = redisTemplate;
         this.valueOps = redisTemplate.opsForValue();
         this.jwtUtil = jwtUtil;
@@ -43,8 +43,8 @@ public class RedisTokenService {
     }
 
     public String checkRefreshToken(Integer accessTokenId) {
-        ValueOperations<String, Object> values = redisTemplate.opsForValue();
-        String refreshToken =(String)values.get(accessTokenId);
+
+        String refreshToken =valueOps.get(accessTokenId.toString());
         if (refreshToken == null)
             throw new CustomException(ErrorCode.EMPTY_REFRESH_TOKEN);
 
@@ -55,7 +55,7 @@ public class RedisTokenService {
 
         Integer id = jwtUtil.decrypt(encrypt);
 
-        if(Objects.equals(id, accessTokenId))
+        if(!Objects.equals(id, accessTokenId))
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
 
         checkAndRenewRefreshToken(id,exp);

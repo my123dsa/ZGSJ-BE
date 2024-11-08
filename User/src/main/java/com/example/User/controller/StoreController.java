@@ -29,14 +29,15 @@ public class StoreController {
     }
 
     @PutMapping
-    private ResponseEntity<Void> updateStore(@RequestParam Integer storeId, @RequestBody StoreRequest storeRequest) {
+    private ResponseEntity<Void> updateStore(@RequestParam("storeid") Integer storeId, @RequestBody StoreRequest storeRequest) {
         storeService.updateStore(storeId, storeRequest);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping
-    private ResponseEntity<Void> deleteStore(@RequestParam Integer storeId) {
+    private ResponseEntity<Void> deleteStore(@RequestParam("storeid") Integer storeId) {
         storeService.deleteStore(storeId);
+        //id 확인 후 삭제
         return ResponseEntity.ok().build();
     }
 }

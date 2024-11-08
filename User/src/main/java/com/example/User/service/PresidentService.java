@@ -45,6 +45,7 @@ public class PresidentService {
 
     @Transactional
     public void remove(Integer id){
+        //확인 후 삭제하기
         presidentRepository.deleteById(id);
     }
 
