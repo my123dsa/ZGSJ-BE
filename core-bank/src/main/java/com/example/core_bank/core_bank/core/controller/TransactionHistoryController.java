@@ -23,7 +23,11 @@ public class TransactionHistoryController {
     private final TransactionHistoryService transactionHistoryService;
 
     @PostMapping("/list")
-    public ResponseEntity<List<TransactionHistoryResponse>> getTransactionHistory(@RequestBody TransactionHistoryRequestDto request) {
+    public ResponseEntity<List<TransactionHistoryResponse>> getTransactionHistory(
+            @RequestBody TransactionHistoryRequestDto request,
+            @RequestParam Integer year,
+            @RequestParam Integer month)
+    {
 
         // 요청에서 bankCode, accountNumber, depositor 정보를 받아옴
         String bankCode = request.getBankCode();
@@ -32,7 +36,7 @@ public class TransactionHistoryController {
 
         // 서비스 레이어를 통해 거래 내역을 조회
         List<TransactionHistoryResponse> transactionHistoryRes = transactionHistoryService
-                .getTransactionHistory(bankCode, accountNumber, depositor);
+                .getTransactionHistory(bankCode, accountNumber, year, month);
 
         return ResponseEntity.ok(transactionHistoryRes);
     }
