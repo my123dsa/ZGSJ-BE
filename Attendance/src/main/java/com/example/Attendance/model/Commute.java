@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -24,7 +25,7 @@ public class Commute {
     private LocalDate commuteDate;
 
     @Column(name = "commute_duration")
-    private LocalTime commuteDuration;
+    private Long commuteDuration;
 
     @Column(name = "start_time")
     private LocalDateTime startTime;
@@ -38,7 +39,7 @@ public class Commute {
 
     private Commute(LocalDate commuteDate, LocalDateTime startTime, StoreEmployee storeEmployee) {
         this.commuteDate = commuteDate;
-        this.commuteDuration = LocalTime.of(0, 0);
+        this.commuteDuration = 0L;
         this.startTime = startTime;
         this.storeEmployee = storeEmployee;
     }
@@ -48,7 +49,7 @@ public class Commute {
         this.commuteDate = commuteDate;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.commuteDuration = calculateDuration(startTime, endTime);
+        calculateDuration(startTime, endTime);
         this.storeEmployee = storeEmployee;
     }
 
@@ -61,9 +62,12 @@ public class Commute {
         return new Commute(commuteDate, startTime, endTime, storeEmployee);
     }
 
-    private LocalTime calculateDuration(LocalDateTime startTime, LocalDateTime endTime) {
-        long hours = ChronoUnit.HOURS.between(startTime, endTime);
-        long minutes = ChronoUnit.MINUTES.between(startTime, endTime) % 60;
-        return LocalTime.of((int) hours, (int) minutes);
+    private void calculateDuration(LocalDateTime startTime, LocalDateTime endTime) {
+        this.commuteDuration = Duration.between(startTime, endTime).toMinutes();
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        calculateDuration(this.startTime, endTime);
+        this.endTime = endTime;
     }
 }

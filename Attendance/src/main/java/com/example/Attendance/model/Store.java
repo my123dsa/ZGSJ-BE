@@ -23,6 +23,9 @@ public class Store {
     @Column(name = "bank_code", length = 50, nullable = false)
     private String bankCode;
 
+    @Column(name = "location",length = 50, nullable = false)
+    private String location;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "president_id")
     private President president;
