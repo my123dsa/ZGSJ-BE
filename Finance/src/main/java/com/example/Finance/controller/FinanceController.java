@@ -2,6 +2,7 @@ package com.example.Finance.controller;
 
 import com.example.Finance.dto.TransactionHistoryRequest;
 import com.example.Finance.dto.TransactionHistoryResponse;
+import com.example.Finance.service.IncomeStatementService;
 import com.example.Finance.service.TransactionHistoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import java.util.List;
 public class FinanceController {
 
     private final TransactionHistoryService transactionHistoryService;
+    private final IncomeStatementService incomeStatementService;
 
     @GetMapping("/dotest")
     public List<TransactionHistoryResponse> getFinanaceData(
@@ -25,5 +27,7 @@ public class FinanceController {
     {
         return transactionHistoryService.getTransactionHistoryList(transactionHistoryRequest, year ,month);
     }
+
+
 
 }

@@ -5,7 +5,6 @@ import com.example.Finance.dto.TransactionHistoryResponse;
 import com.example.Finance.feign.CoreBankFeign;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -13,12 +12,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TransactionHistoryService {
     private final CoreBankFeign coreBankFeign;
+    private final IncomeStatementService incomeStatementService;
 
     public List<TransactionHistoryResponse> getTransactionHistoryList(
             TransactionHistoryRequest transactionHistoryRequest,
             Integer year,
             Integer month)
     {
+        incomeStatementService.calculateStatement(coreBankFeign.getTransactionHistoryList(transactionHistoryRequest ,year, month));
         return coreBankFeign.getTransactionHistoryList(transactionHistoryRequest ,year, month);
     }
 
