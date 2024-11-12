@@ -6,6 +6,7 @@ import com.example.Attendance.service.MapService;
 import com.example.Attendance.service.StoreEmployeeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,8 +26,8 @@ public class StoreEmployeeController {
 
         //
         boolean result= storeEmployeeService.goToWork(storeId,commuteRequest);
-        if(result){
-            return ResponseEntity.ok("이전 퇴근을 찍지 않았습니다 사장님께 연락해주세요");
+        if(!result){
+            return ResponseEntity.status(202).body("이전 퇴근을 찍지 않았습니다 사장님께 연락해주세요");
         }
         return ResponseEntity.ok("출근이 찍혔습니다");
     }
