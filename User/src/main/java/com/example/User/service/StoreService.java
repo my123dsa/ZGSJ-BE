@@ -26,7 +26,7 @@ public class StoreService {
     private final PresidentRepository presidentRepository;
 
     @Transactional
-    public void registerStore(StoreRequest storeRequest) {
+    public String registerStore(StoreRequest storeRequest) {
         Integer presidentId = 1;
         President president = presidentRepository.findById(presidentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRESIDENT_NOT_FOUND));
@@ -38,6 +38,7 @@ public class StoreService {
 
         Store store = storeRequest.toEntity(president);
         storeRepository.save(store);
+        return president.getEmail();
     }
 
     public List<StoreResponse> showStores() {
