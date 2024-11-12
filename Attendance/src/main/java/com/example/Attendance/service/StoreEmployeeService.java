@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,14 +26,14 @@ public class StoreEmployeeService {
     public boolean goToWork(Integer storeId,EmployeeCommuteRequest request){
         StoreEmployee storeEmployee =findStoreEmployeeByEmailAndStoreId(storeId,request);
 
-        Commute lastCommute= commuteRepository.findTopByStoreEmployeeIdOrderByStartTimeDesc(storeEmployee.getId()).get();
+        Optional<Commute> lastCommute= commuteRepository.findTopByStoreEmployeeIdOrderByStartTimeDesc(storeEmployee.getId());
         LocalDateTime now= LocalDateTime.now();
         Commute commute= Commute.createCommuteCheckIn(now.toLocalDate(),now,storeEmployee);
-
-        if (lastCommute!=null && lastCommute.getEndTime()==null){
+        if(lastCommute.isPresent() &&lastCommute.get().getEndTime()==null){
             commuteRepository.save(commute);
             return false;
         }
+
         commuteRepository.save(commute);
         return true;
     }
@@ -63,8 +64,8 @@ public class StoreEmployeeService {
 
         Double reLat= request.getLatitude();
         Double reLong= request.getLongitude();
-        boolean isLat=reLat <= sLat+rangeLat || reLat>=sLat-rangeLat;
-        boolean isLong= reLong<= sLong+rangeLon || reLong>=sLong-rangeLon;
+        boolean isLat=reLat <= sLat+rangeLat && reLat>=sLat-rangeLat;
+        boolean isLong= reLong<= sLong+rangeLon && reLong>=sLong-rangeLon;
         if (!isLat || !isLong){
             throw new CustomException(ErrorCode.INVALID_LOCATION);
         }

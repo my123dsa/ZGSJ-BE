@@ -2,11 +2,9 @@ package com.example.Attendance.controller;
 
 
 import com.example.Attendance.dto.EmployeeCommuteRequest;
-import com.example.Attendance.service.MapService;
 import com.example.Attendance.service.StoreEmployeeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class StoreEmployeeController {
 
-    private final MapService mapService;
+//    private final MapService mapService;
     private final StoreEmployeeService storeEmployeeService;
 
     @PostMapping("/{storeid}/go-to-work")
@@ -38,10 +36,10 @@ public class StoreEmployeeController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/getCoordinates")
-    public ResponseEntity<String> getCoordinates(@RequestBody String address) {
-        String gps=mapService.getCoordinates(address);
-        return ResponseEntity.ok(gps);
-    }
+//    @PostMapping("/getCoordinates")
+//    public ResponseEntity<String> getCoordinates(@RequestBody String address) {
+//        String gps=mapService.getCoordinates(address);
+//        return ResponseEntity.ok(gps);
+//    }
 }
 
