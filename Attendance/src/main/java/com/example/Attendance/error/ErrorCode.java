@@ -20,7 +20,13 @@ public enum ErrorCode {
     EMAIL_ALREADY_EXISTS(432, "존재하는 이메일입니다."),
     INVALID_PASSWORD_FORMAT(433, "비밀번호 형식이 잘못되었습니다."),
 
-    SERVER_ERROR(500, "서버 에러입니다. 서버 팀에 연락주세요!");
+    SERVER_ERROR(500, "서버 에러입니다. 서버 팀에 연락주세요!"),
+    CANNOT_FIND_POSITION(400,"위치가 잘못됨"),
+    INVALID_EMPLOYEE(400,"직원 정보가 없음"),
+    INVALID_LOCATION(403,"위치가 잘못됨"),
+    INVALID_COMMUTE(400,"통근 정보가 없음"),
+    MISSING_GO_TO_WORK_RECODE(400,"출근 찍지 않음"),
+    MISSING_LEAVE_WORK_RECODE(400,"퇴근 찍지 않음");
 
 
     private final int status;

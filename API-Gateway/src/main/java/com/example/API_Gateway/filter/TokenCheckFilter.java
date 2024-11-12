@@ -42,7 +42,10 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
                 path.contains("/president/regist") ||
                 path.contains("/president/logout") ||
                 path.contains("/president/refresh") ||
-                path.contains("/QRCheck")) {
+                path.contains("/QRCheck") ||
+                path.contains("/leave-work")||
+                path.contains("/go-to-work")
+            ){
             log.info("통과");
             return chain.filter(exchange);
         }
