@@ -3,8 +3,8 @@ package com.example.Finance.controller;
 import com.example.Finance.dto.TransactionHistoryRequest;
 import com.example.Finance.dto.TransactionHistoryResponse;
 import com.example.Finance.feign.UserFeign;
-import com.example.Finance.service.PdfService;
 import com.example.Finance.service.IncomeStatementService;
+import com.example.Finance.service.IncomeStatementPdfService;
 import com.example.Finance.service.TransactionHistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -24,7 +23,7 @@ public class FinanceController {
 
     private final TransactionHistoryService transactionHistoryService;
     private final IncomeStatementService incomeStatementService;
-    private final PdfService pdfService;
+    private final IncomeStatementPdfService incomeStatementPdfService;
     private final UserFeign userFeign;
 
     //차트 제공에 맞춰서 변경하기
@@ -50,17 +49,12 @@ public class FinanceController {
         List<TransactionHistoryResponse> transactionHistoryResponseList = transactionHistoryService.getTransactionHistoryList(transactionHistoryRequest, year, month);
 
         // PDF 생성
-        byte[] pdfContent = pdfService.generateIncomeStatementPdf(
-                transactionHistoryResponseList,
-                incomeStatementService.calculateStatement(transactionHistoryResponseList)
+        byte[] pdfContent = incomeStatementPdfService.generateIncomeStatementPdf(
+                transactionHistoryResponseList
         );
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        // 파일명 설정 (한글 지원)
-        headers.setContentDisposition(ContentDisposition.builder("attachment")
-                .filename(String.format("%d년_%d월_손익계산서.pdf", year, month), StandardCharsets.UTF_8)
-                .build());
 
         return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
     }

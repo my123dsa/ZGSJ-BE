@@ -49,15 +49,15 @@ public class IncomeStatementService {
         ) ;
     }
 
-    private BigDecimal calculateRevenue(List<TransactionHistoryResponse> transactions) {
+    public BigDecimal calculateRevenue(List<TransactionHistoryResponse> transactions) {
         return transactions.stream()
-                .filter(TransactionHistoryResponse::getIsDeposit)
+                .filter(TransactionHistoryResponse::getIsDeposit) //1이 입금
                 .filter(t -> isRevenueClassification(t.getClassificationName()))
                 .map(t -> new BigDecimal(t.getAmount()))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    private BigDecimal calculateCostOfSales(List<TransactionHistoryResponse> transactions) {
+    public BigDecimal calculateCostOfSales(List<TransactionHistoryResponse> transactions) {
         return transactions.stream()
                 .filter(t -> !t.getIsDeposit())
                 .filter(t -> isCostOfSalesClassification(t.getClassificationName()))
@@ -65,7 +65,7 @@ public class IncomeStatementService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    private BigDecimal calculateOperatingExpenses(List<TransactionHistoryResponse> transactions) {
+    public BigDecimal calculateOperatingExpenses(List<TransactionHistoryResponse> transactions) {
         return transactions.stream()
                 .filter(t -> !t.getIsDeposit())
                 .filter(t -> isOperatingExpenseClassification(t.getClassificationName()))
@@ -74,7 +74,7 @@ public class IncomeStatementService {
     }
 
     //입금 내역(수익)
-    private boolean isRevenueClassification(String classificationName) {
+    public boolean isRevenueClassification(String classificationName) {
         return List.of(
                 "일일 매출 입금",
                 "카드 매출 정산금",
@@ -86,7 +86,7 @@ public class IncomeStatementService {
     }
 
     //원재료 비용
-    private boolean isCostOfSalesClassification(String classificationName) {
+    public boolean isCostOfSalesClassification(String classificationName) {
         return List.of(
                 "거래처 대금 지급",
                 "재료/원자재 구매"
@@ -94,7 +94,7 @@ public class IncomeStatementService {
     }
 
     //지출
-    private boolean isOperatingExpenseClassification(String classificationName) {
+    public boolean isOperatingExpenseClassification(String classificationName) {
         return List.of(
                 "임대료/관리비 지급",
                 "직원 급여 이체",
@@ -117,7 +117,7 @@ public class IncomeStatementService {
     }
 
     //율(%)로 바꾸기
-    private BigDecimal calculateProfitMargin(BigDecimal operatingIncome, BigDecimal totalRevenue) {
+    public BigDecimal calculateProfitMargin(BigDecimal operatingIncome, BigDecimal totalRevenue) {
         if (totalRevenue.compareTo(BigDecimal.ZERO) == 0) {
             return BigDecimal.ZERO;
         }
