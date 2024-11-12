@@ -9,10 +9,7 @@ import com.example.Finance.service.TransactionHistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,8 +35,7 @@ public class FinanceController {
     }
 
     //pdf 생성
-    @CrossOrigin(origins = "*")
-    @GetMapping(value = "/transactionpdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    @PostMapping(value = "/transactionpdf")
     public ResponseEntity<byte[]> getFinancePdf(
             @RequestParam Integer storeid,
             @RequestParam Integer year,

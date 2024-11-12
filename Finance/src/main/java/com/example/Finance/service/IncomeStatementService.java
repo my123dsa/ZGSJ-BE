@@ -44,7 +44,7 @@ public class IncomeStatementService {
 
         return IncomeStatementResponse.of(
                 totalRevenue, costOfSales,
-                operatingExpenses, grossProfit,
+               grossProfit, operatingExpenses,
                 operatingIncome, profitMargin
         ) ;
     }
