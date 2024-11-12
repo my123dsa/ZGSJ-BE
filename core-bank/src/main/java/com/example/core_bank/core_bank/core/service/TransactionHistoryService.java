@@ -34,7 +34,13 @@ public class TransactionHistoryService {
 
 //     * bankCode, accountNumber, depositor로 거래 내역 조회
 //     */
-    public List<TransactionHistoryResponse> getTransactionHistory(String bankCode, String accountNumber, String depositor) {
+    public List<TransactionHistoryResponse> getTransactionHistory(
+            String bankCode,
+            String accountNumber,
+            Integer year,
+            Integer month
+    )
+    {
         // 계좌 조회
         Optional<Account> accountOpt = accountRepository.findByAccountNumberWithBank(accountNumber);
 
@@ -45,7 +51,7 @@ public class TransactionHistoryService {
 
         // 계좌가 존재하고 bankCode가 일치하는 경우, 거래 내역 조회
         Account account = accountOpt.get();
-        List<TransactionHistory> transactionHistories = transactionHistoryRepository.findByAccountIdWithClassfication(account.getId());
+        List<TransactionHistory> transactionHistories = transactionHistoryRepository.findByAccountIdAndYearAndMonthWithClassfication(account.getId(), year, month);
 
         // 거래 내역을 TransactionHistoryResponse로 변환하여 반환
         return transactionHistories.stream()
