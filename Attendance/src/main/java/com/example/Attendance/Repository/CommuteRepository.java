@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface CommuteRepository extends JpaRepository<Commute, Integer> {
 
-    Optional<Commute> findTopById(Integer id);
+
+    Optional<Commute> findTopByStoreEmployeeIdOrderByStartTimeDesc(Integer seId);
 }

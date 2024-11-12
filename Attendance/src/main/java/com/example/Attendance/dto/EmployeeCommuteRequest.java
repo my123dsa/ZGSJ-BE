@@ -1,6 +1,7 @@
 package com.example.Attendance.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,8 @@ import lombok.NoArgsConstructor;
 public class EmployeeCommuteRequest {
     @NotBlank
     private String email;
-    @NotBlank
-    private String location;
+    @NotNull
+    private Double latitude;
+    @NotNull
+    private Double longitude;
 }

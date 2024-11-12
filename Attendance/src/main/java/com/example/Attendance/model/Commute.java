@@ -27,7 +27,7 @@ public class Commute {
     @Column(name = "commute_duration")
     private Long commuteDuration;
 
-    @Column(name = "start_time")
+    @Column(name = "start_time", nullable = false)
     private LocalDateTime startTime;
 
     @Column(name = "end_time")
