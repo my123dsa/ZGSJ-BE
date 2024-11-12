@@ -6,6 +6,7 @@ import com.example.core_bank.core_bank.core.model.TransactionHistory;
 import com.example.core_bank.core_bank.core.repository.TransactionHistoryRepository;
 import com.example.core_bank.core_bank.core.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,6 +47,7 @@ public class TransactionHistoryService {
 
         // 계좌가 존재하지 않거나 bankCode가 일치하지 않으면 빈 리스트 반환
         if (accountOpt.isEmpty() || !accountOpt.get().getBank().getBankCode().equals(bankCode)) {
+            log.info("계좌 존재 x or bankcode");
             return List.of();
         }
 

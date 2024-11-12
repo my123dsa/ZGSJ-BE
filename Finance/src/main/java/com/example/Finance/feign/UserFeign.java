@@ -12,5 +12,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface UserFeign {
 
     @GetMapping("/storeAccount")
-    public AccountInfoResponse getStoreAccountInfo(@RequestParam Integer postId);
+    public AccountInfoResponse getStoreAccountInfo(@RequestParam Integer storeId);
 }

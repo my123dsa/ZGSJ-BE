@@ -14,8 +14,8 @@ public class CoreBankController {
     private final CoreBankService coreBankService;
 
     @GetMapping("/storeAccount")
-    public AccountInfoResponse getaccountInfoResponse(@RequestParam Integer postId)
+    public AccountInfoResponse getaccountInfoResponse(@RequestParam Integer storeId)
     {
-
+        return coreBankService.getStoreAccountInfo(storeId);
     }
 }
