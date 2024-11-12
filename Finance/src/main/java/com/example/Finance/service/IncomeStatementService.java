@@ -1,5 +1,6 @@
 package com.example.Finance.service;
 
+import com.example.Finance.dto.IncomeStatementResponse;
 import com.example.Finance.dto.TransactionHistoryResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,7 @@ import java.util.Map;
 @Slf4j
 public class IncomeStatementService {
 
-    public void calculateStatement(List<TransactionHistoryResponse> transactions) {
+    public IncomeStatementResponse calculateStatement(List<TransactionHistoryResponse> transactions) {
         // 총 매출액 계산
         BigDecimal totalRevenue = calculateRevenue(transactions);
         log.info("총 매출액 계산" + totalRevenue);
@@ -41,15 +42,11 @@ public class IncomeStatementService {
         BigDecimal profitMargin = calculateProfitMargin(operatingIncome, totalRevenue);
         log.info("수익률 계산" + operatingIncome);
 
-//        return new IncomeStatementResponse(
-//                totalRevenue,
-//                costOfSales,
-//                grossProfit,
-//                operatingExpenses,
-//                operatingIncome,
-//                profitMargin,
-//                createDetailsDTO(transactions)
-//        );
+        return IncomeStatementResponse.of(
+                totalRevenue, costOfSales,
+                operatingExpenses, grossProfit,
+                operatingIncome, profitMargin
+        ) ;
     }
 
     private BigDecimal calculateRevenue(List<TransactionHistoryResponse> transactions) {
