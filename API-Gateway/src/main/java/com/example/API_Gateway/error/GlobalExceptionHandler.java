@@ -27,13 +27,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ArithmeticException.class) // ③
-    public ResponseEntity<Object> handleArithmeticException(ArithmeticException e) {
+    public ResponseEntity<ErrorDTO> handleArithmeticException(ArithmeticException e) {
         ErrorCode errorCode = ErrorCode.SERVER_ERROR;
         return handleExceptionInternal(errorCode, e.getMessage());
     }
 
 
-    private ResponseEntity<Object> handleExceptionInternal(ErrorCode errorCode, String message) {
+    private ResponseEntity<ErrorDTO> handleExceptionInternal(ErrorCode errorCode, String message) {
         return ResponseEntity.status(errorCode.getStatus())
                 .body(makeErrorResponse(errorCode, message));
     }
