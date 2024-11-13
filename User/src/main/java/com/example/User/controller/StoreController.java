@@ -4,7 +4,6 @@ import com.example.User.dto.store.StoreRequest;
 import com.example.User.dto.store.StoreResponse;
 import com.example.User.model.President;
 import com.example.User.service.EmailService;
-import com.example.User.service.MapService;
 import com.example.User.service.PresidentService;
 import com.example.User.service.StoreService;
 import jakarta.servlet.http.HttpServletRequest;

@@ -54,6 +54,7 @@ public class PresidentService {
     public void updatePresident(Integer id, String phoneNumber, LocalDate birthDate) {
         presidentRepository.updatePhoneNumberAndBirthDate(id,phoneNumber,birthDate);
     }
+
     public President findById(Integer id) {
         return presidentRepository.findById(id)
                 .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
