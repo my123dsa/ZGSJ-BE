@@ -1,12 +1,14 @@
 package com.example.User.service;
 
 
+import com.example.User.dto.login.ReqIdFindData;
 import com.example.User.dto.login.ReqLoginData;
 import com.example.User.dto.login.ReqRegist;
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
 import com.example.User.model.President;
 import com.example.User.repository.PresidentRepository;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -53,6 +55,18 @@ public class PresidentService {
     @Transactional
     public void updatePresident(Integer id, String phoneNumber, LocalDate birthDate) {
         presidentRepository.updatePhoneNumberAndBirthDate(id,phoneNumber,birthDate);
+    }
+
+    //사장 아이디 찾기
+    public String findByNameAndPhoneNumber(ReqIdFindData reqIdFindData){
+        President president = presidentRepository.findByNameAndPhoneNumber(
+                reqIdFindData.getName(),
+                reqIdFindData.getPhoneNumber()
+        ).orElseThrow(() -> new NotFoundException("일치하는 사용자 정보를 찾을 수 없습니다"));
+
+        String presidentEmail = president.getEmail();
+
+        return presidentEmail;
     }
 
 

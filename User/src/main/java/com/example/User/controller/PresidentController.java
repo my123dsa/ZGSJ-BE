@@ -1,9 +1,7 @@
 package com.example.User.controller;
 
 
-import com.example.User.dto.login.ReqLoginData;
-import com.example.User.dto.login.ReqRegist;
-import com.example.User.dto.login.ResNewAccessToken;
+import com.example.User.dto.login.*;
 import com.example.User.dto.presidentupdate.PresidentUpdateRequest;
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
@@ -47,6 +45,13 @@ public class PresidentController {
 
         redisTokenService.removeRefreshToken(id);
         return ResponseEntity.ok().build();
+    }
+
+
+    @PostMapping("/id-find")
+    ResponseEntity<ResIdFindData> findId(@RequestBody ReqIdFindData reqIdFindData){
+        String email = presidentService.findByNameAndPhoneNumber(reqIdFindData);
+        return ResponseEntity.ok(ResIdFindData.from(email));
     }
 
     @GetMapping("/refresh")
