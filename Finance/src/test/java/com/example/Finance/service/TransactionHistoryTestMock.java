@@ -48,7 +48,7 @@ public class TransactionHistoryTestMock {
 
         // when
         List<TransactionHistoryResponse> result =
-                transactionHistoryService.getTransactionHistoryList(transactionHistoryRequest, 2024, 11);
+                transactionHistoryService.getYearMonthlyTransactions(transactionHistoryRequest, 2024, 11);
 
         // then
         assertThat(result.size()).isEqualTo(0);
@@ -65,7 +65,7 @@ public class TransactionHistoryTestMock {
                 .thenReturn(transactionHistoryResponseList);
 
         List<TransactionHistoryResponse> result =
-                transactionHistoryService.getTransactionHistoryList(transactionHistoryRequest, 2024, 11);
+                transactionHistoryService.getYearMonthlyTransactions(transactionHistoryRequest, 2024, 11);
 
         assertThat(result.get(0).getClassificationName()).isEqualTo("테스트임");
 
@@ -87,7 +87,7 @@ public class TransactionHistoryTestMock {
                         .build()));
 
         assertThatThrownBy(() ->
-                transactionHistoryService.getTransactionHistoryList(transactionHistoryRequest, 2024, 11))
+                transactionHistoryService.getYearMonthlyTransactions(transactionHistoryRequest, 2024, 11))
                 .isInstanceOf(FeignException.class)
                 .hasMessageContaining("존재하지 않는 사용자의 계좌입니다");
 
