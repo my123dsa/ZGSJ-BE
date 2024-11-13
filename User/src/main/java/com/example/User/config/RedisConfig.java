@@ -13,10 +13,10 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
 
     @Value("${spring.data.redis.host}")
-    private static final String host="localhost";
+    private String host;
 
     @Value("${spring.data.redis.port}")
-    private static final int port=6379;
+    private int port;
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
@@ -34,13 +34,16 @@ public class RedisConfig {
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
 
-        // Hash Key-Value 형태로 직렬화를 수행합니다.
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
-
-        // 기본적으로 직렬화를 수행합니다.
-        redisTemplate.setDefaultSerializer(new StringRedisSerializer());
-
+//        //이후 거래 내역 저장시 객체 이거 사용할 듯?
+//        Jackson2JsonRedisSerializer<Object> jsonSerializer =
+//                new Jackson2JsonRedisSerializer<>(Object.class);
+//        redisTemplate.setValueSerializer(jsonSerializer);
+//        // Hash Key-Value 형태로 직렬화를 수행합니다.
+//        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+//        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
+//
+//        // 기본적으로 직렬화를 수행합니다.
+//        redisTemplate.setDefaultSerializer(new StringRedisSerializer());
         return redisTemplate;
     }
 }
