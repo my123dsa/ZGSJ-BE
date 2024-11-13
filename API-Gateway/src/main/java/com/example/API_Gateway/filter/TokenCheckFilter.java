@@ -1,11 +1,13 @@
 package com.example.API_Gateway.filter;
 
 
-import com.example.API_Gateway.error.exception.AccessTokenException;
+import com.example.API_Gateway.error.CustomException;
+import com.example.API_Gateway.error.ErrorCode;
 import com.example.API_Gateway.util.JWTUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -17,96 +19,84 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class TokenCheckFilter implements GlobalFilter, Ordered {
 
     private final JWTUtil jwtUtil;
+    private static final List<String> permitUrl=new ArrayList<>();
 
-    public TokenCheckFilter(JWTUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
+    static {
+        permitUrl.add("/president/login");
+        permitUrl.add("/president/regist");
+        permitUrl.add("/president/logout");
+        permitUrl.add("/president/refresh");
+        permitUrl.add("commute/QRCheck");
+        permitUrl.add("/leave-work");
+        permitUrl.add("/go-to-work");
+    }
+
+    @Override
+    public int getOrder() {
+        return -1;
     }
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-
+        HttpHeaders headers = request.getHeaders();
         String path = request.getURI().getPath();
         log.info("TokenCheckFilter path: {}", path);
 
-        // /user/login 경로는 예외 처리
-        if (path.contains("/president/login") ||
-                path.contains("/president/regist") ||
-                path.contains("/president/logout") ||
-                path.contains("/president/refresh") ||
-                path.contains("/QRCheck") ||
-                path.contains("/leave-work")||
-                path.contains("/go-to-work")
-            ){
+        if(permitUrl.contains(path)){
             log.info("통과");
             return chain.filter(exchange);
         }
 
-        log.info("Token Check Filter..........................");
-
-        if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
+        if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
             log.info("헤더에 정보가 없습니다");
             return onError(exchange, HttpStatus.UNAUTHORIZED);
         }
 
-        String tokenStr = request.getHeaders()
-                .get(HttpHeaders.AUTHORIZATION)
-                .get(0)
-                .replace("Bearer ", "");
+        String tokenStr = headers.get(HttpHeaders.AUTHORIZATION)
+                .get(0).replace("Bearer ", "");
 
-        log.info("tokenStr: {}", tokenStr);
-        try {
-            Map<String, Object> payload = validateAccessToken(tokenStr);
-            if (payload.containsKey("refresh")) {
-                //상태 코드 지정
-                return onError(exchange, HttpStatus.BAD_GATEWAY);
-            }
+        Map<String, Object> payload = validateAccessToken(tokenStr);
 
-            Integer id = jwtUtil.decrypt((String) payload.get("payload"));
-            log.info("id: {}", id);
+        // 숫자인지 한번 확인 필요할 수도
+        Integer id = jwtUtil.decrypt((String) payload.get("payload"));
+        log.info("id: {}", id);
 
-            ServerHttpRequest mutatedRequest = request.mutate()
-                    .header("id", id.toString())
-                    .build();
-
-            return chain.filter(exchange.mutate().request(mutatedRequest).build());
-        } catch (AccessTokenException e) {
-            return onError(exchange, HttpStatus.UNAUTHORIZED);
-        }
+        ServerHttpRequest mutatedRequest = request.mutate()
+                .header("id", id.toString())
+                .build();
+        return chain.filter(exchange.mutate().request(mutatedRequest).build());
     }
 
-    private Map<String, Object> validateAccessToken(String tokenStr) throws AccessTokenException {
+    private Map<String, Object> validateAccessToken(String tokenStr){
         try {
             return jwtUtil.validateToken(tokenStr);
         } catch (MalformedJwtException malformedJwtException) {
             log.error("MalformedJwtException----------------------");
-            throw new AccessTokenException(AccessTokenException.TOKEN_ERROR.MALFORM);
+            throw new CustomException(ErrorCode.MALFORM_TOKEN);
         } catch (SignatureException signatureException) {
             log.error("SignatureException----------------------");
-            throw new AccessTokenException(AccessTokenException.TOKEN_ERROR.BADSIGN);
+            throw new CustomException(ErrorCode.BADSIGN_TOKEN);
         } catch (ExpiredJwtException expiredJwtException) {
             log.error("ExpiredJwtException----------------------");
-            Map<String, Object> claims = expiredJwtException.getClaims();
-            claims.put("refresh", "true");
-            return claims;
+            throw  new CustomException(ErrorCode.BAD_GATEWAY_TEST);
+//            throw new CustomException(ErrorCode.EXPIRED_TOKEN);
         }
     }
 
     private Mono<Void> onError(ServerWebExchange exchange, HttpStatus status) {
         exchange.getResponse().setStatusCode(status);
         return exchange.getResponse().setComplete();
-    }
-
-    @Override
-    public int getOrder() {
-        return -1;
     }
 }
