@@ -36,7 +36,7 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
         permitUrl.add("/president/login");
         permitUrl.add("/president/regist");
         permitUrl.add("/president/logout");
-        permitUrl.add("/president/refresh");
+//        permitUrl.add("/president/refresh");
         permitUrl.add("commute/QRCheck");
         permitUrl.add("/leave-work");
         permitUrl.add("/go-to-work");
@@ -67,7 +67,7 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
         String tokenStr = headers.get(HttpHeaders.AUTHORIZATION)
                 .get(0).replace("Bearer ", "");
 
-        Map<String, Object> payload = validateAccessToken(tokenStr);
+        Map<String, Object> payload = validateAccessToken(tokenStr,path);
 
         // 숫자인지 한번 확인 필요할 수도
         Integer id = jwtUtil.decrypt((String) payload.get("payload"));
@@ -79,7 +79,7 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
         return chain.filter(exchange.mutate().request(mutatedRequest).build());
     }
 
-    private Map<String, Object> validateAccessToken(String tokenStr){
+    private Map<String, Object> validateAccessToken(String tokenStr,String path){
         try {
             return jwtUtil.validateToken(tokenStr);
         } catch (MalformedJwtException malformedJwtException) {
@@ -90,6 +90,8 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
             throw new CustomException(ErrorCode.BADSIGN_TOKEN);
         } catch (ExpiredJwtException expiredJwtException) {
             log.error("ExpiredJwtException----------------------");
+            if(path.contains("/president/refresh"))
+                return expiredJwtException.getClaims();
             throw  new CustomException(ErrorCode.BAD_GATEWAY_TEST);
 //            throw new CustomException(ErrorCode.EXPIRED_TOKEN);
         }
