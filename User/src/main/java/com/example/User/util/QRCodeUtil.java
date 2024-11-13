@@ -16,18 +16,17 @@ public class QRCodeUtil {
 
     public String generateQRUrl(Integer storeId) {
         String ip= "localhost";
-        String server="";
+//        String server="";
         return "http://" +ip+":8888/employee/"+storeId+"/commute";
     }
 
     public byte[] generateQRCodeImage(Integer storeId) {
-        try {
+        try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream();) {
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
             //여기에 가게id붙여서 특정 폼 만들게 하는 qr 생성
             String url = generateQRUrl(storeId);  // URL 생성
 
             BitMatrix bitMatrix = qrCodeWriter.encode(url, BarcodeFormat.QR_CODE, 200, 200);
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             MatrixToImageWriter.writeToStream(bitMatrix, "PNG", outputStream);
 
             return outputStream.toByteArray();
