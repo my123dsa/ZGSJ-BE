@@ -1,5 +1,6 @@
 package com.example.Attendance.Repository;
 
+import com.example.Attendance.dto.BatchInputData;
 import com.example.Attendance.model.StoreEmployee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +19,13 @@ public interface StoreEmployeeRepository extends JpaRepository<StoreEmployee, In
 
     @Query("select se from StoreEmployee se join fetch se.store s join fetch s.president p where se.paymentDate= :paymentDate")
     List<StoreEmployee> findAllByPaymentDate(Integer paymentDate);
+
+//    @Query("SELECT new com.example.Attendance.dto.BatchInputData(" +
+//            "se.id, s.accountNumber, '020', se.accountNumber, se.bankCode, " +
+//            "se.salary, se.name, p.name) " +
+//            "FROM StoreEmployee se " +
+//            "JOIN se.store s " +
+//            "JOIN s.president p " +
+//            "WHERE se.paymentDate = :paymentDate")
+//    List<BatchInputData> findAllBatchInputDataByPaymentDate(@Param("paymentDate") Integer paymentDate);
 }

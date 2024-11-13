@@ -30,11 +30,11 @@ public class BatchInputData {
         this.fromAccountDepositor = fromAccountDepositor;
     }
 
-    public static BatchInputData of(StoreEmployee se,Long commuteDuration) {
+    public static BatchInputData of(StoreEmployee se, Long commuteDuration) {
 
         Long amount= se.getSalary();
-        if (se.getEmploymentType()){
-            //분단위인데 시급 어케 줄지 기준이 30분 단위 들이다
+        if (se.getEmploymentType()){ // true - 알바라고 가정
+            // 분단위인데 시급 어케 줄지 기준이 30분 단위 들이다
             amount*=commuteDuration/60;
         }
 

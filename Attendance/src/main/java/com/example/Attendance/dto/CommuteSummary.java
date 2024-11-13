@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class CommuteSummary {
-    private Integer id;
+    private Integer employeeId;
     private Long commuteDuration;
 }

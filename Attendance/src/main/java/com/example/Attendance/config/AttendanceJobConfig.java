@@ -63,35 +63,40 @@ public class AttendanceJobConfig {
             private int currentIndex = 0;           // 현재 위치를 추적하는 인덱스
             private LocalDate localDate = LocalDate.now();
             private List<CommuteSummary> commutes;
+            private List<Integer> employeeIds;
 
             @Override
             public BatchInputData read() {
                 try {
                     // 최초 데이터 로드
-//                    if (employees == null) {
-//                        employees = storeEmployeeRepository
-//                                .findAllByPaymentDate(localDate.getDayOfMonth());
-//                        log.info("직원 데이터 {}건을 조회했습니다.", employees.size());
-//
-//                        if (employees.isEmpty()) {
-//                            log.info("처리할 직원 데이터가 없습니다.");
-//                            return null;
-//                        }
-//                    }
-                    employees = storeEmployeeRepository
-                            .findAllByPaymentDate(localDate.getDayOfMonth());
+                    if (employees == null) {
+                        employees = storeEmployeeRepository
+                                .findAllByPaymentDate(localDate.getDayOfMonth());
+                        log.info("직원 데이터 {}건을 조회했습니다.", employees.size());
+                        employeeIds = employees.stream().map(StoreEmployee::getId).collect(Collectors.toList());
+
+                        if (employees.isEmpty()) {
+                            log.info("처리할 직원 데이터가 없습니다.");
+                            return null;
+                        }
+                    }
 
                     if (commutes == null) {
-                        //이거 년도랑 월만 받아야한다  이거 -30 해야되나
-                        commutes = commuteRepository.findAllByCommuteDate(localDate);
+                        LocalDate startDate = localDate.minusMonths(1); // 지난 달의 오늘 날짜부터
+                        LocalDate endDate = localDate.minusDays(1); // 오늘 날짜의 하루 전까지
+                        // 오늘이 11월 13일이라면 10월 13일 ~ 11월 12일까지
+
+                        // 출퇴근 데이터 조회
+                        commutes = commuteRepository.findAllByCommuteDateBetween(startDate, endDate, employeeIds);
                         log.info("출퇴근 데이터 {}건을 조회했습니다.", commutes.size());
                     }
 
                     // 데이터 반환
                     if (currentIndex < employees.size()) {
                         StoreEmployee employee = employees.get(currentIndex);
+
                         Long commuteDuration = commutes.stream()
-                                .filter(commuteSummary -> commuteSummary.getId().equals(employee.getId()))
+                                .filter(commuteSummary -> commuteSummary.getEmployeeId().equals(employee.getId()))
                                 .map(CommuteSummary::getCommuteDuration)
                                 .findFirst()
                                 .orElse(0L);
