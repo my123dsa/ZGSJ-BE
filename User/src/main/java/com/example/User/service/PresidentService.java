@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDate;
+
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +45,15 @@ public class PresidentService {
 
     @Transactional
     public void remove(Integer id){
+        //확인 후 삭제하기
         presidentRepository.deleteById(id);
     }
+
+    //사장 정보 수정
+    @Transactional
+    public void updatePresident(Integer id, String phoneNumber, LocalDate birthDate) {
+        presidentRepository.updatePhoneNumberAndBirthDate(id,phoneNumber,birthDate);
+    }
+
+
 }

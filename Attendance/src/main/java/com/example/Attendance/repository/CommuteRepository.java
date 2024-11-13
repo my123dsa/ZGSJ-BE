@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CommuteRepository extends JpaRepository<Commute, Integer> {
@@ -32,4 +33,6 @@ public interface CommuteRepository extends JpaRepository<Commute, Integer> {
             @Param("year") int year,
             @Param("month") int month
     );
+
+    Optional<Commute> findTopByStoreEmployeeIdOrderByStartTimeDesc(Integer seId);
 }

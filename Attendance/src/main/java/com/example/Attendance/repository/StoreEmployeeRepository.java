@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface StoreEmployeeRepository extends JpaRepository<StoreEmployee, Integer> {
@@ -16,4 +17,8 @@ public interface StoreEmployeeRepository extends JpaRepository<StoreEmployee, In
             "FROM StoreEmployee se " +
             "WHERE se.store.id = :storeId")
     List<EmployeeNameResponse> findSimpleInfoByStoreId(@Param("storeId") Integer storeId);
+
+    @Query("select se from StoreEmployee se join fetch se.store s  where se.email= :email and s.id= :storeId")
+    Optional<StoreEmployee> findByEmailAndStoreId
+            (@Param("email") String email, @Param("storeId") Integer storeId);
 }

@@ -22,7 +22,7 @@ public class StoreEmployeeController {
     @PostMapping
     public ResponseEntity<String> registerEmployee(
             @RequestBody StoreEmployeeRequest request,
-            @RequestParam Integer storeid
+            @RequestParam("storeid") Integer storeid
     ) {
         storeemployeeService.register(request, storeid);
         return ResponseEntity.ok("직원 등록 성공");
@@ -30,7 +30,7 @@ public class StoreEmployeeController {
 
     @PutMapping
     public ResponseEntity<String> updateEmployee(
-            @RequestParam Integer seid,
+            @RequestParam("seid") Integer seid,
             @RequestBody StoreEmployeeUpdateRequest request
     ) {
         storeemployeeService.updateEmployee(seid, request);
@@ -39,14 +39,14 @@ public class StoreEmployeeController {
 
     @DeleteMapping
     public ResponseEntity<String> deleteEmployee(
-            @RequestParam Integer seid
+            @RequestParam("seid") Integer seid
     ) {
         storeemployeeService.deleteEmployee(seid);
         return ResponseEntity.ok("직원 삭제 성공");
     }
 
     @GetMapping("/details")
-    public ResponseEntity<List<EmployeeInfoResponse>> getEmployeeInfoByStore(@RequestParam Integer storeid)
+    public ResponseEntity<List<EmployeeInfoResponse>> getEmployeeInfoByStore(@RequestParam("storeid") Integer storeid)
     {
         return ResponseEntity.ok(storeemployeeService.getEmployeeInfoByStore(storeid));
     }

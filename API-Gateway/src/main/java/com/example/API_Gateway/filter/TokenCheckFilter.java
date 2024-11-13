@@ -38,11 +38,14 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
         log.info("TokenCheckFilter path: {}", path);
 
         // /user/login 경로는 예외 처리
-        if (path.contains("/login") ||
-                path.contains("/regist") ||
-                path.contains("/logout") ||
-                path.contains("/refresh") ||
-                path.contains("/QRCheck")) {
+        if (path.contains("/president/login") ||
+                path.contains("/president/regist") ||
+                path.contains("/president/logout") ||
+                path.contains("/president/refresh") ||
+                path.contains("/QRCheck") ||
+                path.contains("/leave-work")||
+                path.contains("/go-to-work")
+            ){
             log.info("통과");
             return chain.filter(exchange);
         }

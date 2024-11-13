@@ -4,6 +4,7 @@ package com.example.User.controller;
 import com.example.User.dto.login.ReqLoginData;
 import com.example.User.dto.login.ReqRegist;
 import com.example.User.dto.login.ResNewAccessToken;
+import com.example.User.dto.presidentupdate.PresidentUpdateRequest;
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
 
@@ -17,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/president")
@@ -78,4 +81,18 @@ public class PresidentController {
         Integer id=Integer.parseInt(request.getHeader("id"));
         return ResponseEntity.ok(id);
     }
+
+
+    //사장 정보수정 폰번호,생년월일
+    @PutMapping("/modify")
+    ResponseEntity<Void> updatePresident(@RequestBody PresidentUpdateRequest presidentUpdateRequest) {
+        Integer id = 1;
+        presidentService.updatePresident(id, presidentUpdateRequest.getPhoneNumber(),presidentUpdateRequest.getBirthDate());
+        return ResponseEntity.ok().build();
+    }
+
+
+
 }
+
+
