@@ -31,14 +31,21 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
 
     private final JWTUtil jwtUtil;
     private static final List<String> permitUrl=new ArrayList<>();
+    private static final List<String> needIdUrl=new ArrayList<>();
+
+    //이거 enum으로 할 수도
     static {
         permitUrl.add("/president/login");
         permitUrl.add("/president/regist");
-        permitUrl.add("/president/logout");
-//        permitUrl.add("/president/refresh");
         permitUrl.add("commute/QRCheck");
         permitUrl.add("/leave-work");
         permitUrl.add("/go-to-work");
+/////////////////////////////////////////////////////
+        needIdUrl.add("/president/logout");
+        needIdUrl.add("/president/modify");
+        needIdUrl.add("/president/change-password");
+        needIdUrl.add("/president/account-check");
+        needIdUrl.add("/user/store");
     }
 
     @Override
@@ -67,6 +74,10 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
                 .get(0).replace("Bearer ", "");
 
         Map<String, Object> payload = validateAccessToken(tokenStr,path);
+
+        if(!needIdUrl.contains(path)){
+            return chain.filter(exchange);
+        }
 
         // 숫자인지 한번 확인 필요할 수도 //필요한 것만 복호화 시키기
         Integer id = jwtUtil.decrypt((String) payload.get("payload"));
