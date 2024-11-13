@@ -12,15 +12,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TransactionHistoryService {
     private final CoreBankFeign coreBankFeign;
-    private final IncomeStatementService incomeStatementService;
 
+    //요청받은 REQUEST에 따라, LIST로 거래 내역 받아오기
     public List<TransactionHistoryResponse> getTransactionHistoryList(
             TransactionHistoryRequest transactionHistoryRequest,
             Integer year,
             Integer month)
     {
-        incomeStatementService.calculateStatement(coreBankFeign.getTransactionHistoryList(transactionHistoryRequest ,year, month));
-        return coreBankFeign.getTransactionHistoryList(transactionHistoryRequest ,year, month);
+        return coreBankFeign.getTransactionHistoryList(transactionHistoryRequest, year, month);
     }
 
 

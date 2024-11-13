@@ -1,5 +1,7 @@
 package com.example.Finance.service;
 
+import com.example.Finance.error.CustomException;
+import com.example.Finance.error.ErrorCode;
 import com.itextpdf.text.pdf.BaseFont;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
@@ -7,11 +9,12 @@ import org.springframework.stereotype.Service;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 @Service
 @Slf4j
 public class PdfService {
+
+    //그대로 사용하지 않고, Extends로만 사용.
 
     public byte[] convertHtmlToPdf(String html) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -37,33 +40,15 @@ public class PdfService {
 
             // 디버깅을 위한 파일 저장
             byte[] pdfContent = baos.toByteArray();
-            savePdfToFile(pdfContent);  // 디버깅용
 
             log.info("PDF 생성 완료: {} bytes", pdfContent.length);
             return pdfContent;
 
         } catch (Exception e) {
             log.error("PDF 변환 중 오류 발생: {}", e.getMessage(), e);
-            throw new RuntimeException("PDF 생성 실패", e);
-        } finally {
-            try {
-                baos.close();
-            } catch (IOException e) {
-                log.error("스트림 닫기 실패", e);
-            }
+            throw new CustomException(ErrorCode.PDF_CREATE_ERROR);
         }
     }
 
-    // 디버깅용 메서드
-    private void savePdfToFile(byte[] pdfContent) {
-        try {
-            java.nio.file.Files.write(
-                    java.nio.file.Paths.get("debug_output.pdf"),
-                    pdfContent
-            );
-            log.info("디버그용 PDF 파일 저장 완료");
-        } catch (IOException e) {
-            log.error("PDF 파일 저장 실패", e);
-        }
-    }
+
 }

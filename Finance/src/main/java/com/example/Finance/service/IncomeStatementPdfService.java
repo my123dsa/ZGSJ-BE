@@ -21,10 +21,10 @@ public class IncomeStatementPdfService extends PdfService {
     private final IncomeStatementService incomeStatementService;
 
     public byte[] generateIncomeStatementPdf(List<TransactionHistoryResponse> transactionHistoryResponseList) {
-        // 손익 계산서 생성
+        // 손익 계산하기
         IncomeStatementResponse incomeStatementResponse = incomeStatementService.calculateStatement(transactionHistoryResponseList);
 
-        // HTML 생성
+        // 게산한 손익관련 자료로 HTML 생성
         String html = generateHtml(transactionHistoryResponseList, incomeStatementResponse);
         log.info("Generated HTML: {}", html);
 
@@ -140,7 +140,7 @@ public class IncomeStatementPdfService extends PdfService {
         Map<String, BigDecimal> details = new LinkedHashMap<>();
 
         transactions.stream()
-                .filter(t -> !t.getIsDeposit())
+                .filter(t -> !t.getIsDeposit()) //매출액이 아닐때만 동작하게
                 .filter(t -> classificationFilter.test(t.getClassificationName()))
                 .collect(Collectors.groupingBy(
                         TransactionHistoryResponse::getClassificationName,
@@ -148,7 +148,6 @@ public class IncomeStatementPdfService extends PdfService {
                                 t -> new BigDecimal(t.getAmount()),
                                 BigDecimal::add)))
                 .forEach(details::put);
-
         return details;
     }
 }

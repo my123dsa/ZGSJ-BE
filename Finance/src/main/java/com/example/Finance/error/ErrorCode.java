@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
 
+    PDF_CREATE_ERROR(500, "PDF 생성 중 오류가 발생했습니다."),
     INVALID_PARAMETER(400, "파라미터 값을 확인해주세요."),
 
     CHECKUP_NOT_FOUND(404, "존재하지 않는 이해도조사 ID 입니다."),
