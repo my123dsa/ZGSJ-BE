@@ -33,21 +33,6 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
     private static final List<String> permitUrl=new ArrayList<>();
     private static final List<String> needIdUrl=new ArrayList<>();
 
-    //이거 enum으로 할 수도
-    static {
-        permitUrl.add("/president/login");
-        permitUrl.add("/president/regist");
-        permitUrl.add("commute/QRCheck");
-        permitUrl.add("/leave-work");
-        permitUrl.add("/go-to-work");
-/////////////////////////////////////////////////////
-        needIdUrl.add("/president/logout");
-        needIdUrl.add("/president/modify");
-        needIdUrl.add("/president/change-password");
-        needIdUrl.add("/president/account-check");
-        needIdUrl.add("/user/store");
-    }
-
     @Override
     public int getOrder() {
         return -1;
@@ -111,4 +96,20 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
         exchange.getResponse().setStatusCode(status);
         return exchange.getResponse().setComplete();
     }
+
+    //이거 enum으로 할 수도
+    static {
+        permitUrl.add("/president/login");
+        permitUrl.add("/president/regist");
+        permitUrl.add("commute/QRCheck");
+        permitUrl.add("/leave-work");
+        permitUrl.add("/go-to-work");
+/////////////////////////////////////////////////////
+        needIdUrl.add("/president/logout");
+        needIdUrl.add("/president/modify");
+        needIdUrl.add("/president/change-password");
+        needIdUrl.add("/president/account-check");
+        needIdUrl.add("/user/store");
+    }
+
 }
