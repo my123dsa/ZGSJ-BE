@@ -17,15 +17,15 @@ public interface StoreEmployeeRepository extends JpaRepository<StoreEmployee, In
     Optional<StoreEmployee> findByEmailAndStoreId
             (@Param("email") String email, @Param("storeId") Integer storeId);
 
-    @Query("select se from StoreEmployee se join fetch se.store s join fetch s.president p where se.paymentDate= :paymentDate")
-    List<StoreEmployee> findAllByPaymentDate(Integer paymentDate);
+//    @Query("select se from StoreEmployee se join fetch se.store s join fetch s.president p where se.paymentDate= :paymentDate")
+//    List<StoreEmployee> findAllByPaymentDate(Integer paymentDate);
 
-//    @Query("SELECT new com.example.Attendance.dto.BatchInputData(" +
-//            "se.id, s.accountNumber, '020', se.accountNumber, se.bankCode, " +
-//            "se.salary, se.name, p.name) " +
-//            "FROM StoreEmployee se " +
-//            "JOIN se.store s " +
-//            "JOIN s.president p " +
-//            "WHERE se.paymentDate = :paymentDate")
-//    List<BatchInputData> findAllBatchInputDataByPaymentDate(@Param("paymentDate") Integer paymentDate);
+    @Query("SELECT new com.example.Attendance.dto.BatchInputData(" +
+            "se.id, s.accountNumber, se.employmentType,'020', se.accountNumber, se.bankCode, " +
+            "se.salary, se.name, p.name) " +
+            "FROM StoreEmployee se " +
+            "JOIN se.store s " +
+            "JOIN s.president p " +
+            "WHERE se.paymentDate = :paymentDate")
+    List<BatchInputData> findAllBatchInputDataByPaymentDate(@Param("paymentDate") Integer paymentDate);
 }

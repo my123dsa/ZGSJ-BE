@@ -59,7 +59,7 @@ public class AttendanceJobConfig {
     @Bean
     public ItemReader<BatchInputData> attendanceReader() {
         return new ItemReader<BatchInputData>() {
-            private List<StoreEmployee> employees;  // 조회한 데이터를 담아두는 리스트
+            private List<BatchInputData> employees;  // 조회한 데이터를 담아두는 리스트
             private int currentIndex = 0;           // 현재 위치를 추적하는 인덱스
             private LocalDate localDate = LocalDate.now();
             private List<CommuteSummary> commutes;
@@ -71,9 +71,9 @@ public class AttendanceJobConfig {
                     // 최초 데이터 로드
                     if (employees == null) {
                         employees = storeEmployeeRepository
-                                .findAllByPaymentDate(localDate.getDayOfMonth());
+                                .findAllBatchInputDataByPaymentDate(localDate.getDayOfMonth());
                         log.info("직원 데이터 {}건을 조회했습니다.", employees.size());
-                        employeeIds = employees.stream().map(StoreEmployee::getId).collect(Collectors.toList());
+                        employeeIds = employees.stream().map(BatchInputData::getSeId).collect(Collectors.toList());
 
                         if (employees.isEmpty()) {
                             log.info("처리할 직원 데이터가 없습니다.");
@@ -93,19 +93,19 @@ public class AttendanceJobConfig {
 
                     // 데이터 반환
                     if (currentIndex < employees.size()) {
-                        StoreEmployee employee = employees.get(currentIndex);
+                        BatchInputData bid = employees.get(currentIndex);
 
                         Long commuteDuration = commutes.stream()
-                                .filter(commuteSummary -> commuteSummary.getEmployeeId().equals(employee.getId()))
+                                .filter(commuteSummary -> commuteSummary.getEmployeeId().equals(bid.getSeId()))
                                 .map(CommuteSummary::getCommuteDuration)
                                 .findFirst()
                                 .orElse(0L);
 
                         currentIndex++;
                         log.debug("Processing employee {} ({}/{})",
-                                employee.getId(), currentIndex, employees.size());
-
-                        return BatchInputData.of(employee, commuteDuration);
+                                bid.getSeId(), currentIndex, employees.size());
+                        bid.changeSalary(commuteDuration);
+                        return bid;
                     }
 
                     log.info("모든 직원 데이터 처리 완료");
@@ -129,6 +129,7 @@ public class AttendanceJobConfig {
                 if(response.getStatus()==200){
                     return BatchOutputData.of(item.getSeId(), item.getAmount(), response);
                 }
+                //다른 에러 처리 필요
                 return null;
             } catch (Exception e) {
                 log.error("송금 처리 실패 - employee: {}, error: {}",
