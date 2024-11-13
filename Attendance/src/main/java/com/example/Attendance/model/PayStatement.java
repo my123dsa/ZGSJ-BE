@@ -1,6 +1,8 @@
 package com.example.Attendance.model;
 
+import com.example.Attendance.dto.BatchOutputData;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +11,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "pay_statement")
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PayStatement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,5 +40,10 @@ public class PayStatement {
 
     public static PayStatement createPayStatement(String url, LocalDate issuanceDate, StoreEmployee storeEmployee, Integer amount) {
         return new PayStatement(url, issuanceDate, storeEmployee,amount);
+    }
+
+    public static PayStatement createPayStatementWithProxy(String url, LocalDate issuanceDate, Integer seId, Integer amount) {
+        //이거 생성자
+        return new PayStatement(url, issuanceDate, new StoreEmployee(seId),amount);
     }
 }

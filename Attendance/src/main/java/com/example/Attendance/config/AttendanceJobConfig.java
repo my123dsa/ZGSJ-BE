@@ -1,9 +1,12 @@
 package com.example.Attendance.config;
 
+import com.example.Attendance.FeignWithCoreBank;
 import com.example.Attendance.Repository.CommuteRepository;
 import com.example.Attendance.Repository.PayStatementRepository;
 import com.example.Attendance.Repository.StoreEmployeeRepository;
 import com.example.Attendance.dto.*;
+import com.example.Attendance.error.CustomException;
+import com.example.Attendance.error.ErrorCode;
 import com.example.Attendance.model.PayStatement;
 import com.example.Attendance.model.StoreEmployee;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +37,7 @@ public class AttendanceJobConfig {
     private final StoreEmployeeRepository storeEmployeeRepository;
     private final PayStatementRepository payStatementRepository;
     private final CommuteRepository commuteRepository;
+    private final FeignWithCoreBank feignWithCoreBank;
 
     @Bean
     public Job attendanceJob() {
@@ -62,30 +66,46 @@ public class AttendanceJobConfig {
 
             @Override
             public BatchInputData read() {
-                // 최초 1회만 DB 조회 실행
-                if (employees == null) {
-                    employees = storeEmployeeRepository
-                            .findAllByPaymentDate(localDate.getDayOfMonth());
-                    log.info("DB에서 {}건의 데이터를 조회했습니다.", employees.size());
-                }
+                try {
+                    // 최초 데이터 로드
+                    if (employees == null) {
+                        employees = storeEmployeeRepository
+                                .findAllByPaymentDate(localDate.getDayOfMonth());
+                        log.info("직원 데이터 {}건을 조회했습니다.", employees.size());
 
-                if (commutes == null) {
-                    commutes=commuteRepository.findAllByCommuteDate(localDate);
-                }
+                        if (employees.isEmpty()) {
+                            log.info("처리할 직원 데이터가 없습니다.");
+                            return null;
+                        }
+                    }
 
-                // 이미 조회한 리스트에서 하나씩 반환
+                    if (commutes == null) {
+                        commutes = commuteRepository.findAllByCommuteDate(localDate);
+                        log.info("출퇴근 데이터 {}건을 조회했습니다.", commutes.size());
+                    }
 
-                if (currentIndex < employees.size()) {
-                    StoreEmployee employee = employees.get(currentIndex);
-                    Long commuteDuration=commutes.stream()
-                            .filter(commuteSummary -> commuteSummary.getId().equals(employee.getId()))
-                            .map(CommuteSummary::getCommuteDuration)
-                            .findFirst()  // Optional<Duration>을 반환
-                            .orElse(0L); // 해당하는 데이터가 없을 경우 null 반환
-                    currentIndex++;
-                    return BatchInputData.of(employee,commuteDuration);
+                    // 데이터 반환
+                    if (currentIndex < employees.size()) {
+                        StoreEmployee employee = employees.get(currentIndex);
+                        Long commuteDuration = commutes.stream()
+                                .filter(commuteSummary -> commuteSummary.getId().equals(employee.getId()))
+                                .map(CommuteSummary::getCommuteDuration)
+                                .findFirst()
+                                .orElse(0L);
+
+                        currentIndex++;
+                        log.debug("Processing employee {} ({}/{})",
+                                employee.getId(), currentIndex, employees.size());
+
+                        return BatchInputData.of(employee, commuteDuration);
+                    }
+
+                    log.info("모든 직원 데이터 처리 완료");
+                    return null;
+                } catch (Exception e) {
+                    log.error("데이터 읽기 실패: {}", e.getMessage(), e);
+                    throw new CustomException(ErrorCode.API_SERVER_ERROR);
                 }
-                return null;
             }
         };
     }
@@ -97,8 +117,7 @@ public class AttendanceJobConfig {
                 TransferRequest request = TransferRequest.from(item);
 
                 // 외부 API 호출
-                TransferResponse response = bankApiClient.requestTransfer(request);
-
+                TransferResponse response = feignWithCoreBank.automaticTransfer(request);
                 if(response.getStatus()==200){
                     return BatchOutputData.of(item.getSeId(), item.getAmount(), response);
                 }
@@ -113,14 +132,13 @@ public class AttendanceJobConfig {
 
     @Bean
     public ItemWriter<BatchOutputData> attendanceWriter() {
-        return items -> {
-            items.get
-            List<PayStatement> payStatements = items.stream()
-                    .map(item -> PayStatement.createPayStatement())
+        return chunk -> {
+            List<PayStatement> payStatements = chunk.getItems().stream()
+                    .map(BatchOutputData::toEntity)
                     .collect(Collectors.toList());
 
             payStatementRepository.saveAll(payStatements);
-            log.info("급여 이체 결과 {} 건 저장 완료", items.size());
+            log.info("급여 이체 결과 {} 건 저장 완료", chunk.size());
         };
     }
 }
