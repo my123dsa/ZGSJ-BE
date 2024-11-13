@@ -31,10 +31,11 @@ public class PresidentController {
 
     //사장 정보수정 폰번호,생년월일
     @PutMapping("/modify")
-    ResponseEntity<Void> updatePresident(@RequestBody PresidentUpdateRequest presidentUpdateRequest) {
+    ResponseEntity<Void> updatePresident(@RequestBody PresidentUpdateRequest
+                                                 presidentUpdateRequest, HttpServletRequest request) {
         Integer id = 1;
-        presidentService.updatePresident(id, presidentUpdateRequest.getPhoneNumber(),
-                presidentUpdateRequest.getBirthDate());
+//        Integer id = Integer.parseInt(request.getHeader("id"));
+        presidentService.updatePresident(id, presidentUpdateRequest);
         return ResponseEntity.ok().build();
     }
 }
