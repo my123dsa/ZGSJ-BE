@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter
@@ -16,15 +17,15 @@ import java.time.LocalTime;
 public class CommuteByPresidentRequest {
 
     @NotNull(message = "출근 시간은 필수입니다")
-    private LocalTime startTime;
+    private LocalDateTime startTime;
 
-    private LocalTime endTime;
+    private LocalDateTime endTime;
 
     @NotNull(message = "출근일자는 필수입니다")
     @PastOrPresent(message = "미래 날짜는 입력할 수 없습니다")
     private LocalDate commuteDate;
 
-    private CommuteByPresidentRequest(LocalTime startTime, LocalTime endTime, LocalDate commuteDate) {
+    private CommuteByPresidentRequest(LocalDateTime startTime, LocalDateTime endTime, LocalDate commuteDate) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.commuteDate = commuteDate;

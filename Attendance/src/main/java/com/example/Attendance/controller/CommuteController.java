@@ -4,6 +4,7 @@ import com.example.Attendance.dto.CommuteByPresidentRequest;
 import com.example.Attendance.dto.CommuteMonthlyResponse;
 import com.example.Attendance.service.CommuteService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/commute")
+@Slf4j
 public class CommuteController {
 
     private final CommuteService commuteService;

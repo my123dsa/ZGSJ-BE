@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -18,8 +19,8 @@ public interface CommuteRepository extends JpaRepository<Commute, Integer> {
     @Query("UPDATE Commute c " + "SET c.startTime = :startTime, " + "c.endTime = :endTime, " +
             "c.commuteDate = :commuteDate, " + "c.commuteDuration = :commuteDuration " + "WHERE c.id = :commuteId")
     void updateCommute(
-            @Param("startTime") LocalTime startTime, @Param("endTime") LocalTime endTime, @Param("commuteDate") LocalDate commuteDate,
-            @Param("commuteDuration") LocalTime commuteDuration, @Param("commuteId") Integer commuteId);
+            @Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime, @Param("commuteDate") LocalDate commuteDate,
+            @Param("commuteDuration") Long commuteDuration, @Param("commuteId") Integer commuteId);
 
     @Query("SELECT c FROM Commute c " +
             "JOIN FETCH c.storeEmployee se " +

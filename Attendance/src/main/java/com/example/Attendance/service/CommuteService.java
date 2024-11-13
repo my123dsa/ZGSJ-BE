@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -36,18 +37,18 @@ public class CommuteService {
 
     @Transactional
     public void updateDailyCommuteByPresident(@Valid CommuteByPresidentRequest request, int commuteId) {
-        LocalTime commuteDuration = request.getEndTime() == null ?
-                LocalTime.of(0, 0) :
+
+        long commuteDuration = request.getEndTime() == null ?
+                0L :
                 calculateDuration(request.getStartTime(), request.getEndTime());
 
         commuteRepository.updateCommute(request.getStartTime(), request.getEndTime(),
                 request.getCommuteDate(), commuteDuration, commuteId);
     }
 
-    private LocalTime calculateDuration(LocalTime startTime, LocalTime endTime) {
-        long hours = ChronoUnit.HOURS.between(startTime, endTime);
-        long minutes = ChronoUnit.MINUTES.between(startTime, endTime) % 60;
-        return LocalTime.of((int) hours, (int) minutes);
+    private long calculateDuration(LocalDateTime startTime, LocalDateTime endTime) {
+
+        return  ChronoUnit.MINUTES.between(startTime, endTime);
     }
 
     @Transactional
