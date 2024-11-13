@@ -9,12 +9,12 @@ import org.springframework.web.reactive.result.method.annotation.ResponseEntityE
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({CustomException.class})
-    protected ResponseEntity<?> handleCustomException(CustomException ex) {
+    protected ResponseEntity<ErrorDTO> handleCustomException(CustomException ex) {
         ErrorCode errorCode = ex.getErrorCode();
         return handleExceptionInternal(errorCode);
     }
 
-    private ResponseEntity<?> handleExceptionInternal(ErrorCode errorCode) {
+    private ResponseEntity<ErrorDTO> handleExceptionInternal(ErrorCode errorCode) {
         return ResponseEntity.status(errorCode.getStatus())
                 .body(makeErrorResponse(errorCode));
     }

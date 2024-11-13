@@ -33,12 +33,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({CustomException.class})
-    protected ResponseEntity<?> handleCustomException(CustomException ex) {
+    protected ResponseEntity<ErrorDTO> handleCustomException(CustomException ex) {
         ErrorCode errorCode = ex.getErrorCode();
         return handleExceptionInternal(errorCode);
     }
 
-    private ResponseEntity<?> handleExceptionInternal(ErrorCode errorCode) {
+    private ResponseEntity<ErrorDTO> handleExceptionInternal(ErrorCode errorCode) {
         return ResponseEntity.status(errorCode.getStatus())
                 .body(makeErrorResponse(errorCode));
     }
@@ -51,13 +51,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ArithmeticException.class) // ③
-    public ResponseEntity<Object> handleArithmeticException(ArithmeticException e) {
+    public ResponseEntity<ErrorDTO> handleArithmeticException(ArithmeticException e) {
         ErrorCode errorCode = ErrorCode.SERVER_ERROR;
         return handleExceptionInternal(errorCode, e.getMessage());
     }
 
 
-    private ResponseEntity<Object> handleExceptionInternal(ErrorCode errorCode, String message) {
+    private ResponseEntity<ErrorDTO> handleExceptionInternal(ErrorCode errorCode, String message) {
         return ResponseEntity.status(errorCode.getStatus())
                 .body(makeErrorResponse(errorCode, message));
     }
