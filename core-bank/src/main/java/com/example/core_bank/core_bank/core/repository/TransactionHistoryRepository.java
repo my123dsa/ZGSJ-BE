@@ -20,4 +20,17 @@ public interface TransactionHistoryRepository extends JpaRepository<TransactionH
             @Param("year") Integer year,
             @Param("month") Integer month
     );
+
+    // fetch join
+    // 단일쿼리로 가능할지
+    @Query("SELECT DISTINCT th FROM TransactionHistory th " +
+            "LEFT JOIN FETCH th.classfication " +
+            "LEFT JOIN FETCH th.account " +
+            "WHERE th.account.id = :accountId " +
+            "AND FUNCTION('YEAR', th.transactionDate) = :year " +
+            "AND th.isDeposit = true")
+    List<TransactionHistory> findByAccountIdYearlyWithClassfication(
+            @Param("accountId") Integer accountId,
+            @Param("year") Integer year
+    );
 }
