@@ -15,9 +15,7 @@ public class AuthService {
     private final RedisTokenService tokenService;
 
     public String onAuthenticationSuccess(Integer id) {
-
         log.info("id" + id);
-
         //원래 1일 또는 2일 으로 설정해야함
         String accessToken = jwtUtil.generateToken(id, 100);
         String refreshToken = jwtUtil.generateToken(id, 1000);
