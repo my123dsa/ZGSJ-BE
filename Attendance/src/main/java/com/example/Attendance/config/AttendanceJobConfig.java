@@ -68,18 +68,21 @@ public class AttendanceJobConfig {
             public BatchInputData read() {
                 try {
                     // 최초 데이터 로드
-                    if (employees == null) {
-                        employees = storeEmployeeRepository
-                                .findAllByPaymentDate(localDate.getDayOfMonth());
-                        log.info("직원 데이터 {}건을 조회했습니다.", employees.size());
-
-                        if (employees.isEmpty()) {
-                            log.info("처리할 직원 데이터가 없습니다.");
-                            return null;
-                        }
-                    }
+//                    if (employees == null) {
+//                        employees = storeEmployeeRepository
+//                                .findAllByPaymentDate(localDate.getDayOfMonth());
+//                        log.info("직원 데이터 {}건을 조회했습니다.", employees.size());
+//
+//                        if (employees.isEmpty()) {
+//                            log.info("처리할 직원 데이터가 없습니다.");
+//                            return null;
+//                        }
+//                    }
+                    employees = storeEmployeeRepository
+                            .findAllByPaymentDate(localDate.getDayOfMonth());
 
                     if (commutes == null) {
+                        //이거 년도랑 월만 받아야한다  이거 -30 해야되나
                         commutes = commuteRepository.findAllByCommuteDate(localDate);
                         log.info("출퇴근 데이터 {}건을 조회했습니다.", commutes.size());
                     }
