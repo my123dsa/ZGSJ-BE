@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum ErrorCode {
 
     INVALID_PARAMETER(400, "파라미터 값을 확인해주세요."),
+    WRONG_BODY(400, "REQUESTBODY에서 잘못된 값이 있습니다."),
 
     CHECKUP_NOT_FOUND(404, "존재하지 않는 이해도조사 ID 입니다."),
     ROOM_NOT_FOUND(404, "존재하지 않는 방 ID 입니다."),
