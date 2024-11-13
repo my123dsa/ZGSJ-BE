@@ -31,7 +31,6 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
 
     private final JWTUtil jwtUtil;
     private static final List<String> permitUrl=new ArrayList<>();
-
     static {
         permitUrl.add("/president/login");
         permitUrl.add("/president/regist");
@@ -69,7 +68,7 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
 
         Map<String, Object> payload = validateAccessToken(tokenStr,path);
 
-        // 숫자인지 한번 확인 필요할 수도
+        // 숫자인지 한번 확인 필요할 수도 //필요한 것만 복호화 시키기
         Integer id = jwtUtil.decrypt((String) payload.get("payload"));
         log.info("id: {}", id);
 
