@@ -6,14 +6,11 @@ import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
 import com.example.User.model.President;
 import com.example.User.model.Store;
-import com.example.User.model.StoreEmployee;
 import com.example.User.repository.PresidentRepository;
 import com.example.User.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +23,7 @@ public class StoreService {
     private final PresidentRepository presidentRepository;
 
     @Transactional
-    public String registerStore(StoreRequest storeRequest) {
-        Integer presidentId = 1;
+    public List<Object> registerStore(Integer presidentId,StoreRequest storeRequest) {
         President president = presidentRepository.findById(presidentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRESIDENT_NOT_FOUND));
         boolean isStoreNameExists = storeRepository.existsByStoreName(storeRequest.getStoreName());
@@ -36,8 +32,11 @@ public class StoreService {
         }
         Store store = storeRequest.toEntity(president);
         //mapService.getCoordinates(storeRequest.getLocation());// 저장하고
-        storeRepository.save(store);
-        return president.getEmail();
+        Integer id = storeRepository.save(store).getId();
+        List<Object> idAndEmail = new ArrayList<>();
+        idAndEmail.add(id);
+        idAndEmail.add(president.getEmail());
+        return idAndEmail;
     }
 
     public List<StoreResponse> showStores() {

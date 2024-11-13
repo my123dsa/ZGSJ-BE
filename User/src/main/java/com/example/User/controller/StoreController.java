@@ -25,8 +25,11 @@ public class StoreController {
     private final PresidentService presidentService;
     private final EmailService emailService;
     @PostMapping
-    private ResponseEntity<byte[]> store(@RequestBody StoreRequest storeRequest) {
-        String email= storeService.registerStore(storeRequest);
+    private ResponseEntity<byte[]> store(@RequestBody StoreRequest storeRequest,HttpServletRequest request) {
+        Integer id=1;
+//        Integer id = Integer.parseInt(request.getHeader("id"));
+        List<Object> idAndEmail= storeService.registerStore(id,storeRequest);
+//      (int)idAndEmail.get(0),(String)idAndEmail.get(1)
         byte[] image=emailService.sendQRToEmail("j0303p@gmail.com",4);
 //        return ResponseEntity.ok();
         return ResponseEntity.ok()
