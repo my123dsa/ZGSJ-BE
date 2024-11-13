@@ -35,6 +35,7 @@ public class SecurityConfig{
         configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L); // 프리플라이트 요청 캐시 시간 (초)
 
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();

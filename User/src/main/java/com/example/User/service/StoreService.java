@@ -30,13 +30,12 @@ public class StoreService {
         Integer presidentId = 1;
         President president = presidentRepository.findById(presidentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRESIDENT_NOT_FOUND));
-
         boolean isStoreNameExists = storeRepository.existsByStoreName(storeRequest.getStoreName());
         if (isStoreNameExists) {
             throw new CustomException(ErrorCode.DUPLICATE_STORE_NAME);
         }
-
         Store store = storeRequest.toEntity(president);
+        //mapService.getCoordinates(storeRequest.getLocation());// 저장하고
         storeRepository.save(store);
         return president.getEmail();
     }
