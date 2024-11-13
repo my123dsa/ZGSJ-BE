@@ -46,7 +46,7 @@ public class StoreEmployeeService {
     @Transactional
     public void deleteEmployee(int storeEmployeeId) {
         StoreEmployee employee = storeEmployeeRepository.findById(storeEmployeeId)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.STOREEMPLOYEE_NOT_FOUND));
         storeEmployeeRepository.delete(employee);
     }
 

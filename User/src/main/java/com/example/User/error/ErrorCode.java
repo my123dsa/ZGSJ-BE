@@ -23,6 +23,7 @@ public enum ErrorCode {
     DB_DUPLICAE_ERROR(500, "DB 중복 ERROR입니다. DB팀에 연락해주세요"),
 
     USER_NOT_FOUND(404, "해당 아이디에 일치하는 유저가 없습니다"),
+    STOREEMPLOYEE_NOT_FOUND(404, "해당 아이디에 일치하는 유저가 없습니다"),
     PASSWORD_NOT_CORRECT(400, "비밀번호가 다릅니다"),
     BUSINESSNUMBER_NOT_FOUND(404, "해당 사업자 번호가 없습니다"),
     EMAIL_ALREADY_EXISTS(409 , "존재하는 이메일입니다."),
