@@ -45,7 +45,7 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
         String path = request.getURI().getPath();
         log.info("TokenCheckFilter path: {}", path);
 
-        if(permitUrl.contains(path)){
+        if(permitUrl.stream().anyMatch(path::contains)) {
             log.info("통과");
             return chain.filter(exchange);
         }
@@ -60,7 +60,8 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
 
         Map<String, Object> payload = validateAccessToken(tokenStr,path);
 
-        if(!needIdUrl.contains(path)){
+        if(!needIdUrl.stream().anyMatch(path::contains)) {
+            log.info("통과");
             return chain.filter(exchange);
         }
 
@@ -106,6 +107,7 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
         permitUrl.add("/go-to-work");
 /////////////////////////////////////////////////////
         needIdUrl.add("/president/logout");
+        needIdUrl.add("/president/refresh");
         needIdUrl.add("/president/modify");
         needIdUrl.add("/president/change-password");
         needIdUrl.add("/president/account-check");
