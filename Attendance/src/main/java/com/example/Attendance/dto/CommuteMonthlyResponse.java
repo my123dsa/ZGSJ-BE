@@ -12,17 +12,9 @@ import java.time.LocalDate;
 public class CommuteMonthlyResponse {
     private LocalDate commuteDate;
     private String name;
-    private CommuteStatus status;
+    private String status;
 
-    @Getter
-    @AllArgsConstructor
-    public enum CommuteStatus {
-        COMPLETED("퇴근완료"),
-        IN_PROGRESS("출근중"),
-        INCOMPLETE("미퇴근");
 
-        private final String description;
-    }
 
     //backend logic :
     //1. 출근을 했고, 퇴근이 찍혀있다면. 회색
@@ -36,14 +28,12 @@ public class CommuteMonthlyResponse {
         );
     }
 
-    private static CommuteStatus determineStatus(Commute commute) {
+    private static String determineStatus(Commute commute) {
         if (commute.getEndTime() != null) {
-            return CommuteStatus.COMPLETED;
+            return "퇴근완료";
         }
 
-        return commute.getCommuteDate().equals(LocalDate.now()) ?
-                CommuteStatus.IN_PROGRESS :
-                CommuteStatus.INCOMPLETE;
+        return commute.getCommuteDate().equals(LocalDate.now()) ? "출근중" : "미퇴근";
     }
 
 }
