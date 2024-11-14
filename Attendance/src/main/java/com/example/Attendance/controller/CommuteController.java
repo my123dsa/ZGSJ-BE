@@ -3,6 +3,7 @@ package com.example.Attendance.controller;
 import com.example.Attendance.dto.CommuteByPresidentRequest;
 import com.example.Attendance.dto.CommuteMonthlyResponse;
 import com.example.Attendance.service.CommuteService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class CommuteController {
 
     @PostMapping
     public ResponseEntity<String> addDailyCommuteByPresident(
-            @RequestParam int seid, @RequestBody CommuteByPresidentRequest request)
+            @RequestParam int seid, @Valid @RequestBody CommuteByPresidentRequest request)
     {
         commuteService.addDailyCommuteByPresident(request, seid);
         return ResponseEntity.ok("직원 출 퇴근 사장님이 추가 성공");
@@ -37,7 +38,7 @@ public class CommuteController {
 
     @PutMapping
     public ResponseEntity<String> updateDailyCommuteByPresident(
-            @RequestParam int commuteid, @RequestBody CommuteByPresidentRequest request)
+            @RequestParam int commuteid, @Valid @RequestBody CommuteByPresidentRequest request)
     {
         commuteService.updateDailyCommuteByPresident(request, commuteid);
         return ResponseEntity.ok("직원 출 퇴근 사장님이 수정 성공");

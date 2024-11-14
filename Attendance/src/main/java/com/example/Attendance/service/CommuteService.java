@@ -28,7 +28,7 @@ public class CommuteService {
     private final StoreEmployeeRepository storeEmployeeRepository;
 
     @Transactional
-    public void addDailyCommuteByPresident(@Valid CommuteByPresidentRequest request, int seId) {
+    public void addDailyCommuteByPresident( CommuteByPresidentRequest request, int seId) {
         StoreEmployee employee = storeEmployeeRepository.findById(seId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         Commute commute = request.toEntity(employee);
@@ -36,7 +36,7 @@ public class CommuteService {
     }
 
     @Transactional
-    public void updateDailyCommuteByPresident(@Valid CommuteByPresidentRequest request, int commuteId) {
+    public void updateDailyCommuteByPresident( CommuteByPresidentRequest request, int commuteId) {
 
         long commuteDuration = request.getEndTime() == null ?
                 0L :
