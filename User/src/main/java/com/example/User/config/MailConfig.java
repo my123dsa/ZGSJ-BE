@@ -33,7 +33,7 @@ public class MailConfig {
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.starttls.enable", "true");  //tls 보안 프로토콜 사용 여부
         props.put("mail.debug", "false");  // 개발 시에만 true로 설정
         props.put("mail.smtp.timeout", "5000");
 
