@@ -8,6 +8,8 @@ import lombok.Getter;
 public enum ErrorCode {
 
     INVALID_PARAMETER(400, "파라미터 값을 확인해주세요."),
+    ACCOUNT_NOT_FOUND(404, "존재하지 않는 사용자의 계좌입니다"),
+    BANKCODE_NOT_MATCH(404, "사용자 계좌와 은행 코드가 일치하지 않습니다"),
 
     CHECKUP_NOT_FOUND(404, "존재하지 않는 이해도조사 ID 입니다."),
     ROOM_NOT_FOUND(404, "존재하지 않는 방 ID 입니다."),

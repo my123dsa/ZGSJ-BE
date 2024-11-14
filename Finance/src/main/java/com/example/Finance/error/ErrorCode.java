@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
 
+    PDF_CREATE_ERROR(500, "PDF 생성 중 오류가 발생했습니다."),
     INVALID_PARAMETER(400, "파라미터 값을 확인해주세요."),
     INVALID_EMAIL_FORMAT(431, "이메일 형식 잘못되었습니다."),
     EMAIL_ALREADY_EXISTS(432, "존재하는 이메일입니다."),
