@@ -3,10 +3,9 @@ package com.example.User.util;
 
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
-import com.google.gson.Gson;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SecurityException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,6 +14,7 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Base64;
@@ -62,11 +62,21 @@ public class JWTUtil {
     }
 
     public Map<String, Object> validateToken(String token) throws JwtException {
-        Map<String, Object> claim = Jwts.parser()
-                .setSigningKey(key.getBytes()) // Set Key
-                .parseClaimsJws(token) // 파싱 및 검증, 실패 시 에러
-                .getBody();
-        return claim;
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8)))
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (MalformedJwtException malformedJwtException) {
+            log.error("MalformedJwtException----------------------");
+            throw new CustomException(ErrorCode.MALFORM_TOKEN);
+        } catch (SecurityException signatureException) {
+            log.error("SignatureException----------------------");
+            throw new CustomException(ErrorCode.BADSIGN_TOKEN);
+        } catch (ExpiredJwtException expiredJwtException) {
+            throw new CustomException(ErrorCode.EXPIRED_TOKEN);
+        }
     }
 
     public Map<String, Object> encrypt(Integer id) {
