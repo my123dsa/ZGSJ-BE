@@ -31,6 +31,13 @@ public class Store {
     @Column(nullable = false, length = 50)
     private String bankCode;
 
+    @Column(name = "location",length = 100, nullable = false)
+    private String location;
+    @Column(name = "latitude", nullable = false)
+    private Double latitude;
+    @Column(name = "longitude", nullable = false)
+    private Double longitude;
+
     @OneToMany(mappedBy = "store")
     private List<StoreEmployee> storeEmployees = new ArrayList<>();
 
@@ -39,17 +46,20 @@ public class Store {
     private President president;
 
     private Store(String storeName, String businessNumber, String accountNumber,
-                  String bankCode, President president) {
+                  String bankCode, President president,String location,Double latitude,Double longitude) {
         this.storeName = storeName;
         this.businessNumber = businessNumber;
         this.accountNumber = accountNumber;
         this.bankCode = bankCode;
         this.president = president;
+        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public static Store createStore(String storeName, String businessNumber, String accountNumber,
-                                    String bankCode, President president) {
-        return new Store(storeName, businessNumber, accountNumber, bankCode, president);
+                                    String bankCode, President president,String location,Double latitude,Double longitude) {
+        return new Store(storeName, businessNumber, accountNumber, bankCode, president,location,latitude,longitude);
     }
 
     public void updateByStoreRequest(StoreRequest storeRequest) {
