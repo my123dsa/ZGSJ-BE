@@ -9,19 +9,15 @@ import com.example.Attendance.model.StoreEmployee;
 import com.example.Attendance.repository.CommuteRepository;
 import com.example.Attendance.repository.StoreEmployeeRepository;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Validated
 public class CommuteService {
 
     private final CommuteRepository commuteRepository;
