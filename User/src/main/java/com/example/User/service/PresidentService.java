@@ -3,6 +3,7 @@ package com.example.User.service;
 
 import com.example.User.dto.login.ReqLoginData;
 import com.example.User.dto.login.ReqRegist;
+import com.example.User.dto.presidentupdate.PresidentUpdateRequest;
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
 import com.example.User.model.President;
@@ -11,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDate;
 
 
 @Service
@@ -51,9 +51,13 @@ public class PresidentService {
 
     //사장 정보 수정
     @Transactional
-    public void updatePresident(Integer id, String phoneNumber, LocalDate birthDate) {
-        presidentRepository.updatePhoneNumberAndBirthDate(id,phoneNumber,birthDate);
+    public void updatePresident(Integer id, PresidentUpdateRequest presidentUpdateRequest) {
+        presidentRepository.updatePhoneNumberAndBirthDate(
+                id,presidentUpdateRequest.getPhoneNumber(),presidentUpdateRequest.getBirthDate());
     }
 
-
+    public President findById(Integer id) {
+        return presidentRepository.findById(id)
+                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+    }
 }

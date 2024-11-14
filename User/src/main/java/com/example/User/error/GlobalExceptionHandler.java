@@ -26,19 +26,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorDTO> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
 
-        String errorMessage = "중복 데이터입니다";
-        ErrorDTO errorResponse = makeErrorResponse(ErrorCode.DB_DUPLICAE_ERROR, errorMessage);
+        ErrorDTO errorResponse = makeErrorResponse(ErrorCode.DB_DUPLICAE_ERROR);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler({CustomException.class})
-    protected ResponseEntity<?> handleCustomException(CustomException ex) {
+    protected ResponseEntity<ErrorDTO> handleCustomException(CustomException ex) {
         ErrorCode errorCode = ex.getErrorCode();
         return handleExceptionInternal(errorCode);
     }
 
-    private ResponseEntity<?> handleExceptionInternal(ErrorCode errorCode) {
+    private ResponseEntity<ErrorDTO> handleExceptionInternal(ErrorCode errorCode) {
         return ResponseEntity.status(errorCode.getStatus())
                 .body(makeErrorResponse(errorCode));
     }
@@ -47,25 +46,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ErrorDTO.builder()
                 .code(errorCode.name())
                 .message(errorCode.getMessage())
-                .build();
-    }
-
-    @ExceptionHandler(ArithmeticException.class) // ③
-    public ResponseEntity<Object> handleArithmeticException(ArithmeticException e) {
-        ErrorCode errorCode = ErrorCode.SERVER_ERROR;
-        return handleExceptionInternal(errorCode, e.getMessage());
-    }
-
-
-    private ResponseEntity<Object> handleExceptionInternal(ErrorCode errorCode, String message) {
-        return ResponseEntity.status(errorCode.getStatus())
-                .body(makeErrorResponse(errorCode, message));
-    }
-
-    private ErrorDTO makeErrorResponse(ErrorCode errorCode, String message) {
-        return ErrorDTO.builder()
-                .code(errorCode.name())
-                .message(message)
                 .build();
     }
 }

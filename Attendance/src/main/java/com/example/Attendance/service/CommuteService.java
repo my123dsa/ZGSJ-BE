@@ -1,5 +1,6 @@
 package com.example.Attendance.service;
 
+import com.example.Attendance.repository.CommuteRepository;
 import com.example.Attendance.dto.CommuteByPresidentRequest;
 import com.example.Attendance.dto.CommuteMonthlyResponse;
 import com.example.Attendance.error.CustomException;
@@ -14,16 +15,41 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-@Service
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
+@Service
 public class CommuteService {
 
     private final CommuteRepository commuteRepository;
     private final StoreEmployeeRepository storeEmployeeRepository;
+
+    @Transactional
+    public boolean goToWork(StoreEmployee storeEmployee){
+        Optional<Commute> lastCommute= commuteRepository.findTopByStoreEmployeeIdOrderByStartTimeDesc(storeEmployee.getId());
+        LocalDateTime now= LocalDateTime.now();
+        Commute commute= Commute.createCommuteCheckIn(now.toLocalDate(),now,storeEmployee);
+        if(lastCommute.isPresent() &&lastCommute.get().getEndTime()==null){
+            commuteRepository.save(commute);
+            return false;
+        }
+        commuteRepository.save(commute);
+        return true;
+    }
+
+    @Transactional
+    public void leaveWork(StoreEmployee storeEmployee){
+        Commute commute= commuteRepository
+                .findTopByStoreEmployeeIdOrderByStartTimeDesc(storeEmployee.getId())
+                .orElseThrow(()-> new CustomException(ErrorCode.INVALID_COMMUTE));
+        if(commute.getEndTime()!=null){
+            throw new CustomException(ErrorCode.MISSING_GO_TO_WORK_RECODE);
+        }
+        commute.setEndTime(LocalDateTime.now());
+    }
 
     @Transactional
     public void addDailyCommuteByPresident( CommuteByPresidentRequest request, int seId) {
@@ -60,3 +86,4 @@ public class CommuteService {
                 .stream().map(CommuteMonthlyResponse::from).toList();
     }
 }
+

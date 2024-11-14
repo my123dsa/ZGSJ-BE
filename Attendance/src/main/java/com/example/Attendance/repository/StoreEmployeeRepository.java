@@ -13,6 +13,7 @@ import java.util.Optional;
 @Repository
 public interface StoreEmployeeRepository extends JpaRepository<StoreEmployee, Integer> {
 
+    //이것도 필요한거 dto로 보내게끔
     @Query("SELECT new com.example.Attendance.dto.EmployeeNameResponse(se.id, se.name) " +
             "FROM StoreEmployee se " +
             "WHERE se.store.id = :storeId")
