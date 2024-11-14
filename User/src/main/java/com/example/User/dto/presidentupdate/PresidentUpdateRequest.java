@@ -4,17 +4,18 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 public class PresidentUpdateRequest {
 
     @NotBlank
     private String phoneNumber;
 
-    @NotBlank
+    @NotNull
     private LocalDate birthDate;
 
 }
