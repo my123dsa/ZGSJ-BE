@@ -1,14 +1,14 @@
-//package com.example.Attendance.service;
+package com.example.User.service;
 //
 //
-//
-//import com.example.Attendance.error.CustomException;
-//import com.example.Attendance.error.ErrorCode;
+//import com.example.User.error.CustomException;
+//import com.example.User.error.ErrorCode;
 //import com.google.gson.JsonArray;
 //import com.google.gson.JsonObject;
 //import com.google.gson.JsonParser;
 //import lombok.RequiredArgsConstructor;
 //import lombok.extern.slf4j.Slf4j;
+//import org.springframework.beans.factory.annotation.Value;
 //import org.springframework.stereotype.Service;
 //
 //import java.io.BufferedReader;
@@ -23,23 +23,26 @@
 //@RequiredArgsConstructor
 //@Service
 //public class MapService {
-//    private static final String API_KEY = "id";
+//    //미사용 입니다--------------------
 //
+//    @Value("${MAP_API_KEY}")
+//    private String API_KEY;
 //
 //    public double[] parseCoordinates(String jsonResponse) {
 //        JsonObject json = JsonParser.parseString(jsonResponse).getAsJsonObject();
 //
 //        JsonArray results = json.getAsJsonArray("results");
-//        if (results.size() > 0) {
+//        if (!results.isEmpty()) {
 //            JsonObject location = results.get(0).getAsJsonObject().getAsJsonObject("geometry").getAsJsonObject("location");
 //            double latitude = location.get("lat").getAsDouble();
 //            double longitude = location.get("lng").getAsDouble();
 //            return new double[]{latitude, longitude};
 //        } else {
-//            return null;
+//            throw new CustomException(ErrorCode.CANNOT_FIND_POSITION);
 //        }
 //    }
-//    public String getCoordinates(String address){
+//
+//    public double[] getCoordinates(String address){
 //        try {
 //            String encodedAddress = URLEncoder.encode(address, "UTF-8");
 //            String apiUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" + encodedAddress + "&key=" + API_KEY;
@@ -64,14 +67,7 @@
 //                // Parse JSON response to get coordinates
 //                String jsonResponse = response.toString();
 //                double[] coordinates = parseCoordinates(jsonResponse);
-//                double targetLatitude = coordinates[0];
-//                double targetLongitude = coordinates[1];
-//
-//                double rangeLat = 0.0009; // 위도 100m 범위
-//                double rangeLon = 0.0011; // 경도 100m 범위
-//
-//                return Arrays.toString(coordinates);
-//
+//                return coordinates;
 //            } else {
 //                throw new CustomException(ErrorCode.CANNOT_FIND_POSITION);
 //            }
