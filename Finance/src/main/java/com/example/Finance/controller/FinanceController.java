@@ -30,7 +30,7 @@ public class FinanceController {
     private final UserFeign userFeign;
 
     //차트 제공에 맞춰서 변경하기
-    @GetMapping("/transactionList")
+    @GetMapping("/transactionlist")
     public ResponseEntity<List<TransactionHistoryResponse>> getFinanaceData(
             @RequestParam Integer storeid,
             @RequestParam Integer year,
