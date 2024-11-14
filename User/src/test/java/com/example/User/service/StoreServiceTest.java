@@ -46,7 +46,10 @@ class StoreServiceTest {
                 "테스트 가게",     // storeName
                 "서울시 강남구",    // location
                 "가게 설명",       // description
-                "010-1234-5678"  // contact
+                "010-1234-5678",  // contact,
+                "위치",
+                123.5125,
+                123.51234
         );
 
         President president = President.createPresident(
@@ -67,7 +70,10 @@ class StoreServiceTest {
                 store.getBusinessNumber(),
                 store.getAccountNumber(),
                 store.getBankCode(),
-                president
+                president,
+                "위치",
+                123.5125,
+                123.51234
         );
 
 
@@ -97,7 +103,10 @@ class StoreServiceTest {
                 "테스트 가게",
                 "서울시 강남구",
                 "가게 설명",
-                "010-1234-5678"
+                "010-1234-5678",
+                "위치",
+                123.5125,
+                123.51234
         );
 
         when(presidentRepository.findById(presidentId)).thenReturn(Optional.empty());
@@ -119,7 +128,10 @@ class StoreServiceTest {
                 "중복된 가게 이름",
                 "서울시 강남구",
                 "가게 설명",
-                "010-1234-5678"
+                "010-1234-5678",
+                "위치",
+                123.5125,
+                123.51234
         );
 
         President president = President.createPresident(
