@@ -31,13 +31,13 @@ public class FinanceController {
 
     //차트 제공에 맞춰서 변경하기
     @GetMapping("/transactionList")
-    public List<TransactionHistoryResponse> getFinanaceData(
+    public ResponseEntity<List<TransactionHistoryResponse>> getFinanaceData(
             @RequestParam Integer storeid,
             @RequestParam Integer year,
             @RequestParam Integer month)
     {
         TransactionHistoryRequest transactionHistoryRequest= TransactionHistoryRequest.from(userFeign.getStoreAccountInfo(storeid));
-        return transactionHistoryService.getTransactionHistoryList(transactionHistoryRequest, year ,month);
+        return ResponseEntity.ok(transactionHistoryService.getTransactionHistoryList(transactionHistoryRequest, year ,month));
     }
 
     //pdf 생성
