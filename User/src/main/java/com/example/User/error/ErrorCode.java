@@ -31,7 +31,12 @@ public enum ErrorCode {
     INVALID_REFRESH_TOKEN(401,"리프레시 토큰이 유효하지 않습니다."),
     INVALID_ENCRYPTION(401,"암호화가 유효하지 않습니다."),
     INVALID_DECRYPTION(401,"복호화가 유효하지 않습니다."),
-    CANNOT_FIND_POSITION(400,"위치가 잘못됨")
+    CANNOT_FIND_POSITION(400,"위치가 잘못됨"),
+    UNACCEPT_TOKEN(401, "Token is null or too short"),
+    BADTYPE_BEARER(401, "Token type Bearer"),
+    MALFORM_TOKEN(403, "Malformed Token"),
+    BADSIGN_TOKEN(403, "BadSignatured Token"),
+    EXPIRED_TOKEN(403, "Expired Token"),
     ;
 
 
