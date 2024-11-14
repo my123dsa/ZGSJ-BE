@@ -113,6 +113,7 @@ public class AttendanceServiceTest {
 
     // 출근 기록이 있고 퇴근시간이 찍혀있는경우
 
+
     @Test
     void testLeaveWork_NoCheckIn() {
         // Given: 출근 기록이 없는 경우
@@ -147,6 +148,24 @@ public class AttendanceServiceTest {
     }
 
     // 직원 위치가 근처가 아닌경우
+    @Test
+    void testFindStoreEmployeeByEmailAndStoreId_InvalidLocation() {
+        // Given: 직원의 위치가 가게에서 멀리 떨어져 있는 경우
+        when(storeEmployeeRepository.findByEmailAndStoreId(request.getEmail(), 1))
+                .thenReturn(Optional.of(storeEmployee));
+
+        // 직원의 위치를 가게에서 멀리 떨어진 곳으로 설정 (예: 부산)
+        when(request.getLatitude()).thenReturn(35.1796);  // 부산의 위도
+        when(request.getLongitude()).thenReturn(129.0756);  // 부산의 경도
+
+        // When: 직원이 가게에서 멀리 떨어져 있을 때, findStoreEmployeeByEmailAndStoreId 호출
+        CustomException thrown = assertThrows(CustomException.class, () -> {
+            storeEmployeeService.findStoreEmployeeByEmailAndStoreId(1, request);
+        });
+
+        // Then: INVALID_LOCATION 에러 코드로 예외가 발생해야 함
+        assertEquals(ErrorCode.INVALID_LOCATION, thrown.getErrorCode());
+    }
 
     @Test
     void testFindStoreEmployeeByEmailAndStoreId_InvalidEmployee() {
