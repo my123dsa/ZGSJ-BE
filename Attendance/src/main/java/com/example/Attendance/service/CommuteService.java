@@ -10,6 +10,7 @@ import com.example.Attendance.repository.CommuteRepository;
 import com.example.Attendance.repository.StoreEmployeeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CommuteService {
 
     private final CommuteRepository commuteRepository;
@@ -25,6 +27,7 @@ public class CommuteService {
 
     @Transactional
     public void addDailyCommuteByPresident( CommuteByPresidentRequest request, int seId) {
+        log.info("seid"+ seId);
         StoreEmployee employee = storeEmployeeRepository.findById(seId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         Commute commute = request.toEntity(employee);
