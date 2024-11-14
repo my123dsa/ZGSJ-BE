@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
 import java.time.Duration;
@@ -26,22 +26,21 @@ import static org.mockito.Mockito.*;
 class RedisServiceTest {
 
     @Mock
-    private RedisTemplate<String, String> redisTemplate;
+    private StringRedisTemplate redisTemplate;
     @Mock
     private ValueOperations<String, String> valueOps;
 
     @Mock
     private JWTUtil jwtUtil;
 
+    @InjectMocks
     private RedisTokenService redisTokenService;
 
     @BeforeEach
     void setUp() {
-        // valueOps mock 생성 및 설정
-        ValueOperations<String, String> valueOps = mock(ValueOperations.class);
         when(redisTemplate.opsForValue()).thenReturn(valueOps);
 
-        // RedisTokenService 인스턴스 생성
+        // RedisTokenService를 직접 생성해서 valueOps 설정
         redisTokenService = new RedisTokenService(redisTemplate, jwtUtil);
     }
 
@@ -58,7 +57,7 @@ class RedisServiceTest {
         claims.put("payload", encryptedId);
         claims.put("exp", expirationTime);
 
-        when(redisTemplate.opsForValue().get(accessTokenId.toString())).thenReturn(refreshToken);
+        when(valueOps.get(accessTokenId.toString())).thenReturn(refreshToken);
 
         when(jwtUtil.validateToken(refreshToken)).thenReturn(claims);
         when(jwtUtil.decrypt(encryptedId)).thenReturn(accessTokenId);
@@ -72,7 +71,7 @@ class RedisServiceTest {
         // Then
         assertThat(result).isEqualTo("new-access-token");
 
-        verify(redisTemplate.opsForValue()).get(accessTokenId.toString());
+        verify(valueOps).get(accessTokenId.toString());
 
 
         verify(jwtUtil).validateToken(refreshToken);
@@ -86,7 +85,7 @@ class RedisServiceTest {
     void checkRefreshToken_EmptyToken() {
         // Given
         Integer accessTokenId = 1;
-        when(redisTemplate.opsForValue().get(accessTokenId.toString())).thenReturn(null);
+        when(valueOps.get(accessTokenId.toString())).thenReturn(null);
 
         // When & Then
         CustomException exception = assertThrows(CustomException.class, () ->
@@ -107,7 +106,7 @@ class RedisServiceTest {
         claims.put("payload", encryptedId);
         claims.put("exp", (int)(System.currentTimeMillis() / 1000) + 3600);
 
-        when(redisTemplate.opsForValue().get(accessTokenId.toString())).thenReturn(refreshToken);
+        when(valueOps.get(accessTokenId.toString())).thenReturn(refreshToken);
         when(jwtUtil.validateToken(refreshToken)).thenReturn(claims);
         when(jwtUtil.decrypt(encryptedId)).thenReturn(2); // 다른 ID 반환
 
@@ -134,7 +133,7 @@ class RedisServiceTest {
 
         // Then
         verify(jwtUtil).generateToken(id, 30);
-        verify(redisTemplate.opsForValue()).set(
+        verify(valueOps).set(
                 eq(id.toString()),
                 eq(newRefreshToken),
                 eq(Duration.ofDays(100))
