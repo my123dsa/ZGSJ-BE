@@ -1,6 +1,7 @@
 package com.example.Attendance.service;
 
-import com.example.Attendance.Repository.StoreEmployeeRepository;
+import com.example.Attendance.repository.CommuteRepository;
+import com.example.Attendance.repository.StoreEmployeeRepository;
 import com.example.Attendance.dto.EmployeeCommuteRequest;
 import com.example.Attendance.error.CustomException;
 import com.example.Attendance.error.ErrorCode;
