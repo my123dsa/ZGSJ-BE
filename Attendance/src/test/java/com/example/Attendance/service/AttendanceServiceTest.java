@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -112,7 +113,28 @@ public class AttendanceServiceTest {
     }
 
     // 출근 기록이 있고 퇴근시간이 찍혀있는경우
+    @Test
+    void testLeaveWork_AlreadyCheckOut() {
+        // Given: 직원이 존재하고, 출근 기록이 있으며, 해당 출근 기록에 이미 퇴근 시간이 설정된 경우
+        when(storeEmployeeRepository.findByEmailAndStoreId(request.getEmail(), 1))
+                .thenReturn(Optional.of(storeEmployee)); // 직원 정보 Mock
+        when(commuteRepository.findTopByStoreEmployeeIdOrderByStartTimeDesc(storeEmployee.getId()))
+                .thenReturn(Optional.of(commute)); // 가장 최근 출근 기록 Mock
 
+        // 출근 기록에 이미 퇴근 시간이 있는 경우로 설정
+        when(commute.getEndTime()).thenReturn(LocalDateTime.now().minusHours(1)); // 이미 퇴근 시간이 있음
+
+        // When: leaveWork 메서드 호출
+        CustomException thrown = assertThrows(CustomException.class, () -> {
+            storeEmployeeService.leaveWork(1, request);
+        });
+
+        // Then: 이미 퇴근한 상태이므로 예외가 발생해야 함
+        assertEquals(ErrorCode.MISSING_GO_TO_WORK_RECODE, thrown.getErrorCode());
+
+        // Then: 이미 퇴근한 경우이므로 새로운 퇴근 기록이 저장되지 않아야 함
+        verify(commuteRepository, never()).save(any(Commute.class));
+    }
 
     @Test
     void testLeaveWork_NoCheckIn() {
