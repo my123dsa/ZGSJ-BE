@@ -27,6 +27,14 @@ public class StoreRequest {
 
     @NotBlank
     private String bankCode;
+    @NotBlank
+    private String location;
+    @NotNull
+    private Double latitude;
+    @NotNull
+    private Double longitude;
+
+
 
     public Store toEntity(President president) {
         return Store.createStore(
@@ -34,7 +42,10 @@ public class StoreRequest {
                 this.getBusinessNumber(),
                 this.getAccountNumber(),
                 this.getBankCode(),
-                president
+                president,
+                this.location,
+                this.latitude,
+                this.longitude
         );
     }
 }
