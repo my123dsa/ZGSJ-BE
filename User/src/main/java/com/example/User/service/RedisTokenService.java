@@ -4,7 +4,7 @@ import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
 import com.example.User.util.JWTUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,11 +18,11 @@ import java.util.Objects;
 @Service
 @Slf4j
 public class RedisTokenService {
-    private final RedisTemplate<String, String> redisTemplate;
+    private final StringRedisTemplate redisTemplate;
     private final JWTUtil jwtUtil;
     private final ValueOperations<String, String> valueOps;
 
-    public RedisTokenService(RedisTemplate<String, String> redisTemplate, JWTUtil jwtUtil) {
+    public RedisTokenService(StringRedisTemplate  redisTemplate, JWTUtil jwtUtil) {
         this.redisTemplate = redisTemplate;
         this.valueOps = redisTemplate.opsForValue();
         this.jwtUtil = jwtUtil;
