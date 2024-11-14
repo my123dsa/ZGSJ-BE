@@ -155,4 +155,53 @@ class RedisServiceTest {
         verify(jwtUtil, never()).generateToken(any(), anyInt());
         verify(valueOps, never()).set(any(), any(), any(Duration.class));
     }
+
+    @Test
+    @DisplayName("리프레시 토큰 삭제 성공 테스트 - 키가 존재하는 경우")
+    void removeRefreshToken_WhenKeyExists() {
+        // Given
+        Integer id = 1;
+        when(redisTemplate.hasKey(id.toString())).thenReturn(true);
+
+        // When
+        redisTokenService.removeRefreshToken(id);
+
+        // Then
+        verify(redisTemplate).hasKey(id.toString());
+        verify(redisTemplate).delete(id.toString());
+    }
+
+    @Test
+    @DisplayName("리프레시 토큰 삭제 테스트 - 키가 존재하지 않는 경우")
+    void removeRefreshToken_WhenKeyNotExists() {
+        // Given
+        Integer id = 1;
+        when(redisTemplate.hasKey(id.toString())).thenReturn(false);
+
+        // When
+        redisTokenService.removeRefreshToken(id);
+
+        // Then
+        verify(redisTemplate).hasKey(id.toString());
+        verify(redisTemplate, never()).delete(anyString());
+    }
+
+    @Test
+    @DisplayName("리프레시 토큰 저장 테스트")
+    void setValues_Success() {
+        // Given
+        Integer id = 1;
+        String value = "test-refresh-token";
+        Duration duration = Duration.ofDays(100);
+
+        // When
+        redisTokenService.setValues(id, value, duration);
+
+        // Then
+        verify(redisTemplate.opsForValue()).set(
+                eq(id.toString()),
+                eq(value),
+                eq(duration)
+        );
+    }
 }
