@@ -35,8 +35,4 @@ public class QRCodeUtil {
             throw new RuntimeException("QR Code 생성에 실패했습니다.", e);
         }
     }
-    public String generateQRCodeBase64(Integer storeId) {
-        byte[] qrCodeBytes = generateQRCodeImage(storeId);
-        return Base64.getEncoder().encodeToString(qrCodeBytes);
-    }
 }
