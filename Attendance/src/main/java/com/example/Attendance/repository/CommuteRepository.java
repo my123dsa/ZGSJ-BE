@@ -28,7 +28,7 @@ public interface CommuteRepository extends JpaRepository<Commute, Integer> {
             "WHERE s.id = :storeId " +
             "AND YEAR(c.commuteDate) = :year " +
             "AND MONTH(c.commuteDate) = :month " +
-            "ORDER BY c.commuteDate, se.name")
+            "ORDER BY c.commuteDate, c.startTime")
     List<Commute> findMonthlyCommutesByStore(
             @Param("storeId") Integer storeId,
             @Param("year") int year,
