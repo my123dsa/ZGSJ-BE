@@ -21,11 +21,9 @@ public interface TransactionHistoryRepository extends JpaRepository<TransactionH
             @Param("month") Integer month
     );
 
-    // fetch join
-    // 단일쿼리로 가능할지
+    // 특정 가게의 특정 년도 매출데이터를 모두 제공하는
     @Query("SELECT DISTINCT th FROM TransactionHistory th " +
             "LEFT JOIN FETCH th.classfication " +
-            "LEFT JOIN FETCH th.account " +
             "WHERE th.account.id = :accountId " +
             "AND FUNCTION('YEAR', th.transactionDate) = :year " +
             "AND th.isDeposit = true")
