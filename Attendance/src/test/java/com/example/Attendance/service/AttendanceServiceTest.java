@@ -6,27 +6,24 @@ import com.example.Attendance.dto.EmployeeCommuteRequest;
 import com.example.Attendance.error.CustomException;
 import com.example.Attendance.error.ErrorCode;
 import com.example.Attendance.model.Commute;
-import com.example.Attendance.model.StoreEmployee;
 import com.example.Attendance.model.Store;
+import com.example.Attendance.model.StoreEmployee;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class) // Mockito 사용을 위한 JUnit 5 확장
 public class AttendanceServiceTest {
 
-    private static final Logger log = LoggerFactory.getLogger(AttendanceServiceTest.class);
     @Mock
     private StoreEmployeeRepository storeEmployeeRepository;
 
@@ -107,12 +104,14 @@ public class AttendanceServiceTest {
         // When: leaveWork 메서드 호출
         storeEmployeeService.leaveWork(1, request);  // 가게 ID와 요청 정보를 사용하여 퇴근 처리
 
-        // Then: 퇴근 시간이 설정되어야 함 (테스트 실패 조건)
+        // Then: 퇴근 시간이 설정되어야 함 (테스트 성공 조건)
         assertNull(commute.getEndTime(), "End time should be set after leaving work");  // 퇴근 시간이 설정되었는지 확인
 
         // Then: 변경된 출근 기록이 저장되었는지 확인
         verify(commuteRepository, times(1)).save(commute);  // save 메서드가 한 번 호출되었는지 검증
     }
+
+    // 출근 기록이 있고 퇴근시간이 찍혀있는경우
 
     @Test
     void testLeaveWork_NoCheckIn() {
@@ -146,6 +145,8 @@ public class AttendanceServiceTest {
         // Then: 예외가 발생하지 않고 정상적으로 직원 정보를 반환해야 함
         assertNotNull(result);
     }
+
+    // 직원 위치가 근처가 아닌경우
 
     @Test
     void testFindStoreEmployeeByEmailAndStoreId_InvalidEmployee() {
