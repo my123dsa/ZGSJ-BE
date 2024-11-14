@@ -29,7 +29,7 @@ public class FinanceController {
     private final UserFeign userFeign;
 
     //차트 제공에 맞춰서 변경하기
-    @GetMapping("/transactionChart")
+    @GetMapping("/transactionchart")
     public ResponseEntity<TransactionChartResponse> getFinanaceData(
             @RequestParam Integer storeid,
             @RequestParam Integer year,
@@ -42,7 +42,7 @@ public class FinanceController {
     }
 
     //pdf 생성
-    @PostMapping(value = "/transactionPdf")
+    @PostMapping(value = "/transactionpdf")
     public ResponseEntity<byte[]> getFinancePdf(
             @RequestParam Integer storeid,
             @RequestParam Integer year,
