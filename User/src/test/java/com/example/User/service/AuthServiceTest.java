@@ -40,8 +40,8 @@ public class AuthServiceTest {
         String mockRefreshToken = "mock-refresh-token";
 
         log.info(mockAccessToken);
-        when(jwtUtil.generateToken(eq(userId), eq(100))).thenReturn(mockAccessToken);
-        when(jwtUtil.generateToken(eq(userId), eq(1000))).thenReturn(mockRefreshToken);
+        when(jwtUtil.generateToken(userId, 100)).thenReturn(mockAccessToken);
+        when(jwtUtil.generateToken(userId, 1000)).thenReturn(mockRefreshToken);
 
         // When
         String resultAccessToken = authService.onAuthenticationSuccess(userId);
