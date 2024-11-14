@@ -52,6 +52,7 @@ public class StoreEmployeeService {
         }
 
         commute.setEndTime(LocalDateTime.now());
+        commuteRepository.save(commute); // 코드가 있어야 테스트 코드를 통과
     }
 
     public StoreEmployee findStoreEmployeeByEmailAndStoreId(Integer storeId,EmployeeCommuteRequest request) {

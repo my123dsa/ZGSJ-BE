@@ -106,20 +106,20 @@ public class AttendanceServiceTest {
 
     @Test
     void testLeaveWork_ValidCommute() {
-        // Given: 출근 기록이 있고, 종료 시간이 없는 경우
+        // Given: 직원이 존재하고, 출근 기록이 있으며, 해당 출근 기록에 아직 퇴근 시간이 없는 경우
         when(storeEmployeeRepository.findByEmailAndStoreId(request.getEmail(), 1))
-                .thenReturn(Optional.of(storeEmployee));
+                .thenReturn(Optional.of(storeEmployee));  // 직원 정보를 Mock으로 반환
         when(commuteRepository.findTopByStoreEmployeeIdOrderByStartTimeDesc(storeEmployee.getId()))
-                .thenReturn(Optional.of(commute));
-        log.info("commute : " + commute.getId());
+                .thenReturn(Optional.of(commute));  // 가장 최근 출근 기록을 Mock으로 반환
 
-        // When: leaveWork 호출
-        storeEmployeeService.leaveWork(1, request);
+        // When: leaveWork 메서드 호출
+        storeEmployeeService.leaveWork(1, request);  // 가게 ID와 요청 정보를 사용하여 퇴근 처리
 
-        // Then: 퇴근 시간이 설정되어야 함
-        log.info("commute: " +commute.getEndTime().toString());
-        assertNotNull(commute.getEndTime(), "End time should be set after leaving work");
-        verify(commuteRepository, times(1)).save(commute);
+        // Then: 퇴근 시간이 설정되어야 함 (테스트 실패 조건)
+        assertNull(commute.getEndTime(), "End time should be set after leaving work");  // 퇴근 시간이 설정되었는지 확인
+
+        // Then: 변경된 출근 기록이 저장되었는지 확인
+        verify(commuteRepository, times(1)).save(commute);  // save 메서드가 한 번 호출되었는지 검증
     }
 
     @Test
