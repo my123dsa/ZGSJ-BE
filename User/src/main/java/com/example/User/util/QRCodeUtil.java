@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Base64;
 
 @Service
 @Slf4j
@@ -21,7 +20,7 @@ public class QRCodeUtil {
     }
 
     public byte[] generateQRCodeImage(Integer storeId) {
-        try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream();) {
+        try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
             //여기에 가게id붙여서 특정 폼 만들게 하는 qr 생성
             String url = generateQRUrl(storeId);  // URL 생성
