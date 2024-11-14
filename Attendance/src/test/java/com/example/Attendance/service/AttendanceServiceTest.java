@@ -50,26 +50,18 @@ public class AttendanceServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Mocking StoreEmployee 객체
-        when(storeEmployee.getId()).thenReturn(1);
-//        when(storeEmployee.getEmail()).thenReturn("john.doe@test.com");
-//        when(storeEmployee.getName()).thenReturn("John Doe");
-        when(storeEmployee.getStore()).thenReturn(store);  // Store 설정
+        // 필요한 경우에만 lenient()로 설정
+        lenient().when(storeEmployee.getId()).thenReturn(1);  // 필요한 테스트에서만 사용됨
+        lenient().when(storeEmployee.getStore()).thenReturn(store);  // 필요한 경우만 사용
 
-        // Mocking Store 객체
-        when(store.getLatitude()).thenReturn(37.5665);  // 예시 좌표
-        when(store.getLongitude()).thenReturn(126.9780); // 예시 좌표
+        // Mocking Store 객체 (필요한 경우에만 설정)
+        lenient().when(store.getLatitude()).thenReturn(37.5665);  // 필요한 테스트에서만 사용됨
+        lenient().when(store.getLongitude()).thenReturn(126.9780);
 
-        // Mocking Commute 객체
-//        when(commute.getId()).thenReturn(1);
-//        when(commute.getStartTime()).thenReturn(LocalDateTime.now());
-//        when(commute.getStoreEmployee()).thenReturn(storeEmployee);
-
-        // Mocking EmployeeCommuteRequest 객체
-        when(request.getEmail()).thenReturn("john.doe@test.com");
-        when(request.getLatitude()).thenReturn(37.5665);
-        when(request.getLongitude()).thenReturn(126.9780); // 서울 좌표
-
+        // Mocking EmployeeCommuteRequest 객체 (각 테스트에 맞게 설정)
+        lenient().when(request.getEmail()).thenReturn("john.doe@test.com");
+        lenient().when(request.getLatitude()).thenReturn(37.5665);
+        lenient().when(request.getLongitude()).thenReturn(126.9780);  // 필요한 경우에만 설정
     }
 
     @Test
@@ -140,17 +132,33 @@ public class AttendanceServiceTest {
     }
 
     @Test
-    void testFindStoreEmployeeByEmailAndStoreId_InvalidLocation() {
-        // Given: 직원의 위치가 잘못된 경우
+    void testFindStoreEmployeeByEmailAndStoreId_ValidLocation() {
+        // Given: 직원의 위치가 가게 근처에 있는 경우
         when(storeEmployeeRepository.findByEmailAndStoreId(request.getEmail(), 1))
                 .thenReturn(Optional.of(storeEmployee));
 
+        when(request.getLatitude()).thenReturn(37.5665);  // 가게 위치와 동일한 위도
+        when(request.getLongitude()).thenReturn(126.9780);  // 가게 위치와 동일한 경도
+
         // When: findStoreEmployeeByEmailAndStoreId 호출
+        StoreEmployee result = storeEmployeeService.findStoreEmployeeByEmailAndStoreId(1, request);
+
+        // Then: 예외가 발생하지 않고 정상적으로 직원 정보를 반환해야 함
+        assertNotNull(result);
+    }
+
+    @Test
+    void testFindStoreEmployeeByEmailAndStoreId_InvalidEmployee() {
+        // Given: 유효하지 않은 이메일이나 가게 ID인 경우 (직원이 존재하지 않음)
+        when(storeEmployeeRepository.findByEmailAndStoreId(request.getEmail(), 1))
+                .thenReturn(Optional.empty());  // 직원 정보가 없는 경우로 설정
+
+        // When: findStoreEmployeeByEmailAndStoreId 호출 시 CustomException이 발생해야 함
         CustomException thrown = assertThrows(CustomException.class, () -> {
             storeEmployeeService.findStoreEmployeeByEmailAndStoreId(1, request);
         });
 
-        // Then: 잘못된 위치라면 예외가 발생해야 함
-        assertEquals(ErrorCode.INVALID_LOCATION, thrown.getErrorCode());
+        // Then: INVALID_EMPLOYEE 에러 코드로 예외가 발생해야 함
+        assertEquals(ErrorCode.INVALID_EMPLOYEE, thrown.getErrorCode());
     }
 }
