@@ -7,7 +7,6 @@ import com.example.API_Gateway.util.JWTUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -15,23 +14,25 @@ import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 
 @Slf4j
-@Component
-@RequiredArgsConstructor
 public class TokenCheckFilter implements GlobalFilter, Ordered {
 
     private final JWTUtil jwtUtil;
-    private static final List<String> permitUrl=new ArrayList<>();
-    private static final List<String> needIdUrl=new ArrayList<>();
+    private  final List<String> permitUrl;
+    private  final List<String> needIdUrl;
+
+    public TokenCheckFilter(JWTUtil jwtUtil, List<String> permitUrl, List<String> needIdUrl) {
+        this.jwtUtil = jwtUtil;
+        this.permitUrl = permitUrl;
+        this.needIdUrl = needIdUrl;
+    }
 
     @Override
     public int getOrder() {
@@ -97,21 +98,4 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
         exchange.getResponse().setStatusCode(status);
         return exchange.getResponse().setComplete();
     }
-
-    //이거 enum으로 할 수도
-    static {
-        permitUrl.add("/president/login");
-        permitUrl.add("/president/regist");
-        permitUrl.add("commute/QRCheck");
-        permitUrl.add("/leave-work");
-        permitUrl.add("/go-to-work");
-/////////////////////////////////////////////////////
-        needIdUrl.add("/president/logout");
-        needIdUrl.add("/president/refresh");
-        needIdUrl.add("/president/modify");
-        needIdUrl.add("/president/change-password");
-        needIdUrl.add("/president/account-check");
-        needIdUrl.add("/user/store");
-    }
-
 }
