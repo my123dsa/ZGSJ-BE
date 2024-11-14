@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -27,11 +28,12 @@ public class RedisTokenService {
         this.jwtUtil = jwtUtil;
     }
 
+    @Transactional
     public void removeRefreshToken(Integer id) {
         if (redisTemplate.hasKey(id.toString()))
             redisTemplate.delete(id.toString());
     }
-
+    @Transactional
     public void setValues(Integer id, String value, Duration duration) {
         valueOps.set(id.toString(), value, duration);
     }
@@ -41,7 +43,7 @@ public class RedisTokenService {
             return "none";
         return String.valueOf(valueOps.get(key));
     }
-
+    @Transactional
     public String checkRefreshToken(Integer accessTokenId) {
 
         String refreshToken =valueOps.get(accessTokenId.toString());
@@ -61,6 +63,7 @@ public class RedisTokenService {
         checkAndRenewRefreshToken(id,exp);
         return jwtUtil.generateToken(id, 1);
     }
+
     public void checkAndRenewRefreshToken(Integer id,Integer exp){
         Date expTime = new Date(Instant.ofEpochMilli(exp).toEpochMilli() * 1000);
         Date current = new Date(System.currentTimeMillis());
