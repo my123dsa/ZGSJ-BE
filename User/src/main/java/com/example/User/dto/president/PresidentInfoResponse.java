@@ -1,5 +1,6 @@
 package com.example.User.dto.president;
 
+import com.example.User.model.President;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -17,7 +18,8 @@ public class PresidentInfoResponse {
 
     private String phoneNumber;
 
-    public static PresidentInfoResponse of(String name, String email, LocalDate birthDate, String phoneNumber) {
-        return new PresidentInfoResponse(name, email, birthDate, phoneNumber);
+    public static PresidentInfoResponse of(President president) {
+        return new PresidentInfoResponse(
+                president.getName(), president.getEmail(), president.getBirthDate(), president.getPhoneNumber()) ;
     }
 }
