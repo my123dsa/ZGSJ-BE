@@ -3,6 +3,7 @@ package com.example.User.controller;
 import com.example.User.dto.store.StoreRequest;
 import com.example.User.dto.store.StoreResponse;
 import com.example.User.model.President;
+import com.example.User.resolver.MasterId;
 import com.example.User.service.EmailService;
 import com.example.User.service.PresidentService;
 import com.example.User.service.StoreService;
@@ -25,9 +26,7 @@ public class StoreController {
     private final PresidentService presidentService;
     private final EmailService emailService;
     @PostMapping
-    private ResponseEntity<byte[]> store(@RequestBody StoreRequest storeRequest,HttpServletRequest request) {
-        Integer id=1;
-//        Integer id = Integer.parseInt(request.getHeader("id"));
+    private ResponseEntity<byte[]> store(@MasterId Integer id, @RequestBody StoreRequest storeRequest) {
         List<Object> idAndEmail= storeService.registerStore(id,storeRequest);
 //      (int)idAndEmail.get(0),(String)idAndEmail.get(1)
         byte[] image=emailService.sendQRToEmail("j0303p@gmail.com",4);
@@ -37,12 +36,11 @@ public class StoreController {
                 .body(image);
     }
      @GetMapping("/resend-QR")
-     private ResponseEntity<byte[]> resendQRCode(@RequestParam("storeid") Integer storeId, HttpServletRequest request) {
-         Integer id = Integer.parseInt(request.getHeader("id"));
-         log.info("id: "+id);
-         President president= presidentService.findById(1);
+     private ResponseEntity<byte[]> resendQRCode(@MasterId Integer id,@RequestParam("storeid") Integer storeId) {
+         log.info("id: {} ",id);
+         President president= presidentService.findById(id);
          //president.getEmail(),storeId
-         byte[] image=emailService.sendQRToEmail("j0303p@gmail.com",4);
+         byte[] image=emailService.sendQRToEmail(president.getEmail(),storeId);
 
          return ResponseEntity.ok()
                  .contentType(MediaType.IMAGE_PNG)
