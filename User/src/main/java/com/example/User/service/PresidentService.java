@@ -1,17 +1,22 @@
 package com.example.User.service;
 
 
+import com.example.User.dto.login.ReqIdFindData;
 import com.example.User.dto.login.ReqLoginData;
 import com.example.User.dto.login.ReqRegist;
 import com.example.User.dto.presidentupdate.PresidentUpdateRequest;
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
+import com.example.User.error.GlobalExceptionHandler;
 import com.example.User.model.President;
 import com.example.User.repository.PresidentRepository;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDate;
 
 
 @Service
@@ -60,4 +65,18 @@ public class PresidentService {
         return presidentRepository.findById(id)
                 .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
+    //사장 아이디 찾기
+    @Transactional
+    public String findByNameAndPhoneNumber(ReqIdFindData reqIdFindData){
+        President president = presidentRepository.findByNameAndPhoneNumber(
+                reqIdFindData.getName(),
+                reqIdFindData.getPhoneNumber()
+        ).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND_BY_NAME_AND_PHONE));
+
+        String presidentEmail = president.getEmail();
+
+        return presidentEmail;
+    }
+
+
 }
