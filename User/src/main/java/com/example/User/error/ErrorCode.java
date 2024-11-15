@@ -31,7 +31,9 @@ public enum ErrorCode {
     INVALID_REFRESH_TOKEN(401,"리프레시 토큰이 유효하지 않습니다."),
     INVALID_ENCRYPTION(401,"암호화가 유효하지 않습니다."),
     INVALID_DECRYPTION(401,"복호화가 유효하지 않습니다."),
-    CANNOT_FIND_POSITION(400,"위치가 잘못됨")
+    CANNOT_FIND_POSITION(400,"위치가 잘못됨"),
+    INVALID_REQUEST(400, "잘못된 요청입니다"),
+    INVALID_NUMBER_FORMAT(400, "숫자 형식이 올바르지 않습니다")
     ;
 
 
