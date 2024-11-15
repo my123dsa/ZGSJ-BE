@@ -6,8 +6,10 @@ import com.example.User.dto.login.ReqLoginData;
 import com.example.User.dto.login.ReqRegist;
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
+import com.example.User.error.GlobalExceptionHandler;
 import com.example.User.model.President;
 import com.example.User.repository.PresidentRepository;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -58,11 +60,12 @@ public class PresidentService {
     }
 
     //사장 아이디 찾기
+    @Transactional
     public String findByNameAndPhoneNumber(ReqIdFindData reqIdFindData){
         President president = presidentRepository.findByNameAndPhoneNumber(
                 reqIdFindData.getName(),
                 reqIdFindData.getPhoneNumber()
-        ).orElseThrow(() -> new NotFoundException("일치하는 사용자 정보를 찾을 수 없습니다"));
+        ).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND_BY_NAME_AND_PHONE));
 
         String presidentEmail = president.getEmail();
 

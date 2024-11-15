@@ -12,6 +12,7 @@ import com.example.User.service.PresidentService;
 import com.example.User.service.RedisTokenService;
 import com.example.User.util.JWTUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -48,8 +49,8 @@ public class PresidentController {
     }
 
 
-    @PostMapping("/id-find")
-    ResponseEntity<ResIdFindData> findId(@RequestBody ReqIdFindData reqIdFindData){
+    @PostMapping("/id-find") //사장님 아이디 찾기
+    ResponseEntity<ResIdFindData> findId(@Valid @RequestBody ReqIdFindData reqIdFindData){
         String email = presidentService.findByNameAndPhoneNumber(reqIdFindData);
         return ResponseEntity.ok(ResIdFindData.from(email));
     }
