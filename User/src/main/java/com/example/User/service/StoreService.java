@@ -39,9 +39,8 @@ public class StoreService {
         return idAndEmail;
     }
 
-    public List<StoreResponse> showStores() {
+    public List<StoreResponse> showStores(Integer presidentId) {
         // President 존재 여부 확인
-        Integer presidentId = 1;
         List<Store> stores = storeRepository.findAllByPresidentId(presidentId);
         return stores.stream()
                 .map(StoreResponse::from)

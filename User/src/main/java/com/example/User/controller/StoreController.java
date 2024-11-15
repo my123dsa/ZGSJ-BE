@@ -47,8 +47,8 @@ public class StoreController {
                  .body(image);
      }
     @GetMapping("/storelist")
-    private ResponseEntity<List<StoreResponse>> showStores() {
-        List<StoreResponse> storeResponse = storeService.showStores();
+    private ResponseEntity<List<StoreResponse>> showStores(@MasterId Integer presidentId) {
+        List<StoreResponse> storeResponse = storeService.showStores(presidentId);
         return ResponseEntity.ok(storeResponse);
     }
 
