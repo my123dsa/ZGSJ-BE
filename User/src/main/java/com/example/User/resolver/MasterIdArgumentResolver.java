@@ -3,6 +3,7 @@ package com.example.User.resolver;
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.support.WebDataBinderFactory;

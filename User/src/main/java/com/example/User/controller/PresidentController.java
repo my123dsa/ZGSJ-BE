@@ -41,10 +41,9 @@ public class PresidentController {
     }
 
     @GetMapping("/mypage")
-    public ResponseEntity<PresidentInfoResponse> getPresidentInfo()
+    public ResponseEntity<PresidentInfoResponse> getPresidentInfo(@MasterId Integer id)
     {
-        int presidentid= 1; //준현이맞춰서 변경 예정
-        return ResponseEntity.ok(presidentService.getPresidentInfo(presidentid));
+        return ResponseEntity.ok(presidentService.getPresidentInfo(id));
     }
 }
 
