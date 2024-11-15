@@ -4,7 +4,6 @@ package com.example.User.controller;
 import com.example.User.dto.presidentupdate.PresidentUpdateRequest;
 import com.example.User.resolver.MasterId;
 import com.example.User.service.PresidentService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
