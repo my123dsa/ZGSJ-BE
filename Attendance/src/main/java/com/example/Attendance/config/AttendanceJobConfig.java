@@ -1,14 +1,13 @@
 package com.example.Attendance.config;
 
 import com.example.Attendance.FeignWithCoreBank;
-import com.example.Attendance.Repository.CommuteRepository;
-import com.example.Attendance.Repository.PayStatementRepository;
-import com.example.Attendance.Repository.StoreEmployeeRepository;
+import com.example.Attendance.repository.CommuteRepository;
+import com.example.Attendance.repository.PayStatementRepository;
+import com.example.Attendance.repository.StoreEmployeeRepository;
 import com.example.Attendance.dto.*;
 import com.example.Attendance.error.CustomException;
 import com.example.Attendance.error.ErrorCode;
 import com.example.Attendance.model.PayStatement;
-import com.example.Attendance.model.StoreEmployee;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
