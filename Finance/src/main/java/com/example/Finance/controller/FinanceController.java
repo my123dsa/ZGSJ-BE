@@ -5,6 +5,7 @@ import com.example.Finance.dto.TransactionHistoryRequest;
 import com.example.Finance.dto.TransactionHistoryResponse;
 import com.example.Finance.feign.UserFeign;
 import com.example.Finance.service.IncomeStatementPdfService;
+import com.example.Finance.service.IncomeStatementService;
 import com.example.Finance.service.TransactionHistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ import java.util.List;
 public class FinanceController {
 
     private final TransactionHistoryService transactionHistoryService;
+    private final IncomeStatementService incomeStatementService;
     private final IncomeStatementPdfService incomeStatementPdfService;
     private final UserFeign userFeign;
 
