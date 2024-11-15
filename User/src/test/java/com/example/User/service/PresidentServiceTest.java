@@ -1,6 +1,7 @@
 package com.example.User.service;
 
 import com.example.User.dto.login.ReqLoginData;
+import com.example.User.dto.president.PresidentInfoResponse;
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
 import com.example.User.model.President;
@@ -108,4 +109,30 @@ public class PresidentServiceTest {
 
         assertThat(exception.getErrorCode()).isEqualTo(ErrorCode.PASSWORD_NOT_CORRECT);
     }
+
+    @Test
+    @DisplayName("마이페이지 검색 성공")
+    void mypageSuccess()
+    {
+        President president = President.createPresident(
+                "테스트",
+                "dealon",
+                "1234",
+                "주소",
+                LocalDate.of(2024, 5, 11),
+                "010-1231-1109",
+                true
+        );
+
+        when(presidentRepository.findByEmail("dealon"))
+                .thenReturn(Optional.of(president));
+
+        PresidentInfoResponse response = presidentService.getPresidentInfo(1);
+
+        assertThat(response.getName()).isEqualTo("테스트");
+        assertThat(response.getEmail()).isEqualTo("dealon");
+        assertThat(response.getBirthDate()).isEqualTo(LocalDate.of(2024, 5, 11));
+        assertThat(response.getPhoneNumber()).isEqualTo("010-1231-1109");
+    }
+
 }
