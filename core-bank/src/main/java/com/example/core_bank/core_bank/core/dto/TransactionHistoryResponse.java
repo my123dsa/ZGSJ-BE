@@ -12,7 +12,7 @@ public class TransactionHistoryResponse {
     private Integer amount;
     private Boolean isDeposit;
     private String transactionType;
-    private Integer classificationCode;
+    private String classificationName;
 
     public static TransactionHistoryResponse from(TransactionHistory transaction) {
         return new TransactionHistoryResponse(
@@ -20,7 +20,7 @@ public class TransactionHistoryResponse {
                 transaction.getAmount(),
                 transaction.getIsDeposit(),
                 transaction.getTransactionType(),
-                transaction.getClassification().getId()
+                transaction.getClassification().getClassficationName()
         );
     }
 }

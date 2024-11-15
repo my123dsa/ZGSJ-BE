@@ -4,6 +4,7 @@ package com.example.User.service;
 import com.example.User.dto.login.ReqIdFindData;
 import com.example.User.dto.login.ReqLoginData;
 import com.example.User.dto.login.ReqRegist;
+import com.example.User.dto.presidentupdate.PresidentUpdateRequest;
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
 import com.example.User.error.GlobalExceptionHandler;
@@ -55,10 +56,15 @@ public class PresidentService {
 
     //사장 정보 수정
     @Transactional
-    public void updatePresident(Integer id, String phoneNumber, LocalDate birthDate) {
-        presidentRepository.updatePhoneNumberAndBirthDate(id,phoneNumber,birthDate);
+    public void updatePresident(Integer id, PresidentUpdateRequest presidentUpdateRequest) {
+        presidentRepository.updatePhoneNumberAndBirthDate(
+                id,presidentUpdateRequest.getPhoneNumber(),presidentUpdateRequest.getBirthDate());
     }
 
+    public President findById(Integer id) {
+        return presidentRepository.findById(id)
+                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+    }
     //사장 아이디 찾기
     @Transactional
     public String findByNameAndPhoneNumber(ReqIdFindData reqIdFindData){

@@ -97,16 +97,4 @@ public class JWTUtil {
             throw new CustomException(ErrorCode.INVALID_DECRYPTION);
         }
     }
-
-    public Integer getIdFromToken(String token) {
-        String[] chunks = token.split("\\.");
-        String payloadBase64 = chunks[1];
-        String payloads = new String(Base64.getUrlDecoder().decode(payloadBase64));
-
-        Map<String, String> payload = new Gson().fromJson(payloads, Map.class);
-
-        log.info("payload" + payload.get("payload"));
-        Integer id = decrypt(payload.get("payload"));
-        return id;
-    }
 }

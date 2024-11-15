@@ -6,9 +6,7 @@ import lombok.*;
 @NoArgsConstructor
 @Setter
 @Getter
-public class TransactionHistoryRequestDto {
-
-    private String depositor;
+public class TransactionHistoryRequest {
     private String account;
     private String bankCode;
 }
