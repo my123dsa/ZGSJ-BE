@@ -1,13 +1,12 @@
 package com.example.Attendance.service;
 
-import com.example.Attendance.Repository.CommuteRepository;
-import com.example.Attendance.Repository.StoreEmployeeRepository;
 import com.example.Attendance.dto.EmployeeCommuteRequest;
 import com.example.Attendance.error.CustomException;
 import com.example.Attendance.error.ErrorCode;
 import com.example.Attendance.model.Commute;
 import com.example.Attendance.model.Store;
 import com.example.Attendance.model.StoreEmployee;
+import com.example.Attendance.repository.StoreEmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
