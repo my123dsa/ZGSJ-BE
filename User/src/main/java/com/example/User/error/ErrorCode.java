@@ -11,6 +11,13 @@ public enum ErrorCode {
     NO_STORE(404, "가게가 존재하지 않습니다"),
     WRONG_VALID(400, "유효성 검사와 어긋나는 요청입니다"),
 
+    CHECKUP_NOT_FOUND(404, "존재하지 않는 이해도조사 ID 입니다."),
+    ROOM_NOT_FOUND(404, "존재하지 않는 방 ID 입니다."),
+    ROOM_UUID_NOT_FOUND(404, "존재하지 않는 uuid 입니다."),
+    COMMENT_NOT_FOUND(404, "존재하지 않는 메세지 ID 입니다."),
+    MEMBER_NOT_FOUND(404, "존재하지 않는 사용자 ID 입니다."),
+    USER_NOT_FOUND_BY_NAME_AND_PHONE(404,"일치하는 사용자 정보를 찾을 수 없습니다"),
+    SNAPSHOT_NOT_FOUND(404, "존재하지 않는 스냅샷 ID 입니다."),
     PRESIDENT_NOT_FOUND(404, "사장님을 찾을 수 없습니다."),
     STORE_NOT_FOUND(404, "가게를 찾을 수 없습니다."),
 
@@ -31,7 +38,9 @@ public enum ErrorCode {
     INVALID_REFRESH_TOKEN(401,"리프레시 토큰이 유효하지 않습니다."),
     INVALID_ENCRYPTION(401,"암호화가 유효하지 않습니다."),
     INVALID_DECRYPTION(401,"복호화가 유효하지 않습니다."),
-    CANNOT_FIND_POSITION(400,"위치가 잘못됨")
+    CANNOT_FIND_POSITION(400,"위치가 잘못됨"),
+    INVALID_REQUEST(400, "잘못된 요청입니다"),
+    INVALID_NUMBER_FORMAT(400, "숫자 형식이 올바르지 않습니다")
     ;
 
 

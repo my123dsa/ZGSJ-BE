@@ -16,6 +16,11 @@ public interface PresidentRepository extends JpaRepository<President, Integer> {
     Optional<President> findByEmail(String email);
 
     boolean existsByEmailAndPhoneNumber(String email, String phoneNumber);
+
+    void deleteByEmail(String email);
+
+    Optional<President> findByNameAndPhoneNumber(String name, String phoneNumber);
+
     //사장 정보 수정 쿼리 요청
     @Modifying
     @Transactional
