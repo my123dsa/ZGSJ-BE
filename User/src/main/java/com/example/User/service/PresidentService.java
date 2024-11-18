@@ -5,6 +5,7 @@ import com.example.User.dto.login.ReqIdFindData;
 import com.example.User.dto.login.ReqLoginData;
 import com.example.User.dto.login.ReqPwChange;
 import com.example.User.dto.login.ReqRegist;
+import com.example.User.dto.president.PresidentInfoResponse;
 import com.example.User.dto.presidentupdate.PresidentUpdateRequest;
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
@@ -94,5 +95,12 @@ public class PresidentService {
         // 4. 새 비밀번호 인코딩 후 저장
         president.setPassword(passwordEncoder.encode(reqpwChange.getNewPassword()));
         presidentRepository.save(president);
+    }
+
+    public PresidentInfoResponse getPresidentInfo(Integer presidentId)
+    {
+        return PresidentInfoResponse.of(presidentRepository.findById(presidentId).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        )) ;
     }
 }

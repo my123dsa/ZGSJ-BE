@@ -20,4 +20,15 @@ public interface TransactionHistoryRepository extends JpaRepository<TransactionH
             @Param("year") Integer year,
             @Param("month") Integer month
     );
+
+    // 특정 가게의 특정 년도 매출데이터를 모두 제공하는
+    @Query("SELECT th FROM TransactionHistory th " +
+            "LEFT JOIN FETCH th.classfication " +
+            "WHERE th.account.id = :accountId " +
+            "AND FUNCTION('YEAR', th.transactionDate) = :year " +
+            "AND th.isDeposit = true")
+    List<TransactionHistory> findByAccountIdYearlyWithClassfication(
+            @Param("accountId") Integer accountId,
+            @Param("year") Integer year
+    );
 }

@@ -14,7 +14,7 @@ import java.io.ByteArrayOutputStream;
 @Slf4j
 public class PdfService {
 
-    //그대로 사용하지 않고, Extends로만 사용.
+    //그대로 사용하지 않고, Extends로 사용.
 
     public byte[] convertHtmlToPdf(String html) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

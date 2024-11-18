@@ -38,4 +38,19 @@ public class TransactionHistoryController {
 
         return ResponseEntity.ok(transactionHistoryRes);
     }
+
+    @PostMapping("/year/list")
+    public ResponseEntity<List<TransactionHistoryResponse>> getTransactionHistoryYearSalesList
+            (@RequestBody TransactionHistoryRequest request,
+             @RequestParam Integer year)
+    {
+        String bankCode = request.getBankCode();
+        String accountNumber = request.getAccount();
+
+        List<TransactionHistoryResponse> transactionHistoryRes = transactionHistoryService
+                .getTransactionYearSalesHistory(bankCode, accountNumber, year);
+
+        return ResponseEntity.ok(transactionHistoryRes);
+
+    }
 }

@@ -27,7 +27,8 @@ public enum ErrorCode {
     INVALID_LOCATION(403,"위치가 잘못됨"),
     INVALID_COMMUTE(400,"통근 정보가 없음"),
     MISSING_GO_TO_WORK_RECODE(400,"출근 찍지 않음"),
-    MISSING_LEAVE_WORK_RECODE(400,"퇴근 찍지 않음");
+    MISSING_LEAVE_WORK_RECODE(400,"퇴근 찍지 않음"),
+    API_SERVER_ERROR(400,"금융 서버 오류 "),;
 
 
     private final int status;

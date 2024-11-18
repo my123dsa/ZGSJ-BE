@@ -1,6 +1,6 @@
 package com.example.Finance.error;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +14,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(FeignException.class)
     public ResponseEntity<Object> handleFeignException(FeignException e) {
         try {
-            // Feign에서 받은 에러 응답(JSON)을 ErrorDTO로 변환
             ObjectMapper objectMapper = new ObjectMapper();
-            ErrorDTO errorDTO = objectMapper.readValue(e.contentUTF8(), ErrorDTO.class);
+            JsonNode jsonNode = objectMapper.readTree(e.contentUTF8());
+            String detail = jsonNode.get("detail").asText();
             return ResponseEntity.status(e.status())
-                    .body(errorDTO);
-        } catch (JsonProcessingException ex) {
-            //변환 과정 다시 오류 발생 시 ,기본 값 전달
+                    .body(new ErrorDTO("FEIGN_ERROR", detail));
+        } catch (Exception ex) {
+            // 변환 과정 다시 오류 발생 시, 기본 값 전달
             return ResponseEntity.status(e.status())
                     .body(new ErrorDTO("FEIGN_ERROR", e.contentUTF8()));
         }
