@@ -1,34 +1,17 @@
 package com.example.Finance.service;
 
 import com.example.Finance.dto.TransactionHistoryRequest;
-import com.example.Finance.dto.TransactionHistoryResponse;
 import com.example.Finance.feign.CoreBankFeign;
 import feign.FeignException;
-import feign.Request;
-import feign.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-
-import javax.swing.tree.TreeNode;
-import java.nio.charset.Charset;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class TransactionHistoryServiceTest {
@@ -108,7 +91,7 @@ class TransactionHistoryServiceTest {
 
         // when & then
         assertThatThrownBy(() ->
-                transactionHistoryService.getTransactionHistoryList(request, 2024, 11))
+                transactionHistoryService.getYearMonthlyTransactions(request, 2024, 11))
                 .isInstanceOf(FeignException.class)
                 .hasMessageContaining("존재하지 않는 사용자의 계좌입니다");
     }
@@ -121,7 +104,7 @@ class TransactionHistoryServiceTest {
 
         // when & then
         assertThatThrownBy(() ->
-                transactionHistoryService.getTransactionHistoryList(request, 2024, 11))
+                transactionHistoryService.getYearMonthlyTransactions(request, 2024, 11))
                 .isInstanceOf(FeignException.class)
                 .hasMessageContaining("사용자 계좌와 은행 코드가 일치하지 않습니다");
     }
