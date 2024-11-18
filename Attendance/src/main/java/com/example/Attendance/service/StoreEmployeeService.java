@@ -1,11 +1,11 @@
 package com.example.Attendance.service;
 
-import com.example.Attendance.repository.CommuteRepository;
-import com.example.Attendance.repository.StoreEmployeeRepository;
 import com.example.Attendance.dto.EmployeeCommuteRequest;
 import com.example.Attendance.error.CustomException;
 import com.example.Attendance.error.ErrorCode;
 import com.example.Attendance.model.StoreEmployee;
+import com.example.Attendance.repository.StoreEmployeeRepository;
+import com.example.Attendance.util.Cryptography;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,9 +15,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class StoreEmployeeService {
     private final StoreEmployeeRepository storeEmployeeRepository;
+    private final Cryptography cryptography;
 
-    public StoreEmployee findStoreEmployeeByEmailAndStoreId(Integer storeId,EmployeeCommuteRequest request) {
-        StoreEmployee storeEmployee=storeEmployeeRepository.findByEmailAndStoreId(request.getEmail(),storeId)
+    public StoreEmployee findStoreEmployeeByEmailAndStoreId(Integer storeId,EmployeeCommuteRequest request,String encryptedEmail) {
+
+        //이메일 디코딩
+        String email  =cryptography.decrypt(encryptedEmail);
+        StoreEmployee storeEmployee=storeEmployeeRepository.findByEmailAndStoreId(email,storeId)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_EMPLOYEE));
         Double sLat=storeEmployee.getStore().getLatitude();
         Double sLong=storeEmployee.getStore().getLongitude();
