@@ -30,8 +30,8 @@ class PayStatementServiceTest {
         Integer year = 2024;
         Integer month = 8;
 
-        PayStatementResponse response1 = new PayStatementResponse(1, "BANK001", "ACC001", 5000, LocalDate.of(2024, 8, 1));
-        PayStatementResponse response2 = new PayStatementResponse(2, "BANK002", "ACC002", 7500, LocalDate.of(2024, 8, 15));
+        PayStatementResponse response1 = new PayStatementResponse(1, "test1","BANK001", "ACC001", 5000, LocalDate.of(2024, 8, 1));
+        PayStatementResponse response2 = new PayStatementResponse(2, "teest2","BANK002", "ACC002", 7500, LocalDate.of(2024, 8, 15));
         List<PayStatementResponse> mockResponses = List.of(response1, response2);
 
         Mockito.when(payStatementRepository.findPayStatementResponsesByStoreAndDateWithFetch(storeId, year, month))

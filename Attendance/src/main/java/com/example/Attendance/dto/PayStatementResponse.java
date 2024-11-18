@@ -13,7 +13,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class PayStatementResponse {
     private Integer payStatementId;
-    private String bankCode;
+    private String name;
+    private String code;
     private String accountNumber;
     private Integer amount;
     private LocalDate issuanceDate;
@@ -21,6 +22,7 @@ public class PayStatementResponse {
     public static PayStatementResponse from(PayStatement payStatement, StoreEmployee storeEmployee) {
         return new PayStatementResponse(
                 payStatement.getId(),
+                storeEmployee.getName(),
                 storeEmployee.getBankCode(),
                 storeEmployee.getAccountNumber(),
                 payStatement.getAmount(),

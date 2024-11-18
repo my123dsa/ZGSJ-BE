@@ -13,6 +13,7 @@ public interface PayStatementRepository extends CrudRepository<PayStatement, Int
     @Query("SELECT " +
             "  new com.example.Attendance.dto.PayStatementResponse(" +
             "    ps.id, " +
+            "    se.name, " +
             "    se.bankCode, " +
             "    se.accountNumber, " +
             "    ps.amount, " +
