@@ -61,4 +61,8 @@ public class President {
                                             Boolean termsAccept) {
         return new President(name, address, email,password, birthDate, phoneNumber, termsAccept);
     }
+    // 비밀번호 변경 메소드
+    public void setPassword(String newPassword) {
+        this.password = newPassword;
+    }
 }
