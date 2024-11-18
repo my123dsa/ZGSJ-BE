@@ -21,22 +21,31 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class EmailService {
 
-    @Autowired
-    private JavaMailSender mailSender;
-    @Autowired
-    private PresidentRepository presidentRepository;
+    private final JavaMailSender mailSender;
+    private final PresidentRepository presidentRepository;
 
     private final QRCodeUtil qrCodeUtil;
     private final BCryptPasswordEncoder encoder;
+    private final SecureRandom rand;
 
-    private static final String CHAR_SET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    private static final int PASSWORD_LENGTH = 10;
+    private final String CHAR_SET;
+    private final int PASSWORD_LENGTH;
+
+    public EmailService(JavaMailSender mailSender, PresidentRepository presidentRepository, QRCodeUtil qrCodeUtil, BCryptPasswordEncoder encoder) {
+        this.mailSender = mailSender;
+        this.presidentRepository = presidentRepository;
+        this.qrCodeUtil = qrCodeUtil;
+        this.encoder = encoder;
+        this.rand = new SecureRandom();
+        CHAR_SET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        PASSWORD_LENGTH = 10;
+    }
 
     public byte[] sendQRToEmail(String email, Integer storeId) {  // 리턴 타입을 void로 변경
         try {
@@ -66,7 +75,6 @@ public class EmailService {
 
     // 임의의 비밀번호 생성
     public String makeRandomPassword() {
-        SecureRandom rand = new SecureRandom();
         StringBuilder password = new StringBuilder(PASSWORD_LENGTH);
 
         for(int i = 0; i < PASSWORD_LENGTH; i++) {
@@ -76,17 +84,19 @@ public class EmailService {
         return password.toString();
     }
 
-    // 이메일과 이름 확인
-    public boolean validateEmailAndName(String email, String name) {
-        Optional<President> president = presidentRepository.findByEmail(email);
-        return president.isPresent() && president.get().getName().equals(name);
+    // 이메일과 이름 일치하는지 확인
+    public President validateEmailAndName(String email, String name) {
+        President president = presidentRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.PRESIDENT_NOT_FOUND));
+        if(!president.getName().equals(name)) {
+            throw new CustomException(ErrorCode.MISMATCH_EMAIL);
+        }
+        return president;
     }
 
     // mail 양식 설정
     public String joinEmail(String email) {
         String authPassword = makeRandomPassword();
-        String setForm = "${EMAIL_USERNAME}@gmail.com"; // email-config에 설정한 내 이메일 주소
-        String toMail = email;
         String title = "[집계사장] 임시 비밀번호를 보내드립니다."; // 이메일 제목
         String content =
                 "집계사장을 사용해주셔서 감사합니다. 🦀🍔🍟" +
@@ -94,31 +104,29 @@ public class EmailService {
                         "임시 비밀번호는 " + authPassword + "입니다." +
                         "<br> " +
                         "보안을 위해 로그인 후에는 꼭 비밀번호를 변경해주세요!"; // 이메일 내용
-        mailSend(setForm, toMail, title, content);
+        mailSend(email, title, content);
         return authPassword;
     }
 
-    private void mailSend(String setForm, String toMail, String title, String content) {
+    private void mailSend(String toMail, String title, String content) {
         MimeMessage message = mailSender.createMimeMessage(); // MimeMessage 객체 생성
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
-            helper.setFrom(setForm); // 이메일 발신자 주소 설정
             helper.setTo(toMail); // 이메일 수신자 주소 설정
             helper.setSubject(title); // 이메일 주소 설정
             helper.setText(content, true); // 이메일의 내용
             mailSender.send(message);
         } catch (MessagingException e) {
             log.error("이메일 전송 실패: {}", e.getMessage());
-            throw new RuntimeException("메일 발송에 실패했습니다.", e);
+            throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
         }
     }
 
-    public void updatePassword(String str, String email) {
-        String encodedPassword = encoder.encode(str); // 패스워드 암호화
-        President existingPresident = presidentRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.PRESIDENT_NOT_FOUND));
-        existingPresident.setPassword(encodedPassword);
-        presidentRepository.save(existingPresident);
+    public void updatePassword(String password, President president) {
+        String encodedPassword = encoder.encode(password); // 패스워드 암호화
+
+        president.setPassword(encodedPassword);
+        presidentRepository.save(president);
     }
 
     private String createHTML() {
