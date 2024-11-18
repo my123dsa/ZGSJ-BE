@@ -59,6 +59,7 @@ public class SecurityConfig {
         permitUrls.add("commute/QRCheck");
         permitUrls.add("/leave-work");
         permitUrls.add("/go-to-work");
+        permitUrls.add("/president/id-find");
 
         List<String> needIdUrls = new ArrayList<>();
         needIdUrls.add("/president/logout");
