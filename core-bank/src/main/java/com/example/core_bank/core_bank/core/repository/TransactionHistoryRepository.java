@@ -22,7 +22,7 @@ public interface TransactionHistoryRepository extends JpaRepository<TransactionH
     );
 
     // 특정 가게의 특정 년도 매출데이터를 모두 제공하는
-    @Query("SELECT DISTINCT th FROM TransactionHistory th " +
+    @Query("SELECT th FROM TransactionHistory th " +
             "LEFT JOIN FETCH th.classfication " +
             "WHERE th.account.id = :accountId " +
             "AND FUNCTION('YEAR', th.transactionDate) = :year " +
