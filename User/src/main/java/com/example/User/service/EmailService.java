@@ -31,7 +31,7 @@ public class EmailService {
             helper.setText(createHTML(url), true);
 
             javaMailSender.send(mimeMessage);
-            log.info("QR 코드 이메일 전송 완료: {}", email);
+            log.info("이메일 전송 완료: {}", email);
             return url;
         } catch (MessagingException e) {
             log.error("이메일 전송 실패: {}", e.getMessage());
