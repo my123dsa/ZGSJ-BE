@@ -28,4 +28,10 @@ public class PayStatementController {
     {
         return ResponseEntity.ok(payStatementService.getPayStatementMonthlyYearly(storeid,year,month));
     }
+
+    @GetMapping("/url")
+    public ResponseEntity<String> getPayStatementUrl(@RequestParam Integer paystatementid)
+    {
+        return ResponseEntity.ok(payStatementService.getPayStatementUrl(paystatementid));
+    }
 }

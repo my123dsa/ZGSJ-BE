@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PayStatementRepository extends CrudRepository<PayStatement, Integer> {
 
@@ -29,5 +30,8 @@ public interface PayStatementRepository extends CrudRepository<PayStatement, Int
             @Param("year") Integer year,
             @Param("month") Integer month
     );
+
+    @Query("SELECT ps.url FROM PayStatement ps WHERE ps.id = :paystatementId")
+    Optional<String> findPayStatementURL(@Param("paystatementId") Integer paystatementId);
 
 }

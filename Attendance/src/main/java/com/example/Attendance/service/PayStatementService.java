@@ -1,6 +1,8 @@
 package com.example.Attendance.service;
 
 import com.example.Attendance.dto.PayStatementResponse;
+import com.example.Attendance.error.CustomException;
+import com.example.Attendance.error.ErrorCode;
 import com.example.Attendance.repository.PayStatementRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,5 +21,12 @@ public class PayStatementService {
     {
         return payStatementRepository.findPayStatementResponsesByStoreAndDateWithFetch(storeId, year, month);
 
+    }
+
+    public String getPayStatementUrl(Integer payStatementId)
+    {
+        return payStatementRepository.findPayStatementURL(payStatementId).orElseThrow(
+                () -> new CustomException(ErrorCode.INVALID_PAY_STATEMENT)
+        );
     }
 }
