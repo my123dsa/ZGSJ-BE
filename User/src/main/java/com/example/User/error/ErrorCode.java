@@ -10,7 +10,6 @@ public enum ErrorCode {
     INVALID_PARAMETER(400, "파라미터 값을 확인해주세요."),
     NO_STORE(404, "가게가 존재하지 않습니다"),
     WRONG_VALID(400, "유효성 검사와 어긋나는 요청입니다"),
-    INVALID_EMAIL(400, "잘못된 이메일 주소입니다."),
 
     CHECKUP_NOT_FOUND(404, "존재하지 않는 이해도조사 ID 입니다."),
     ROOM_NOT_FOUND(404, "존재하지 않는 방 ID 입니다."),
@@ -29,6 +28,7 @@ public enum ErrorCode {
 
     SERVER_ERROR(500, "서버 에러입니다. 서버 팀에 연락주세요!"),
     DB_DUPLICAE_ERROR(500, "DB 중복 ERROR입니다. DB팀에 연락해주세요"),
+    MISMATCH_EMAIL(503, "이메일과 이름이 일치하지 않습니다."),
 
     USER_NOT_FOUND(404, "해당 아이디에 일치하는 유저가 없습니다"),
     STOREEMPLOYEE_NOT_FOUND(404, "해당 아이디에 일치하는 유저가 없습니다"),
