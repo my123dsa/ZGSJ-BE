@@ -38,6 +38,6 @@ public class BatchOutputData {
     }
 
     public PayStatement toEntity() {
-        return PayStatement.createPayStatementWithProxy("12342412", this.getIssuanceDate().toLocalDate(),this.getSeId(), this.getAmount().intValue());
+        return PayStatement.createPayStatement("12342412", this.getIssuanceDate().toLocalDate(),this.getSeId(), this.getAmount().intValue());
     }
 }
