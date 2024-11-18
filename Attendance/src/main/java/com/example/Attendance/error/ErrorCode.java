@@ -28,8 +28,8 @@ public enum ErrorCode {
     INVALID_COMMUTE(400,"통근 정보가 없음"),
     MISSING_GO_TO_WORK_RECODE(400,"출근 찍지 않음"),
     MISSING_LEAVE_WORK_RECODE(400,"퇴근 찍지 않음"),
-    API_SERVER_ERROR(400,"금융 서버 오류 "),;
-
+    API_SERVER_ERROR(400,"금융 서버 오류 "),
+    INVALID_PAY_STATEMENT(400, "급여 기록 없음");
 
     private final int status;
     private final String message;
