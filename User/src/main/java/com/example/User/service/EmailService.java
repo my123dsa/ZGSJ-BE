@@ -28,7 +28,6 @@ import java.util.Random;
 public class EmailService {
 
     private final JavaMailSender javaMailSender;
-    private final PresidentRepository presidentRepository;
 
     private final QRCodeUtil qrCodeUtil;
     private final SecureRandom rand;
@@ -36,9 +35,8 @@ public class EmailService {
     private final String CHAR_SET;
     private final int PASSWORD_LENGTH;
 
-    public EmailService(JavaMailSender mailSender, PresidentRepository presidentRepository, QRCodeUtil qrCodeUtil) {
+    public EmailService(JavaMailSender mailSender, QRCodeUtil qrCodeUtil) {
         this.javaMailSender = mailSender;
-        this.presidentRepository = presidentRepository;
         this.qrCodeUtil = qrCodeUtil;
         this.rand = new SecureRandom();
         CHAR_SET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
