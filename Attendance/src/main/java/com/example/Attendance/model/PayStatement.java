@@ -1,6 +1,7 @@
 package com.example.Attendance.model;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +10,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "pay_statement")
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PayStatement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,18 +26,17 @@ public class PayStatement {
     @Column(name = "amount", nullable = false)
     private Integer amount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "se_id")
-    private StoreEmployee storeEmployee;
+    private Integer seId;
 
-    private PayStatement(String url, LocalDate issuanceDate, StoreEmployee storeEmployee, Integer amount) {
+    private PayStatement(String url, LocalDate issuanceDate, Integer seId, Integer amount) {
         this.url = url;
         this.issuanceDate = issuanceDate;
-        this.storeEmployee = storeEmployee;
+        this.seId = seId;
         this.amount = amount;
     }
 
-    public static PayStatement createPayStatement(String url, LocalDate issuanceDate, StoreEmployee storeEmployee, Integer amount) {
-        return new PayStatement(url, issuanceDate, storeEmployee,amount);
+    public static PayStatement createPayStatement(String url, LocalDate issuanceDate, Integer seId, Integer amount) {
+        return new PayStatement(url, issuanceDate, seId,amount);
     }
 }

@@ -48,4 +48,8 @@ public class StoreEmployee {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
+
+    public StoreEmployee(Integer id) {
+        this.id = id;
+    }
 }
