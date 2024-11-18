@@ -27,21 +27,19 @@ import java.util.Random;
 @Slf4j
 public class EmailService {
 
-    private final JavaMailSender mailSender;
+    private final JavaMailSender javaMailSender;
     private final PresidentRepository presidentRepository;
 
     private final QRCodeUtil qrCodeUtil;
-    private final BCryptPasswordEncoder encoder;
     private final SecureRandom rand;
 
     private final String CHAR_SET;
     private final int PASSWORD_LENGTH;
 
-    public EmailService(JavaMailSender mailSender, PresidentRepository presidentRepository, QRCodeUtil qrCodeUtil, BCryptPasswordEncoder encoder) {
-        this.mailSender = mailSender;
+    public EmailService(JavaMailSender mailSender, PresidentRepository presidentRepository, QRCodeUtil qrCodeUtil) {
+        this.javaMailSender = mailSender;
         this.presidentRepository = presidentRepository;
         this.qrCodeUtil = qrCodeUtil;
-        this.encoder = encoder;
         this.rand = new SecureRandom();
         CHAR_SET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         PASSWORD_LENGTH = 10;
@@ -49,7 +47,7 @@ public class EmailService {
 
     public byte[] sendQRToEmail(String email, Integer storeId) {  // 리턴 타입을 void로 변경
         try {
-            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             byte[] qrImageData = qrCodeUtil.generateQRCodeImage(storeId);
 
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
@@ -64,7 +62,7 @@ public class EmailService {
 
             helper.setText(createHTML(), true);
 
-            mailSender.send(mimeMessage);
+            javaMailSender.send(mimeMessage);
             log.info("QR 코드 이메일 전송 완료: {}", email);
             return qrImageData;
         } catch (MessagingException e) {
@@ -84,16 +82,6 @@ public class EmailService {
         return password.toString();
     }
 
-    // 이메일과 이름 일치하는지 확인
-    public President validateEmailAndName(String email, String name) {
-        President president = presidentRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.PRESIDENT_NOT_FOUND));
-        if(!president.getName().equals(name)) {
-            throw new CustomException(ErrorCode.MISMATCH_EMAIL);
-        }
-        return president;
-    }
-
     // mail 양식 설정
     public String joinEmail(String email) {
         String authPassword = makeRandomPassword();
@@ -109,24 +97,17 @@ public class EmailService {
     }
 
     private void mailSend(String toMail, String title, String content) {
-        MimeMessage message = mailSender.createMimeMessage(); // MimeMessage 객체 생성
+        MimeMessage message = javaMailSender.createMimeMessage(); // MimeMessage 객체 생성
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
             helper.setTo(toMail); // 이메일 수신자 주소 설정
             helper.setSubject(title); // 이메일 주소 설정
             helper.setText(content, true); // 이메일의 내용
-            mailSender.send(message);
+            javaMailSender.send(message);
         } catch (MessagingException e) {
             log.error("이메일 전송 실패: {}", e.getMessage());
             throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
         }
-    }
-
-    public void updatePassword(String password, President president) {
-        String encodedPassword = encoder.encode(password); // 패스워드 암호화
-
-        president.setPassword(encodedPassword);
-        presidentRepository.save(president);
     }
 
     private String createHTML() {

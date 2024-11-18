@@ -8,16 +8,12 @@ import com.example.User.dto.president.PresidentInfoResponse;
 import com.example.User.dto.presidentupdate.PresidentUpdateRequest;
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
-import com.example.User.error.GlobalExceptionHandler;
 import com.example.User.model.President;
 import com.example.User.repository.PresidentRepository;
-import jakarta.validation.Valid;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDate;
 
 
 @Service
@@ -86,5 +82,22 @@ public class PresidentService {
         return PresidentInfoResponse.of(presidentRepository.findById(presidentId).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         )) ;
+    }
+
+    // 이메일과 이름 일치하는지 확인
+    public President validateEmailAndName(String email, String name) {
+        President president = presidentRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.PRESIDENT_NOT_FOUND));
+        if(!president.getName().equals(name)) {
+            throw new CustomException(ErrorCode.MISMATCH_EMAIL);
+        }
+        return president;
+    }
+
+    public void updatePassword(String password, President president) {
+        String encodedPassword = passwordEncoder.encode(password); // 패스워드 암호화
+
+        president.setPassword(encodedPassword);
+        presidentRepository.save(president);
     }
 }
