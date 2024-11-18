@@ -4,6 +4,7 @@ package com.example.User.service;
 import com.example.User.dto.login.ReqIdFindData;
 import com.example.User.dto.login.ReqLoginData;
 import com.example.User.dto.login.ReqRegist;
+import com.example.User.dto.president.PresidentInfoResponse;
 import com.example.User.dto.presidentupdate.PresidentUpdateRequest;
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
@@ -79,4 +80,11 @@ public class PresidentService {
     }
 
 
+
+    public PresidentInfoResponse getPresidentInfo(Integer presidentId)
+    {
+        return PresidentInfoResponse.of(presidentRepository.findById(presidentId).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        )) ;
+    }
 }

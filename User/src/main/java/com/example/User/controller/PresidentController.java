@@ -3,6 +3,7 @@ package com.example.User.controller;
 
 import com.example.User.dto.login.ReqIdFindData;
 import com.example.User.dto.login.ResIdFindData;
+import com.example.User.dto.president.PresidentInfoResponse;
 import com.example.User.dto.presidentupdate.PresidentUpdateRequest;
 import com.example.User.resolver.MasterId;
 import com.example.User.service.PresidentService;
@@ -37,6 +38,12 @@ public class PresidentController {
                                                  presidentUpdateRequest) {
         presidentService.updatePresident(id, presidentUpdateRequest);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/mypage")
+    public ResponseEntity<PresidentInfoResponse> getPresidentInfo(@MasterId Integer id)
+    {
+        return ResponseEntity.ok(presidentService.getPresidentInfo(id));
     }
 }
 
