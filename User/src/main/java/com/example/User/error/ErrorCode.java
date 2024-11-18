@@ -40,7 +40,8 @@ public enum ErrorCode {
     INVALID_DECRYPTION(401,"복호화가 유효하지 않습니다."),
     CANNOT_FIND_POSITION(400,"위치가 잘못됨"),
     INVALID_REQUEST(400, "잘못된 요청입니다"),
-    INVALID_NUMBER_FORMAT(400, "숫자 형식이 올바르지 않습니다")
+    INVALID_NUMBER_FORMAT(400, "숫자 형식이 올바르지 않습니다"),
+    INVALID_EMPLOYEE(400,"직원 정보가 없음"),
     ;
 
 

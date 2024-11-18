@@ -97,4 +97,15 @@ public class JWTUtil {
             throw new CustomException(ErrorCode.INVALID_DECRYPTION);
         }
     }
+
+    public String encryptByEmail(String email) {
+        try {
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.ENCRYPT_MODE, this.secretKey);
+            byte[] encryptedBytes = cipher.doFinal(email.getBytes());
+            return Base64.getEncoder().encodeToString(encryptedBytes);
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.INVALID_ENCRYPTION);
+        }
+    }
 }
