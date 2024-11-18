@@ -103,7 +103,7 @@ public class JWTUtil {
             Cipher cipher = Cipher.getInstance(ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, this.secretKey);
             byte[] encryptedBytes = cipher.doFinal(email.getBytes());
-            return Base64.getEncoder().encodeToString(encryptedBytes);
+            return Base64.getUrlEncoder().encodeToString(encryptedBytes);
         } catch (Exception e) {
             throw new CustomException(ErrorCode.INVALID_ENCRYPTION);
         }
