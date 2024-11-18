@@ -94,6 +94,7 @@ public class PresidentService {
         return president;
     }
 
+    @Transactional
     public void updatePassword(String password, President president) {
         String encodedPassword = passwordEncoder.encode(password); // 패스워드 암호화
 
