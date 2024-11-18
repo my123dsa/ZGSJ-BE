@@ -83,7 +83,7 @@ public class PresidentService {
     }
 
     @Transactional
-    public void changePassword(Integer id,@RequestBody ReqPwChange reqpwChange) {
+    public void changePassword(Integer id,ReqPwChange reqpwChange) {
         // 1. 사장님 조회
         President president = presidentRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
