@@ -6,16 +6,16 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class AccountCheckRequest {
+public class AccountAndCodeRequest {
 
-    private String name ;
-
+    @NotBlank
     private String bankCode ;
 
+    @NotBlank // 유효성 검사를 추가
     private String accountNumber;
 
-
-    public static AccountCheckRequest of(String accountNumber, String bankCode, String name) {
-        return new AccountCheckRequest(name,bankCode,accountNumber);
+    public static AccountAndCodeRequest of(String accountNumber, String bankCode) {
+        return new AccountAndCodeRequest(bankCode,accountNumber);
     }
+
 }
