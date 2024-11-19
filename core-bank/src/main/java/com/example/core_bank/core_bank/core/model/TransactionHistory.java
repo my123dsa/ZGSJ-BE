@@ -21,7 +21,7 @@ public class TransactionHistory {
     private LocalDate transactionDate ;
 
     @Column(name= "amount", nullable = false)
-    private Integer amount;
+    private Long amount;
 
     @Column(columnDefinition = "TINYINT(1)", name = "is_deposit", nullable = false)
     private Boolean isDeposit;
@@ -37,17 +37,18 @@ public class TransactionHistory {
     @JoinColumn(name = "classfication_id")
     private Classfication classfication;
 
-    public TransactionHistory(LocalDate transactionDate, boolean isDeposit, String transactionType, Account account, Classfication classfication) {
+    public TransactionHistory(Long amount,LocalDate transactionDate, boolean isDeposit, String transactionType, Account account, Classfication classfication) {
         this.transactionDate = transactionDate;
         this.isDeposit = isDeposit;
         this.transactionType = transactionType;
         this.account = account;
         this.classfication = classfication;
+        this.amount= amount;
     }
 
-    public static TransactionHistory createTransactionHistory(LocalDate transactionDate, boolean isDeposit, String transactionType, Account account, Classfication classfication)
+    public static TransactionHistory createTransactionHistory(Long amount,LocalDate transactionDate, boolean isDeposit, String transactionType, Account account, Classfication classfication)
     {
-        return new TransactionHistory(transactionDate,isDeposit,transactionType,account,classfication);
+        return new TransactionHistory(amount,transactionDate,isDeposit,transactionType,account,classfication);
     }
 
     // classfication 객체 반환 메소드
