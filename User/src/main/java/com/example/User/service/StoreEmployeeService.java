@@ -13,13 +13,11 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Validated
 public class StoreEmployeeService {
     private final StoreRepository storeRepository;
     private final StoreEmployeeRepository storeEmployeeRepository;

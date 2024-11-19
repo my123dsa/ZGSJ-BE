@@ -16,7 +16,8 @@ public enum ErrorCode {
     BADTYPE_BEARER(HttpStatus.UNAUTHORIZED, "Token type Bearer"),
     MALFORM_TOKEN(HttpStatus.FORBIDDEN, "Malformed Token"),
     BADSIGN_TOKEN(HttpStatus.FORBIDDEN, "BadSignatured Token"),
-    EXPIRED_TOKEN(HttpStatus.FORBIDDEN, "Expired Token")
+    EXPIRED_TOKEN(HttpStatus.FORBIDDEN, "Expired Token"),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "Unauthorized"),
     ;
 
     private final HttpStatus status;

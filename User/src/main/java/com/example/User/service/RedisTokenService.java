@@ -33,19 +33,13 @@ public class RedisTokenService {
 
     @Transactional
     public void removeRefreshToken(Integer id) {
-        if (redisTemplate.hasKey(id.toString()))
+        if (Boolean.TRUE.equals(redisTemplate.hasKey(id.toString())))
             redisTemplate.delete(id.toString());
     }
 
     @Transactional
     public void setValues(Integer id, String value, Duration duration) {
         valueOps.set(id.toString(), value, duration);
-    }
-
-    public String getValue(String key) {
-        if (valueOps.get(key) == null)
-            return "none";
-        return String.valueOf(valueOps.get(key));
     }
 
     @Transactional
@@ -58,7 +52,7 @@ public class RedisTokenService {
         Map<String, Object> claims= jwtUtil.validateToken(refreshToken);
         String encrypt= (String)claims.get("payload");
         Integer exp = (Integer) claims.get("exp");
-        log.info("encrypt"+encrypt +"exp"+exp);
+        log.info("encrypt :{} exp :{}",encrypt,exp);
 
         Integer id = cryptoUtil.decrypt(encrypt);
 
@@ -69,6 +63,7 @@ public class RedisTokenService {
         return jwtUtil.generateToken(id, 1);
     }
 
+    @Transactional
     public void checkAndRenewRefreshToken(Integer id,Integer exp){
         Date expTime = new Date(Instant.ofEpochMilli(exp).toEpochMilli() * 1000);
         Date current = new Date(System.currentTimeMillis());

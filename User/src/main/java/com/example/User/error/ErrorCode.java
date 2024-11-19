@@ -46,7 +46,13 @@ public enum ErrorCode {
     INVALID_NUMBER_FORMAT(400, "숫자 형식이 올바르지 않습니다"),
     INVALID_EMPLOYEE(400,"직원 정보가 없음"),
     PASSWORD_CONFIRM_NOT_MATCH(400,"새 비밀번호와 확인 비밀번호가 일치하지 않습니다."),
-    BANK_ERROR(404,"은행쪽 에러입니다.");
+    BANK_ERROR(404,"은행쪽 에러입니다."),
+    UNACCEPT_TOKEN(401, "Token is null or too short"),
+    BADTYPE_BEARER(401, "Token type Bearer"),
+    MALFORM_TOKEN(403, "Malformed Token"),
+    BADSIGN_TOKEN(403, "BadSignatured Token"),
+    EXPIRED_TOKEN(403, "Expired Token"),
+    ;
 
 
     private final int status;
