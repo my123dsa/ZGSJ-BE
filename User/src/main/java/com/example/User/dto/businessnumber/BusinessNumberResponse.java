@@ -12,6 +12,6 @@ public class BusinessNumberResponse {
     private String message;
 
     public static BusinessNumberResponse of(boolean exists, boolean hasError, String message) {
-        return new BusinessNumberResponse(exists,hasError, message);
+        return new BusinessNumberResponse(exists, hasError, message);
     }
 }
