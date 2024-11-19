@@ -16,6 +16,11 @@ public interface PresidentRepository extends JpaRepository<President, Integer> {
     Optional<President> findByEmail(String email);
 
     boolean existsByEmailAndPhoneNumber(String email, String phoneNumber);
+
+    void deleteByEmail(String email);
+
+    Optional<President> findByNameAndPhoneNumber(String name, String phoneNumber);
+
     //사장 정보 수정 쿼리 요청
     @Modifying
     @Transactional
@@ -23,5 +28,10 @@ public interface PresidentRepository extends JpaRepository<President, Integer> {
     int updatePhoneNumberAndBirthDate(@Param("id") Integer id,
                                       @Param("phoneNumber") String phoneNumber,
                                       @Param("birthDate") LocalDate birthDate);
+
+    //jwt토큰에서 id로사장 name추출??
+     @Query("SELECT p.name FROM President p WHERE p.id = :id")
+     Optional<String> findNameById(@Param("id") Integer id);
+
 }
 

@@ -1,5 +1,6 @@
 package com.example.core_bank.core_bank.core.service;
 
+import com.example.core_bank.core_bank.core.dto.TransactionHistoryRequest;
 import com.example.core_bank.core_bank.core.dto.TransactionHistoryResponse;
 import com.example.core_bank.core_bank.core.model.Account;
 import com.example.core_bank.core_bank.core.model.TransactionHistory;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.ErrorResponse;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -56,10 +58,32 @@ public class TransactionHistoryService {
         }
 
         // 계좌가 존재하고 bankCode가 일치하는 경우, 거래 내역 조회
-        List<TransactionHistory> transactionHistories = transactionHistoryRepository.findByAccountIdAndYearAndMonthWithClassfication(account.getId(), year, month);
+        List<TransactionHistory> transactionHistories =
+                transactionHistoryRepository.findByAccountIdAndYearAndMonthWithClassfication(account.getId(), year, month);
 
         // 거래 내역을 TransactionHistoryResponse로 변환하여 반환
         return transactionHistories.stream()
+                .map(TransactionHistoryResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    public List<TransactionHistoryResponse> getTransactionYearSalesHistory(
+            String bankCode,
+            String accountNumber,
+            Integer year
+    )
+    {
+        Account account = accountRepository.findByAccountNumberWithBank(accountNumber)
+                .orElseThrow(()->new CustomException(ErrorCode.ACCOUNT_NOT_FOUND));
+
+        if (!account.getBank().getBankCode().equals(bankCode)) {
+            throw new CustomException(ErrorCode.BANKCODE_NOT_MATCH);
+        }
+
+        List<TransactionHistory> transactionSalesYearHistory
+                = transactionHistoryRepository.findByAccountIdYearlyWithClassfication(account.getId(),year);
+
+        return transactionSalesYearHistory.stream()
                 .map(TransactionHistoryResponse::from)
                 .collect(Collectors.toList());
     }

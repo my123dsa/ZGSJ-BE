@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +22,7 @@ public class StoreService {
     private final PresidentRepository presidentRepository;
 
     @Transactional
-    public List<Object> registerStore(Integer presidentId,StoreRequest storeRequest) {
+    public void registerStore(Integer presidentId,StoreRequest storeRequest) {
         President president = presidentRepository.findById(presidentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRESIDENT_NOT_FOUND));
         boolean isStoreNameExists = storeRepository.existsByStoreName(storeRequest.getStoreName());
@@ -32,16 +31,11 @@ public class StoreService {
         }
         Store store = storeRequest.toEntity(president);
         //mapService.getCoordinates(storeRequest.getLocation());// 저장하고
-        Integer id = storeRepository.save(store).getId();
-        List<Object> idAndEmail = new ArrayList<>();
-        idAndEmail.add(id);
-        idAndEmail.add(president.getEmail());
-        return idAndEmail;
+        storeRepository.save(store);
     }
 
-    public List<StoreResponse> showStores() {
+    public List<StoreResponse> showStores(Integer presidentId) {
         // President 존재 여부 확인
-        Integer presidentId = 1;
         List<Store> stores = storeRepository.findAllByPresidentId(presidentId);
         return stores.stream()
                 .map(StoreResponse::from)

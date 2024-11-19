@@ -3,6 +3,7 @@ package com.example.User.controller;
 import com.example.User.dto.login.ReqLoginData;
 import com.example.User.dto.login.ReqRegist;
 import com.example.User.dto.login.ResNewAccessToken;
+import com.example.User.resolver.MasterId;
 import com.example.User.service.AuthService;
 import com.example.User.service.PresidentService;
 import com.example.User.service.RedisTokenService;
@@ -22,7 +23,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    ResponseEntity<ResNewAccessToken> login(@RequestBody ReqLoginData reqLoginData) {
+    ResponseEntity<ResNewAccessToken> login( @RequestBody ReqLoginData reqLoginData) {
         log.info("reqLoginData: "+reqLoginData);
 
         Integer id= presidentService.validateLogin(reqLoginData);
@@ -32,16 +33,13 @@ public class AuthController {
     }
 
     @GetMapping("/logout")
-    ResponseEntity<Void> logout(HttpServletRequest request) {
-        Integer id=Integer.parseInt(request.getHeader("id"));
-
+    ResponseEntity<Void> logout(@MasterId Integer id) {
         redisTokenService.removeRefreshToken(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/refresh")
-    ResponseEntity<ResNewAccessToken> refresh(HttpServletRequest request) {
-        Integer id=Integer.parseInt(request.getHeader("id"));
+    ResponseEntity<ResNewAccessToken> refresh(@MasterId Integer id) {
         String accessToken =redisTokenService.checkRefreshToken(id);
 
         return ResponseEntity.ok(ResNewAccessToken.from(accessToken));
@@ -49,7 +47,6 @@ public class AuthController {
 
     @PostMapping("/regist")
     ResponseEntity<ResNewAccessToken> regist(@RequestBody ReqRegist reqRegist) {
-        log.info("reqRegist: " + reqRegist);
         Integer id = presidentService.regist(reqRegist);
         String accessToken = authService.onAuthenticationSuccess(id);
         return ResponseEntity.ok(ResNewAccessToken.from(accessToken));

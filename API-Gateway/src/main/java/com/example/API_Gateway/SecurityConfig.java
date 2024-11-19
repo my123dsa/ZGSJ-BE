@@ -54,6 +54,9 @@ public class SecurityConfig {
         permitUrls.add("commute/QRCheck");
         permitUrls.add("/leave-work");
         permitUrls.add("/go-to-work");
+        permitUrls.add("/president/id-find"); // id 찾기는 인증 없이도 가능하도록 해야하니까
+        permitUrls.add("/president/check/email");
+        permitUrls.add("/president/resetPassword");
 
         List<String> needIdUrls = new ArrayList<>();
         needIdUrls.add("/president/logout");
@@ -62,6 +65,9 @@ public class SecurityConfig {
         needIdUrls.add("/president/change-password");
         needIdUrls.add("/president/account-check");
         needIdUrls.add("/user/store");
+        needIdUrls.add("/president/mypage");
+        needIdUrls.add("/president/secession");
+        needIdUrls.add("/user/account-check");
 
         return new TokenCheckFilter(jwtUtil, permitUrls, needIdUrls);
     }

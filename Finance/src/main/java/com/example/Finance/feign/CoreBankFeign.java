@@ -19,4 +19,9 @@ public interface CoreBankFeign {
             (@RequestBody TransactionHistoryRequest transactionHistoryRequest,
              @RequestParam Integer year,
              @RequestParam Integer month);
+
+    @PostMapping("/bank/year/list")
+    List<TransactionHistoryResponse> getTransactionHistoryYearSalesList
+            (@RequestBody TransactionHistoryRequest transactionHistoryRequest,
+             @RequestParam Integer year);
 }
