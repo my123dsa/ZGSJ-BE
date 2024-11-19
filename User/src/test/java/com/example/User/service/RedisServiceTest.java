@@ -3,6 +3,7 @@ package com.example.User.service;
 
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
+import com.example.User.util.CryptoUtil;
 import com.example.User.util.JWTUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,6 +32,9 @@ class RedisServiceTest {
     private ValueOperations<String, String> valueOps;
 
     @Mock
+    private CryptoUtil cryptoUtil;
+
+    @Mock
     private JWTUtil jwtUtil;
 
     @InjectMocks
@@ -41,7 +45,7 @@ class RedisServiceTest {
         when(redisTemplate.opsForValue()).thenReturn(valueOps);
 
         // RedisTokenService를 직접 생성해서 valueOps 설정
-        redisTokenService = new RedisTokenService(redisTemplate, jwtUtil);
+        redisTokenService = new RedisTokenService(redisTemplate, jwtUtil,cryptoUtil);
     }
 
     @Test
@@ -60,7 +64,7 @@ class RedisServiceTest {
         when(valueOps.get(accessTokenId.toString())).thenReturn(refreshToken);
 
         when(jwtUtil.validateToken(refreshToken)).thenReturn(claims);
-        when(jwtUtil.decrypt(encryptedId)).thenReturn(accessTokenId);
+        when(cryptoUtil.decrypt(encryptedId)).thenReturn(accessTokenId);
         when(jwtUtil.generateToken(accessTokenId, 1)).thenReturn("new-access-token");
 
         // When
@@ -75,7 +79,7 @@ class RedisServiceTest {
 
 
         verify(jwtUtil).validateToken(refreshToken);
-        verify(jwtUtil).decrypt(encryptedId);
+        verify(cryptoUtil).decrypt(encryptedId);
         verify(jwtUtil).generateToken(accessTokenId, 1);
 
     }
@@ -108,7 +112,7 @@ class RedisServiceTest {
 
         when(valueOps.get(accessTokenId.toString())).thenReturn(refreshToken);
         when(jwtUtil.validateToken(refreshToken)).thenReturn(claims);
-        when(jwtUtil.decrypt(encryptedId)).thenReturn(2); // 다른 ID 반환
+        when(cryptoUtil.decrypt(encryptedId)).thenReturn(2); // 다른 ID 반환
 
         // When & Then
         CustomException exception = assertThrows(CustomException.class, () ->
