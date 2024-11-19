@@ -1,4 +1,4 @@
-package com.example.core_bank.core_bank.authentication.dto;
+package com.example.core_bank.core_bank.core.dto.transfer;
 
 
 import lombok.Getter;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class TransferResponse {
     private Integer status;
-    private LocalDateTime issuanceDate ;
+    private LocalDateTime issuanceDate;
     private String message;
 
     public TransferResponse(Integer status, LocalDateTime issuanceDate, String message) {
@@ -21,8 +21,8 @@ public class TransferResponse {
         this.message = message;
     }
 
-    public static TransferResponse of(Integer status,LocalDateTime issuanceDate, String message) {
+    public static TransferResponse of(Integer status, LocalDateTime issuanceDate, String message) {
 
-        return new TransferResponse(status,issuanceDate,message);
+        return new TransferResponse(status, issuanceDate, message);
     }
 }
