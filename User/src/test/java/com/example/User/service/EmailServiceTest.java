@@ -1,6 +1,8 @@
 package com.example.User.service;
 
 
+import com.example.User.error.CustomException;
+import com.example.User.error.ErrorCode;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.Assertions;
@@ -13,6 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 
@@ -69,14 +73,12 @@ public class EmailServiceTest {
         }).when(javaMailSender).send(mimeMessage);
 
         // When & Then
-        RuntimeException exception = Assertions.assertThrows(RuntimeException.class, () ->
-                emailService.sendURLToEmail(email, storeId,encryptedEmail)
+        CustomException exception = assertThrows(CustomException.class, () ->
+                emailService.sendURLToEmail(email, storeId, encryptedEmail)
         );
 
-        assertThat(exception)
-                .hasMessage("메일 발송에 실패했습니다.")
-                .hasCauseInstanceOf(MessagingException.class);
-
+        assertEquals(ErrorCode.EMAIL_SEND_FAILED, exception.getErrorCode());
+        verify(javaMailSender).send(any(MimeMessage.class));
 
         verify(javaMailSender).createMimeMessage();
         verify(javaMailSender).send(mimeMessage);
