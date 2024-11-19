@@ -9,7 +9,7 @@ import lombok.Getter;
 public class TransactionHistoryResponse {
 
     private String transactionDate;
-    private Integer amount;
+    private Long amount;
     private Boolean isDeposit;
     private String transactionType;
     private String classificationName;
