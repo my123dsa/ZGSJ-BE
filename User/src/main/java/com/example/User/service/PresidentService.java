@@ -3,6 +3,7 @@ package com.example.User.service;
 
 import com.example.User.dto.login.ReqIdFindData;
 import com.example.User.dto.login.ReqLoginData;
+import com.example.User.dto.login.ReqPwChange;
 import com.example.User.dto.login.ReqRegist;
 import com.example.User.dto.president.PresidentInfoResponse;
 import com.example.User.dto.presidentupdate.PresidentUpdateRequest;
@@ -17,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import java.time.LocalDate;
 
 
@@ -79,7 +82,20 @@ public class PresidentService {
         return presidentEmail;
     }
 
+    @Transactional
+    public void changePassword(Integer id,ReqPwChange reqpwChange) {
+        // 1. 사장님 조회
+        President president = presidentRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
+        // 2. 현재 비밀번호 확인
+        if (!passwordEncoder.matches(reqpwChange.getBeforePassword(), president.getPassword())) {
+            throw new CustomException(ErrorCode.PASSWORD_NOT_CORRECT);
+        }
+        // 4. 새 비밀번호 인코딩 후 저장
+        president.setPassword(passwordEncoder.encode(reqpwChange.getNewPassword()));
+        presidentRepository.save(president);
+    }
 
     public PresidentInfoResponse getPresidentInfo(Integer presidentId)
     {

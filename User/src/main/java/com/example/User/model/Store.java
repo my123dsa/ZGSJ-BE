@@ -38,7 +38,7 @@ public class Store {
     @Column(name = "longitude", nullable = false)
     private Double longitude;
 
-    @OneToMany(mappedBy = "store")
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StoreEmployee> storeEmployees = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
