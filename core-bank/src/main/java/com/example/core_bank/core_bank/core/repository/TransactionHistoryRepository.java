@@ -34,19 +34,19 @@ public interface TransactionHistoryRepository extends JpaRepository<TransactionH
             @Param("year") Integer year
     );
 
-    // 1번의 쿼리로 2개의 데이터 삽입
-    @Modifying
-    @Query(value = "INSERT INTO transaction_history " +
-            "(transaction_date, amount, is_deposit, transaction_type, account_id, classfication_id) " +
-            "VALUES " +
-            "(:now, :amount, false, '이체', :fromAccountId, :fromClassificationId), " +
-            "(:now, :amount, true, '입금', :toAccountId, :toClassificationId)",
-            nativeQuery = true)
-    void saveTransactionHistories(
-            @Param("fromAccountId") Integer fromAccountId,
-            @Param("toAccountId") Integer toAccountId,
-            @Param("amount") Long amount,
-            @Param("fromClassificationId") Integer fromClassificationId,
-            @Param("toClassificationId") Integer toClassificationId,
-            @Param("now") LocalDate now);
+//    // 1번의 쿼리로 2개의 데이터 삽입
+//    @Modifying
+//    @Query(value = "INSERT INTO transaction_history " +
+//            "(transaction_date, amount, is_deposit, transaction_type, account_id, classfication_id) " +
+//            "VALUES " +
+//            "(:now, :amount, false, '이체', :fromAccountId, :fromClassificationId), " +
+//            "(:now, :amount, true, '입금', :toAccountId, :toClassificationId)",
+//            nativeQuery = true)
+//    void saveTransactionHistories(
+//            @Param("fromAccountId") Integer fromAccountId,
+//            @Param("toAccountId") Integer toAccountId,
+//            @Param("amount") Long amount,
+//            @Param("fromClassificationId") Integer fromClassificationId,
+//            @Param("toClassificationId") Integer toClassificationId,
+//            @Param("now") LocalDate now);
 }

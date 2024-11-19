@@ -42,11 +42,4 @@ public class Account {
     public static Account createAccount(String accountNumber, String name, Bank bank) {
         return new Account(accountNumber, name, 0L, bank);  // 초기 잔액 0
     }
-    public void deposit(Long amount) {
-        balance += amount;
-    }
-    public void transfer(Long amount) {
-        balance -= amount;
-
-    }
 }
