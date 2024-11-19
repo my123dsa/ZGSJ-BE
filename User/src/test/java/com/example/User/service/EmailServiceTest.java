@@ -40,20 +40,21 @@ public class EmailServiceTest {
     void sendQRToEmail_Success() throws Exception {
         // Given
         String email = "test@example.com";
+        String encryptedEmail = "encryptedEmail";
         Integer storeId = 123;
-        byte[] mockQrImageData = "mock-qr-data".getBytes();
+        String url = "http://localhost:8888/123/commute/encryptedEmail";
+
 
         when(javaMailSender.createMimeMessage()).thenReturn(mimeMessage);
-        when(qrCodeUtil.generateQRCodeImage(storeId)).thenReturn(mockQrImageData);
         doNothing().when(javaMailSender).send(any(MimeMessage.class));
 
         // When
-        byte[] result = emailService.sendQRToEmail(email, storeId);
+        String result = emailService.sendURLToEmail(email, storeId,encryptedEmail);
 
         // Then
-        assertThat(result).isEqualTo(mockQrImageData);
+        assertThat(result).isEqualTo(url);
         verify(javaMailSender).createMimeMessage();
-        verify(qrCodeUtil).generateQRCodeImage(storeId);
+
         verify(javaMailSender).send(any(MimeMessage.class));
     }
 
@@ -62,11 +63,11 @@ public class EmailServiceTest {
     void sendQRToEmail_ThrowsException() throws Exception {
         String email = "test@example.com";
         Integer storeId = 123;
-        byte[] mockQrImageData = "test-qr-data".getBytes();
+        String encryptedEmail = "encryptedEmail";
+
 
         // MimeMessageHelper 생성 시 예외 발생
         when(javaMailSender.createMimeMessage()).thenReturn(mimeMessage);
-        when(qrCodeUtil.generateQRCodeImage(storeId)).thenReturn(mockQrImageData);
 
         // PowerMockito를 사용하여 MimeMessageHelper 생성을 모킹
         doAnswer(invocation -> {
@@ -75,7 +76,7 @@ public class EmailServiceTest {
 
         // When & Then
         RuntimeException exception = Assertions.assertThrows(RuntimeException.class, () ->
-                emailService.sendQRToEmail(email, storeId)
+                emailService.sendURLToEmail(email, storeId,encryptedEmail)
         );
 
         assertThat(exception)
@@ -84,7 +85,6 @@ public class EmailServiceTest {
 
 
         verify(javaMailSender).createMimeMessage();
-        verify(qrCodeUtil).generateQRCodeImage(storeId);
         verify(javaMailSender).send(mimeMessage);
     }
 }

@@ -28,6 +28,8 @@ public enum ErrorCode {
 
     SERVER_ERROR(500, "서버 에러입니다. 서버 팀에 연락주세요!"),
     DB_DUPLICAE_ERROR(500, "DB 중복 ERROR입니다. DB팀에 연락해주세요"),
+    EMAIL_SEND_FAILED(500, "이메일 전송에 실패했습니다."),
+    MISMATCH_EMAIL(503, "이메일과 이름이 일치하지 않습니다."),
 
     USER_NOT_FOUND(404, "해당 아이디에 일치하는 유저가 없습니다"),
     STOREEMPLOYEE_NOT_FOUND(404, "해당 아이디에 일치하는 유저가 없습니다"),
@@ -40,8 +42,9 @@ public enum ErrorCode {
     INVALID_DECRYPTION(401,"복호화가 유효하지 않습니다."),
     CANNOT_FIND_POSITION(400,"위치가 잘못됨"),
     INVALID_REQUEST(400, "잘못된 요청입니다"),
-    INVALID_NUMBER_FORMAT(400, "숫자 형식이 올바르지 않습니다")
-    ;
+    INVALID_NUMBER_FORMAT(400, "숫자 형식이 올바르지 않습니다"),
+    INVALID_EMPLOYEE(400,"직원 정보가 없음"),
+    PASSWORD_CONFIRM_NOT_MATCH(400,"새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
 
 
     private final int status;
