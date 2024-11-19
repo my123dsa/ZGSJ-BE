@@ -1,7 +1,6 @@
 package com.example.User.service;
 
 
-import com.example.User.util.QRCodeUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.Assertions;
@@ -11,11 +10,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 
@@ -25,9 +22,6 @@ public class EmailServiceTest {
 
     @Mock
     private JavaMailSender javaMailSender;
-
-    @Mock
-    private QRCodeUtil qrCodeUtil;
 
     @Mock
     private MimeMessage mimeMessage;
