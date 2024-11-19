@@ -22,8 +22,6 @@ public class CoreBankService {
 
     private final StoreRepository storeRepository;
     private final PresidentRepository presidentRepository;
-
-    @Autowired
     private final CoreBankFeign coreBankFeign;
 
     public AccountInfoResponse getStoreAccountInfo(Integer storeId)
