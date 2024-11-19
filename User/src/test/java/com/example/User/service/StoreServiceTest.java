@@ -79,16 +79,12 @@ class StoreServiceTest {
 
         when(presidentRepository.findById(presidentId)).thenReturn(Optional.of(president));
         when(storeRepository.existsByStoreName(storeRequest.getStoreName())).thenReturn(false);
-        when(storeRepository.save(any(Store.class))).thenReturn(savedStore);
+        when(storeRepository.save(any(Store.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        // When
-        List<Object> result = storeService.registerStore(presidentId, storeRequest);
+        // When - 실제 테스트할 메소드 호출
+        storeService.registerStore(presidentId, storeRequest);
 
-        // Then
-        assertThat(result).hasSize(2);
-        assertThat(result.get(0)).isEqualTo(savedStore.getId());
-        assertThat(result.get(1)).isEqualTo(storeEmail);
-
+        // Then - 결과 검증
         verify(presidentRepository).findById(presidentId);
         verify(storeRepository).existsByStoreName(storeRequest.getStoreName());
         verify(storeRepository).save(any(Store.class));

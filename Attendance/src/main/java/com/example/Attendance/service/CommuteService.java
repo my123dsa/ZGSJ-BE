@@ -48,7 +48,6 @@ public class CommuteService {
             throw new CustomException(ErrorCode.MISSING_GO_TO_WORK_RECODE);
         }
         commute.setEndTime(LocalDateTime.now());
-        commuteRepository.save(commute);
     }
 
     @Transactional

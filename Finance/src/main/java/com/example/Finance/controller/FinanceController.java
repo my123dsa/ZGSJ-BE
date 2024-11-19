@@ -1,5 +1,6 @@
 package com.example.Finance.controller;
 
+import com.example.Finance.dto.TransactionChartResponse;
 import com.example.Finance.dto.TransactionHistoryRequest;
 import com.example.Finance.dto.TransactionHistoryResponse;
 import com.example.Finance.feign.UserFeign;
@@ -30,14 +31,16 @@ public class FinanceController {
     private final UserFeign userFeign;
 
     //차트 제공에 맞춰서 변경하기
-    @GetMapping("/transactionlist")
-    public ResponseEntity<List<TransactionHistoryResponse>> getFinanaceData(
+    @GetMapping("/transactionchart")
+    public ResponseEntity<TransactionChartResponse> getFinanaceData(
             @RequestParam Integer storeid,
             @RequestParam Integer year,
             @RequestParam Integer month)
     {
         TransactionHistoryRequest transactionHistoryRequest= TransactionHistoryRequest.from(userFeign.getStoreAccountInfo(storeid));
-        return ResponseEntity.ok(transactionHistoryService.getTransactionHistoryList(transactionHistoryRequest, year ,month));
+
+        return ResponseEntity.ok(
+                transactionHistoryService.getTransactionChartData(transactionHistoryRequest, year ,month));
     }
 
     //pdf 생성
@@ -48,7 +51,7 @@ public class FinanceController {
             @RequestParam Integer month
     ) {
         TransactionHistoryRequest transactionHistoryRequest = TransactionHistoryRequest.from(userFeign.getStoreAccountInfo(storeid));
-        List<TransactionHistoryResponse> transactionHistoryResponseList = transactionHistoryService.getTransactionHistoryList(transactionHistoryRequest, year, month);
+        List<TransactionHistoryResponse> transactionHistoryResponseList = transactionHistoryService.getYearMonthlyTransactions(transactionHistoryRequest, year, month);
 
         // PDF 생성
         byte[] pdfContent = incomeStatementPdfService.generateIncomeStatementPdf(
