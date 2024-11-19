@@ -18,6 +18,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Base64;
 import java.util.Map;
 
@@ -26,21 +27,17 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JWTUtil {
     //    @Value("${org.zerock.jwt.secret}")
-    private final String key;
-    private static final String ALGORITHM = "AES";
-    private static final String FIXED_KEY = "myFixedSecretKey";
-    private final SecretKey secretKey;
+    private final Key key;
 
     public JWTUtil() {
-        key="dGhpc19pc19hX3ZlcnlfbG9uZ19hbmRfc2VjdXJlX2tleV9mb3JfaHMyNTZfYWxnb3JpdGhtX2F0X2xlYXN0XzMyX2J5dGVz";
-        byte[] keyBytes = FIXED_KEY.getBytes(); // 문자열을 바이트 배열로 변환
-        this.secretKey = new SecretKeySpec(keyBytes, ALGORITHM);
+        String settingKey="dGhpc19pc19hX3ZlcnlfbG9uZ19hbmRfc2VjdXJlX2tleV9mb3JfaHMyNTZfYWxnb3JpdGhtX2F0X2xlYXN0XzMyX2J5dGVz";
+        key = Keys.hmacShaKeyFor(settingKey.getBytes(StandardCharsets.UTF_8));
     }
 
     public Map<String, Object> validateToken(String token,String path) throws JwtException {
         try {
             return Jwts.parserBuilder()
-                    .setSigningKey(Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8)))
+                    .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
@@ -56,19 +53,6 @@ public class JWTUtil {
                 return expiredJwtException.getClaims();
             throw new CustomException(ErrorCode.BAD_GATEWAY_TEST);
 //            throw new CustomException(ErrorCode.EXPIRED_TOKEN);
-        }
-
-    }
-    public Integer decrypt(String encryptedText) {
-        try {
-            Cipher cipher = Cipher.getInstance(ALGORITHM);
-            cipher.init(Cipher.DECRYPT_MODE, this.secretKey);
-            byte[] decodedBytes = Base64.getDecoder().decode(encryptedText);
-            byte[] decryptedBytes = cipher.doFinal(decodedBytes);
-            ByteBuffer buffer = ByteBuffer.wrap(decryptedBytes);
-            return buffer.getInt();
-        } catch (Exception e) {
-            throw new CustomException(ErrorCode.INVALID_DECRYPTION);
         }
     }
 }
