@@ -26,7 +26,7 @@ public class BankCoreService {
     private final EntityManager entityManager;
 
     @Transactional
-    public void transfer(TransferRequest transferRequest) {
+    public LocalDate transfer(TransferRequest transferRequest) {
 
         // 리스트 정렬해서 받음.
         // 여기 로직 더 효율적이게 변경 되어야함
@@ -39,22 +39,23 @@ public class BankCoreService {
                         transferRequest.getToAccount(), transferRequest.getToBankCode(),
                         transferRequest.getToAccountDepositor())
                 .orElseThrow(() -> new CustomException(ErrorCode.ACCOUNT_NOT_FOUND));
+        LocalDate now = LocalDate.now();
 
         List<Account> processedAccounts = processTransfer(fromAccount, toAccount, transferRequest.getAmount());
         accountRepository.saveAll(processedAccounts);
 
-        List<TransactionHistory> histories = createHistories(fromAccount, toAccount);
+        List<TransactionHistory> histories = createHistories(fromAccount, toAccount,now,transferRequest.getAmount());
         transactionHistoryRepository.saveAll(histories);
+        return now;
     }
 
-    public List<TransactionHistory> createHistories(Account fromAccount, Account toAccount) {
-        LocalDate now = LocalDate.now();
+    public List<TransactionHistory> createHistories(Account fromAccount, Account toAccount,LocalDate now,Long amount) {
         Classfication transfer = entityManager.getReference(Classfication.class, 3);
         Classfication deposit = entityManager.getReference(Classfication.class, 26);
         return Arrays.asList(TransactionHistory.createTransactionHistory
-                        (now, false, "이체", fromAccount, transfer),
+                        (amount,now, false, "이체", fromAccount, transfer),
                 TransactionHistory.createTransactionHistory
-                        (now, true, "입금", toAccount, deposit));
+                        (amount,now, true, "입금", toAccount, deposit));
     }
 
     public List<Account> processTransfer(Account fromAccount, Account toAccount, Long amount) {
