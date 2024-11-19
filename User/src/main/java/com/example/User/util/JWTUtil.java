@@ -3,21 +3,19 @@ package com.example.User.util;
 
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,20 +25,21 @@ import java.util.Map;
 
 public class JWTUtil {
     //    @Value("${org.zerock.jwt.secret}")
-    private final String key;
-//            = "dGhpc19pc19hX3ZlcnlfbG9uZ19hbmRfc2VjdXJlX2tleV9mb3JfaHMyNTZfYWxnb3JpdGhtX2F0X2xlYXN0XzMyX2J5dGVz";
+    private final Key key;
     private final CryptoUtil cryptoUtil;
 
     public JWTUtil(CryptoUtil cryptoUtil) {
         this.cryptoUtil = cryptoUtil;
-        this.key ="dGhpc19pc19hX3ZlcnlfbG9uZ19hbmRfc2VjdXJlX2tleV9mb3JfaHMyNTZfYWxnb3JpdGhtX2F0X2xlYXN0XzMyX2J5dGVz";
+        String settingKey="dGhpc19pc19hX3ZlcnlfbG9uZ19hbmRfc2VjdXJlX2tleV9mb3JfaHMyNTZfYWxnb3JpdGhtX2F0X2xlYXN0XzMyX2J5dGVz";
+
+       key = Keys.hmacShaKeyFor(settingKey.getBytes(StandardCharsets.UTF_8));
     }
 
     public String generateToken(Integer id, int days) {
 
         Map<String, Object> headers = new HashMap<>();
         headers.put("typ", "JWT");
-        headers.put("alg", "HS256");
+        headers.put("alg", "HS512");
 
         Map<String, Object> encrypted = cryptoUtil.encrypt(id);
 
@@ -48,20 +47,19 @@ public class JWTUtil {
 
         ZonedDateTime nowUtc = ZonedDateTime.now(ZoneId.of("UTC"));
 
-        String jwtStr = Jwts.builder()
+        return Jwts.builder()
                 .setHeader(headers)
                 .setClaims(encrypted)
                 .setIssuedAt(Date.from(nowUtc.toInstant()))
                 .setExpiration(Date.from(nowUtc.plusMinutes(time).toInstant()))
-                .signWith(SignatureAlgorithm.HS256, key.getBytes())
+                .signWith(key)
                 .compact();
-        return jwtStr;
     }
 
     public Map<String, Object> validateToken(String token) throws JwtException {
         try {
             return Jwts.parserBuilder()
-                    .setSigningKey(Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8)))
+                    .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
@@ -75,6 +73,4 @@ public class JWTUtil {
             throw new CustomException(ErrorCode.EXPIRED_TOKEN);
         }
     }
-
-
 }
