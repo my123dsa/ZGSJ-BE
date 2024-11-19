@@ -24,19 +24,16 @@ import java.util.Map;
 
 @Component
 @Slf4j
-@RequiredArgsConstructor
+
 public class JWTUtil {
     //    @Value("${org.zerock.jwt.secret}")
-    private String key =
-            "dGhpc19pc19hX3ZlcnlfbG9uZ19hbmRfc2VjdXJlX2tleV9mb3JfaHMyNTZfYWxnb3JpdGhtX2F0X2xlYXN0XzMyX2J5dGVz";
-    private static final String ALGORITHM = "AES";
-    private static final String FIXED_KEY = "myFixedSecretKey";
-    private final SecretKey secretKey;
+    private final String key;
+//            = "dGhpc19pc19hX3ZlcnlfbG9uZ19hbmRfc2VjdXJlX2tleV9mb3JfaHMyNTZfYWxnb3JpdGhtX2F0X2xlYXN0XzMyX2J5dGVz";
+    private final CryptoUtil cryptoUtil;
 
-
-    public JWTUtil() {
-        byte[] keyBytes = FIXED_KEY.getBytes(); // 문자열을 바이트 배열로 변환
-        this.secretKey = new SecretKeySpec(keyBytes, ALGORITHM);
+    public JWTUtil(CryptoUtil cryptoUtil) {
+        this.cryptoUtil = cryptoUtil;
+        this.key ="dGhpc19pc19hX3ZlcnlfbG9uZ19hbmRfc2VjdXJlX2tleV9mb3JfaHMyNTZfYWxnb3JpdGhtX2F0X2xlYXN0XzMyX2J5dGVz";
     }
 
     public String generateToken(Integer id, int days) {
@@ -45,7 +42,7 @@ public class JWTUtil {
         headers.put("typ", "JWT");
         headers.put("alg", "HS256");
 
-        Map<String, Object> encrypted = encrypt(id);
+        Map<String, Object> encrypted = cryptoUtil.encrypt(id);
 
         int time = 60 * 24 * days; //테스트는 분단위로 나중에 60*24 (일)단위변경
 
@@ -69,43 +66,5 @@ public class JWTUtil {
         return claim;
     }
 
-    public Map<String, Object> encrypt(Integer id) {
-        try {
-            ByteBuffer buffer = ByteBuffer.allocate(4); // Integer는 4바이트
-            buffer.putInt(id);
-            byte[] idBytes = buffer.array();
 
-            Cipher cipher = Cipher.getInstance(ALGORITHM);
-            cipher.init(Cipher.ENCRYPT_MODE, this.secretKey);
-            byte[] encryptedBytes = cipher.doFinal(idBytes);
-            String s = Base64.getEncoder().encodeToString(encryptedBytes);
-            return Map.of("payload", s);
-        } catch (Exception e) {
-            throw new CustomException(ErrorCode.INVALID_ENCRYPTION);
-        }
-    }
-
-    public Integer decrypt(String encryptedText) {
-        try {
-            Cipher cipher = Cipher.getInstance(ALGORITHM);
-            cipher.init(Cipher.DECRYPT_MODE, this.secretKey);
-            byte[] decodedBytes = Base64.getDecoder().decode(encryptedText);
-            byte[] decryptedBytes = cipher.doFinal(decodedBytes);
-            ByteBuffer buffer = ByteBuffer.wrap(decryptedBytes);
-            return buffer.getInt();
-        } catch (Exception e) {
-            throw new CustomException(ErrorCode.INVALID_DECRYPTION);
-        }
-    }
-
-    public String encryptByEmail(String email) {
-        try {
-            Cipher cipher = Cipher.getInstance(ALGORITHM);
-            cipher.init(Cipher.ENCRYPT_MODE, this.secretKey);
-            byte[] encryptedBytes = cipher.doFinal(email.getBytes());
-            return Base64.getUrlEncoder().encodeToString(encryptedBytes);
-        } catch (Exception e) {
-            throw new CustomException(ErrorCode.INVALID_ENCRYPTION);
-        }
-    }
 }
