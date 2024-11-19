@@ -1,5 +1,6 @@
 package com.example.User.controller;
 
+import com.example.User.dto.corebank.AccountAndCodeRequest;
 import com.example.User.dto.corebank.AccountCheckRequest;
 import com.example.User.dto.corebank.AccountInfoResponse;
 import com.example.User.resolver.MasterId;
@@ -23,13 +24,12 @@ public class CoreBankController {
     @PostMapping("/account-check")
     public ResponseEntity<Boolean> getAccountBankcodeAndAccountNumber(
             @MasterId Integer id,
-            @RequestBody AccountCheckRequest accountCheckRequest
-    ) {
+            @RequestBody AccountAndCodeRequest accountAndCodeRequest) {
         // 서비스 호출
         boolean isValid = coreBankService.getNameByIdAndBankCodeAndAccountNumber(
                 id,
-                accountCheckRequest.getAccountNumber(),
-                accountCheckRequest.getBankCode()
+                accountAndCodeRequest.getAccountNumber(),
+                accountAndCodeRequest.getBankCode()
         );
 
         // 프론트로 boolean 값 반환
