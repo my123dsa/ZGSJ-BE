@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.util.Base64;
 
-@Service
-@Slf4j
-public class QRCodeUtil {
+//@Service
+//@Slf4j
+//public class QRCodeUtil {
 //
 //    public String generateQRUrl(Integer storeId) {
 //        String ip= "localhost";
@@ -35,4 +35,4 @@ public class QRCodeUtil {
 //            throw new RuntimeException("QR Code 생성에 실패했습니다.", e);
 //        }
 //    }
-}
+//}
