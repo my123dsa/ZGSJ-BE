@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Slf4j
 @RestController
@@ -23,10 +23,8 @@ public class BankCoreController {
     @PostMapping("/automaticTransfer")
     public TransferResponse automaticTransfer(@RequestBody TransferRequest transferRequest) {
         log.info("automaticTransfer");
-        bankCoreService.transfer(transferRequest);
 
-
-        TransferResponse transferResponse =TransferResponse.of(200,LocalDateTime.now(),"success");
-        return transferResponse;
+        LocalDate transferDate= bankCoreService.transfer(transferRequest);
+        return TransferResponse.of(200,transferDate,"success");
     }
 }
