@@ -1,5 +1,6 @@
 package com.example.core_bank.core_bank.core.dto.accountnumber;
 
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 

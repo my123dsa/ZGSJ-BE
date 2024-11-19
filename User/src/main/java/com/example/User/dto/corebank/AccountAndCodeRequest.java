@@ -1,5 +1,6 @@
 package com.example.User.dto.corebank;
 
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
