@@ -13,8 +13,11 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     @Query("select a from Account a join fetch a.bank where a.accountNumber = :accountNumber")
     Optional<Account> findByAccountNumberWithBank(String accountNumber);
 
-    @Query("SELECT COUNT(a) > 0 FROM Account a " +
-            "JOIN a.bank b " +
-            "WHERE a.name = :name AND a.accountNumber = :accountNumber AND b.bankCode = :bankCode")
-    boolean existsByNameAndAccountNumberAndBankCode(String name, String accountNumber, String bankCode);
+
+    @Query("SELECT CASE WHEN COUNT(a) > 0 THEN TRUE ELSE FALSE END " +
+            "FROM Account a " +
+            "WHERE EXISTS (SELECT 1 FROM Bank b WHERE b.id = a.bank.id AND b.bankCode = :bankCode) " +
+            "AND a.name = :name AND a.accountNumber = :accountNumber")
+    boolean existsByAccountNumberAndNameAndBankCode(String name, String accountNumber, String bankCode);
+
 }

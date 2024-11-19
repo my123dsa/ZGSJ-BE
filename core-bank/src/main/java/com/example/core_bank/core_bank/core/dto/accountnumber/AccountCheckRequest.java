@@ -6,7 +6,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AccountVerifyRequest {
+public class AccountCheckRequest {
     @NotBlank(message = "계좌번호는 필수입니다.")
     private String accountNumber;
 
