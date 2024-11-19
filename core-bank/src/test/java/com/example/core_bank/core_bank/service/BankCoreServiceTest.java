@@ -4,7 +4,6 @@ import com.example.core_bank.core_bank.core.dto.transfer.TransferRequest;
 import com.example.core_bank.core_bank.core.model.Account;
 import com.example.core_bank.core_bank.core.model.Bank;
 import com.example.core_bank.core_bank.core.repository.AccountRepository;
-import com.example.core_bank.core_bank.core.repository.TransactionHistoryRepository;
 import com.example.core_bank.core_bank.core.service.BankCoreService;
 import com.example.core_bank.core_bank.global.error.CustomException;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -20,24 +20,22 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class BankCoreServiceTest {
 
-    @InjectMocks
-    private BankCoreService bankCoreService;
 
     @Mock
     private AccountRepository accountRepository;
-    @Mock
-    private TransactionHistoryRepository transactionHistoryRepository;
 
+
+    @Spy
+    @InjectMocks
+    private BankCoreService bankCoreService;
 
     private TransferRequest transferRequest;
     private Account fromAccount;
@@ -46,20 +44,15 @@ public class BankCoreServiceTest {
     private Bank toBank;
     @BeforeEach
     void setUp() {
-        // 테스트용 데이터 설정
-        // Bank 생성 (정적 팩토리 메서드 사용)
+        // Bank 설정
         fromBank = Bank.createBank("001", "FromBank");
         toBank = Bank.createBank("002", "ToBank");
-
-        // Bank ID 설정
         ReflectionTestUtils.setField(fromBank, "id", 1);
         ReflectionTestUtils.setField(toBank, "id", 2);
 
-        // Account 생성 (정적 팩토리 메서드 사용)
+        // Account 설정
         fromAccount = Account.createAccountWithBalance("1234", "John", fromBank, 2000L);
         toAccount = Account.createAccountWithBalance("5678", "Jane", toBank, 1000L);
-
-        // Account ID 설정
         ReflectionTestUtils.setField(fromAccount, "id", 1);
         ReflectionTestUtils.setField(toAccount, "id", 2);
 
@@ -77,6 +70,7 @@ public class BankCoreServiceTest {
     @Test
     @DisplayName("정상적으로 이체 완료 되었을 경우")
     public void transferSuccess() {
+        // given
         given(accountRepository.findByAccountNumberAndBankCodeAndName(
                 transferRequest.getFromAccount(),
                 transferRequest.getFromBankCode(),
@@ -88,30 +82,27 @@ public class BankCoreServiceTest {
                 transferRequest.getToBankCode(),
                 transferRequest.getToAccountDepositor()))
                 .willReturn(Optional.of(toAccount));
+
+        doNothing().when(bankCoreService).createHistories(any(), any(), any(), any());
+        // when
         LocalDate result = bankCoreService.transfer(transferRequest);
 
         // then
         assertNotNull(result);
+
         verify(accountRepository).updateBalances(
                 fromAccount.getId(),
                 toAccount.getId(),
                 1000L,
                 2000L
         );
-        verify(transactionHistoryRepository).saveTransactionHistories(
-                eq(fromAccount.getId()),
-                eq(toAccount.getId()),
-                eq(1000L),
-                eq(3),
-                eq(26),
-                any(LocalDate.class)
-        );
     }
 
     @Test
     @DisplayName("잔액보다 출금 금액이 더 클 경우")
     public void throwExceptionWhenInsufficientBalance() {
-        ReflectionTestUtils.setField(transferRequest, "amount", 3000L); // 잔액보다 큰 금액으로 설정
+        // given
+        ReflectionTestUtils.setField(transferRequest, "amount", 3000L);
 
         given(accountRepository.findByAccountNumberAndBankCodeAndName(
                 transferRequest.getFromAccount(),
@@ -130,11 +121,13 @@ public class BankCoreServiceTest {
                 bankCoreService.transfer(transferRequest)
         );
 
+        verify(accountRepository, never()).updateBalances(any(), any(), any(), any());
     }
 
     @Test
     @DisplayName("계좌 못찾았을 경우")
     public void throwExceptionWhenAccountNotFound() {
+        // given
         given(accountRepository.findByAccountNumberAndBankCodeAndName(
                 transferRequest.getFromAccount(),
                 transferRequest.getFromBankCode(),
@@ -145,5 +138,7 @@ public class BankCoreServiceTest {
         assertThrows(CustomException.class, () ->
                 bankCoreService.transfer(transferRequest)
         );
+
+        verify(accountRepository, never()).updateBalances(any(), any(), any(), any());
     }
 }
