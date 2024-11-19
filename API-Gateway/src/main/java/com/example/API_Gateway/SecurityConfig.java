@@ -70,6 +70,7 @@ public class SecurityConfig {
         needIdUrls.add("/user/store");
         needIdUrls.add("/president/mypage");
         needIdUrls.add("/president/secession");
+        needIdUrls.add("/user/account-check");
 
         return new TokenCheckFilter(jwtUtil, permitUrls, needIdUrls);
     }
