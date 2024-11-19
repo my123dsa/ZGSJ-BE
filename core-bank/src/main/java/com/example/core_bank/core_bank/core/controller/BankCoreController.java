@@ -20,9 +20,9 @@ public class BankCoreController {
 
     private final BankCoreService bankCoreService;
 
-    @PostMapping("/automaticTransfer")
+    @PostMapping("/automatictransfer")
     public TransferResponse automaticTransfer(@RequestBody TransferRequest transferRequest) {
-        log.info("automaticTransfer");
+        log.info("automatictransfer");
 
         LocalDate transferDate= bankCoreService.transfer(transferRequest);
         return TransferResponse.of(200,transferDate,"success");
