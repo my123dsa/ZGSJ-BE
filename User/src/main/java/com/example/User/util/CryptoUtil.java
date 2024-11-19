@@ -23,11 +23,12 @@ public class CryptoUtil {
 
     private final String CHAR_SET;
     private final int PASSWORD_LENGTH;
-    private static final String ALGORITHM = "AES";
-    private static final String FIXED_KEY = "myFixedSecretKey";
+    private final String ALGORITHM;
     private final SecretKey secretKey;
 
     public CryptoUtil() {
+        ALGORITHM ="AES";
+        String FIXED_KEY = "myFixedSecretKey";
         this.rand = new SecureRandom();
         CHAR_SET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         PASSWORD_LENGTH = 10;
