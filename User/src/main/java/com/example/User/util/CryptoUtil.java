@@ -21,7 +21,6 @@ public class CryptoUtil {
 
     private final SecureRandom rand;
 
-    private final String CHAR_SET;
     private final int PASSWORD_LENGTH;
     private final String ALGORITHM;
     private final SecretKey secretKey;
@@ -30,7 +29,6 @@ public class CryptoUtil {
         ALGORITHM ="AES";
         String FIXED_KEY = "myFixedSecretKey";
         this.rand = new SecureRandom();
-        CHAR_SET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         PASSWORD_LENGTH = 10;
         byte[] keyBytes = FIXED_KEY.getBytes(); // 문자열을 바이트 배열로 변환
         this.secretKey = new SecretKeySpec(keyBytes, ALGORITHM);
@@ -41,8 +39,15 @@ public class CryptoUtil {
         StringBuilder password = new StringBuilder(PASSWORD_LENGTH);
 
         for(int i = 0; i < PASSWORD_LENGTH; i++) {
-            int randIdx = rand.nextInt(CHAR_SET.length());
-            password.append(CHAR_SET.charAt(randIdx));
+            int randomNum = rand.nextInt(62); // 총 62개 문자 (10 + 26 + 26)
+
+            if (randomNum < 10) {
+                password.append((char)(randomNum + 48));  // 0-9
+            } else if (randomNum < 36) {
+                password.append((char)(randomNum - 10 + 65));  // A-Z
+            } else {
+                password.append((char)(randomNum - 36 + 97));  // a-z
+            }
         }
         return password.toString();
     }
