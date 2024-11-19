@@ -45,7 +45,8 @@ public enum ErrorCode {
     INVALID_REQUEST(400, "잘못된 요청입니다"),
     INVALID_NUMBER_FORMAT(400, "숫자 형식이 올바르지 않습니다"),
     INVALID_EMPLOYEE(400,"직원 정보가 없음"),
-    PASSWORD_CONFIRM_NOT_MATCH(400,"새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+    PASSWORD_CONFIRM_NOT_MATCH(400,"새 비밀번호와 확인 비밀번호가 일치하지 않습니다."),
+    BANK_ERROR(404,"은행쪽 에러입니다.");
 
 
     private final int status;
