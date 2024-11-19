@@ -1,15 +1,12 @@
 package com.example.Attendance.service;
 
 
-import com.example.Attendance.dto.EmployeeCommuteRequest;
 import com.example.Attendance.error.CustomException;
 import com.example.Attendance.error.ErrorCode;
 import com.example.Attendance.model.Commute;
-import com.example.Attendance.model.Store;
 import com.example.Attendance.model.StoreEmployee;
 import com.example.Attendance.repository.CommuteRepository;
 import com.example.Attendance.repository.StoreEmployeeRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -41,13 +38,12 @@ public class CommuteServiceTest {
     @Mock
     private Commute commute;
 
-    @Mock
-    private EmployeeCommuteRequest request;
 
     @Test
     void testGoToWork_NewCommute() {
+        String email = "john.doe@test.com";
         // Given
-        lenient().when(storeEmployeeRepository.findByEmailAndStoreId(request.getEmail(), 1))
+        lenient().when(storeEmployeeRepository.findByEmailAndStoreId(email, 1))
                 .thenReturn(Optional.of(storeEmployee));
         when(commuteRepository.findTopByStoreEmployeeIdOrderByStartTimeDesc(storeEmployee.getId()))
                 .thenReturn(Optional.empty());
@@ -63,8 +59,9 @@ public class CommuteServiceTest {
 
     @Test
     void testGoToWork_ExistingCommute() {
+        String email = "john.doe@test.com";
         // Given: 이전 근무 기록이 있고, 종료 시간이 없는 경우
-        lenient().when(storeEmployeeRepository.findByEmailAndStoreId(request.getEmail(), 1))
+        lenient().when(storeEmployeeRepository.findByEmailAndStoreId(email, 1))
                 .thenReturn(Optional.of(storeEmployee));
         when(commuteRepository.findTopByStoreEmployeeIdOrderByStartTimeDesc(storeEmployee.getId()))
                 .thenReturn(Optional.of(commute));
@@ -79,8 +76,9 @@ public class CommuteServiceTest {
 
     @Test
     void testLeaveWork_ValidCommute() {
+        String email = "john.doe@test.com";
         // Given
-        lenient().when(storeEmployeeRepository.findByEmailAndStoreId(request.getEmail(), 1))
+        lenient().when(storeEmployeeRepository.findByEmailAndStoreId(email, 1))
                 .thenReturn(Optional.of(storeEmployee));
         when(commuteRepository.findTopByStoreEmployeeIdOrderByStartTimeDesc(storeEmployee.getId()))
                 .thenReturn(Optional.of(commute));
@@ -99,8 +97,9 @@ public class CommuteServiceTest {
     // 출근 기록이 있고 퇴근시간이 찍혀있는경우
     @Test
     void testLeaveWork_AlreadyCheckOut() {
+        String email = "john.doe@test.com";
         // Given
-        lenient().when(storeEmployeeRepository.findByEmailAndStoreId(request.getEmail(), 1))
+        lenient().when(storeEmployeeRepository.findByEmailAndStoreId(email, 1))
                 .thenReturn(Optional.of(storeEmployee));
         when(commuteRepository.findTopByStoreEmployeeIdOrderByStartTimeDesc(storeEmployee.getId()))
                 .thenReturn(Optional.of(commute));
@@ -120,8 +119,9 @@ public class CommuteServiceTest {
 
     @Test
     void testLeaveWork_NoCheckIn() {
+        String email = "john.doe@test.com";
         // Given: 출근 기록이 없는 경우
-        lenient().when(storeEmployeeRepository.findByEmailAndStoreId(request.getEmail(), 1))
+        lenient().when(storeEmployeeRepository.findByEmailAndStoreId(email, 1))
                 .thenReturn(Optional.of(storeEmployee));
         when(commuteRepository.findTopByStoreEmployeeIdOrderByStartTimeDesc(storeEmployee.getId()))
                 .thenReturn(Optional.empty());

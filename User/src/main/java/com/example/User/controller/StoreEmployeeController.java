@@ -3,7 +3,9 @@ package com.example.User.controller;
 import com.example.User.dto.storeemployee.EmployeeInfoResponse;
 import com.example.User.dto.storeemployee.StoreEmployeeRequest;
 import com.example.User.dto.storeemployee.StoreEmployeeUpdateRequest;
+import com.example.User.service.EmailService;
 import com.example.User.service.StoreEmployeeService;
+import com.example.User.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,8 @@ import java.util.List;
 public class StoreEmployeeController {
 
     private final StoreEmployeeService storeemployeeService;
+    private final EmailService emailService;
+    private final JWTUtil jwtUtil;
 
     @PostMapping
     public ResponseEntity<String> registerEmployee(
@@ -25,7 +29,9 @@ public class StoreEmployeeController {
             @RequestParam("storeid") Integer storeid
     ) {
         storeemployeeService.register(request, storeid);
-        return ResponseEntity.ok("직원 등록 성공");
+        String encryptedEmail= jwtUtil.encryptByEmail(request.getEmail());
+        String url= emailService.sendURLToEmail(request.getEmail(), storeid,encryptedEmail);
+        return ResponseEntity.ok(url);
     }
 
     @PutMapping
@@ -51,5 +57,14 @@ public class StoreEmployeeController {
         return ResponseEntity.ok(storeemployeeService.getEmployeeInfoByStore(storeid));
     }
 
+    @GetMapping("/resend/url")
+    public ResponseEntity<String> resendUrl(@RequestParam("seid") Integer seId,@RequestParam("storeid") Integer storeId){
+
+        String email= storeemployeeService.getEmail(seId);
+        String encryptedEmail= jwtUtil.encryptByEmail(email);
+        String url= emailService.sendURLToEmail(email, storeId,encryptedEmail);
+
+        return ResponseEntity.ok(url);
+}
 }
 
