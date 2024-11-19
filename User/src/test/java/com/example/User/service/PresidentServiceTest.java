@@ -124,13 +124,13 @@ public class PresidentServiceTest {
                 true
         );
 
-        when(presidentRepository.findByEmail("dealon"))
+        when(presidentRepository.findById(1))
                 .thenReturn(Optional.of(president));
 
         PresidentInfoResponse response = presidentService.getPresidentInfo(1);
 
         assertThat(response.getName()).isEqualTo("테스트");
-        assertThat(response.getEmail()).isEqualTo("dealon");
+        assertThat(response.getEmail()).isEqualTo("1234");
         assertThat(response.getBirthDate()).isEqualTo(LocalDate.of(2024, 5, 11));
         assertThat(response.getPhoneNumber()).isEqualTo("010-1231-1109");
     }

@@ -5,6 +5,7 @@ import com.example.User.dto.storeemployee.StoreEmployeeRequest;
 import com.example.User.dto.storeemployee.StoreEmployeeUpdateRequest;
 import com.example.User.service.EmailService;
 import com.example.User.service.StoreEmployeeService;
+import com.example.User.util.CryptoUtil;
 import com.example.User.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ public class StoreEmployeeController {
 
     private final StoreEmployeeService storeemployeeService;
     private final EmailService emailService;
-    private final JWTUtil jwtUtil;
+    private final CryptoUtil cryptoUtil;
 
     @PostMapping
     public ResponseEntity<String> registerEmployee(
@@ -29,7 +30,7 @@ public class StoreEmployeeController {
             @RequestParam("storeid") Integer storeid
     ) {
         storeemployeeService.register(request, storeid);
-        String encryptedEmail= jwtUtil.encryptByEmail(request.getEmail());
+        String encryptedEmail= cryptoUtil.encryptByEmail(request.getEmail());
         String url= emailService.sendURLToEmail(request.getEmail(), storeid,encryptedEmail);
         return ResponseEntity.ok(url);
     }
@@ -61,7 +62,7 @@ public class StoreEmployeeController {
     public ResponseEntity<String> resendUrl(@RequestParam("seid") Integer seId,@RequestParam("storeid") Integer storeId){
 
         String email= storeemployeeService.getEmail(seId);
-        String encryptedEmail= jwtUtil.encryptByEmail(email);
+        String encryptedEmail= cryptoUtil.encryptByEmail(email);
         String url= emailService.sendURLToEmail(email, storeId,encryptedEmail);
 
         return ResponseEntity.ok(url);

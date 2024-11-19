@@ -9,7 +9,6 @@ import com.example.User.model.Store;
 import com.example.User.model.StoreEmployee;
 import com.example.User.repository.StoreEmployeeRepository;
 import com.example.User.repository.StoreRepository;
-import com.example.User.util.JWTUtil;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,6 @@ import java.util.List;
 public class StoreEmployeeService {
     private final StoreRepository storeRepository;
     private final StoreEmployeeRepository storeEmployeeRepository;
-    private final JWTUtil jwtUtil;
 
     @Transactional
     public void register(@Valid StoreEmployeeRequest request, Integer storeId) {
