@@ -7,8 +7,10 @@ import com.example.User.error.ErrorCode;
 import com.example.User.feign.CoreBankFeign;
 import com.example.User.repository.PresidentRepository;
 import com.example.User.repository.StoreRepository;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,8 @@ public class CoreBankService {
 
     private final StoreRepository storeRepository;
     private final PresidentRepository presidentRepository;
+
+    @Autowired
     private final CoreBankFeign coreBankFeign;
 
     public AccountInfoResponse getStoreAccountInfo(Integer storeId)
@@ -37,17 +41,12 @@ public class CoreBankService {
         log.info("이름 : " + name);
         // 2. 요청 DTO 생성
         AccountCheckRequest accountCheckRequest = AccountCheckRequest.of(accountNumber, bankCode, name);
-        log.info("생성된 요청 DTO: {}", accountCheckRequest);
 
         // 3. CoreBankFeign 호출
-
-        ResponseEntity<String> response = coreBankFeign.verifyAccount(accountCheckRequest);
-        if (response.getStatusCode()!= HttpStatusCode.valueOf(200)) {
-            return false;
+        try {
+             return coreBankFeign.verifyAccount(accountCheckRequest);
+        }catch (FeignException e){
+            throw new CustomException(ErrorCode.BANK_ERROR);
         }
-        log.info("CoreBank 응답: {}", response);
-
-        // 4. 유효성 결과 반환
-        return true;
     }
 }

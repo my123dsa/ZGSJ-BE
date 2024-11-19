@@ -15,6 +15,6 @@ public interface CoreBankFeign {
     @PostMapping("/businesscheck")
     BusinessNumberResponse checkBusinessNumber(@RequestBody String businessNumber);
 
-    @PostMapping("/verify-account")
-    ResponseEntity<String> verifyAccount(@RequestBody AccountCheckRequest accountCheckRequest);
+    @PostMapping("/bank/verify-account")
+    boolean verifyAccount(@RequestBody AccountCheckRequest accountCheckRequest);
 }
