@@ -2,6 +2,7 @@ package com.example.User.dto.login;
 
 import com.example.User.model.President;
 import com.example.User.model.Store;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +16,9 @@ public class ReqRegist {
     private String name;
     private String address;
     private String email;
+
+    @Pattern(regexp = "^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$",
+            message = "비밀번호는 최소 8자 이상이며, 특수문자(!@#$%^&*)를 1개 이상 포함해야 합니다.")
     private String password;
     private LocalDate birthDate;
     private String phoneNumber;

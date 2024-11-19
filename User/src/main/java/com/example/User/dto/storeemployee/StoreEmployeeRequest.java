@@ -13,6 +13,7 @@ import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor (access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class StoreEmployeeRequest {
 
     private String email;

@@ -2,6 +2,7 @@ package com.example.User.controller;
 
 
 import com.example.User.dto.login.ReqIdFindData;
+import com.example.User.dto.login.ReqPwChange;
 import com.example.User.dto.login.ResIdFindData;
 import com.example.User.dto.president.PresidentInfoResponse;
 import com.example.User.dto.presidentupdate.PresidentUpdateRequest;
@@ -25,6 +26,14 @@ public class PresidentController {
         String email = presidentService.findByNameAndPhoneNumber(reqIdFindData);
         return ResponseEntity.ok(ResIdFindData.from(email));
     }
+
+    @PutMapping("/change-password")
+    public ResponseEntity<Void> changePassword(@MasterId Integer id,
+                                               @Valid @RequestBody ReqPwChange reqpwChange) {
+        presidentService.changePassword(id, reqpwChange);
+        return ResponseEntity.ok().build();
+    }
+
 
     @DeleteMapping("/secession")
     public ResponseEntity<Void> secession(@MasterId Integer id) {

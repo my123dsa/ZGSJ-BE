@@ -9,7 +9,6 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Getter
-@Setter
 @AllArgsConstructor
 public class PayStatementResponse {
     private Integer payStatementId;
@@ -19,7 +18,7 @@ public class PayStatementResponse {
     private Integer amount;
     private LocalDate issuanceDate;
 
-    public static PayStatementResponse from(PayStatement payStatement, StoreEmployee storeEmployee) {
+    public static PayStatementResponse of(PayStatement payStatement, StoreEmployee storeEmployee) {
         return new PayStatementResponse(
                 payStatement.getId(),
                 storeEmployee.getName(),

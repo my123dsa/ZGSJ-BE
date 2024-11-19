@@ -40,7 +40,7 @@ public class President {
     @Column(name = "terms_accept", nullable = false)
     private Boolean termsAccept;
 
-    @OneToMany(mappedBy = "president")
+    @OneToMany(mappedBy = "president", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Store> stores = new ArrayList<>();
 
     private President(String name, String address, String email,String password,
@@ -60,5 +60,9 @@ public class President {
                                             LocalDate birthDate, String phoneNumber,
                                             Boolean termsAccept) {
         return new President(name, address, email,password, birthDate, phoneNumber, termsAccept);
+    }
+    // 비밀번호 변경 메소드
+    public void setPassword(String newPassword) {
+        this.password = newPassword;
     }
 }

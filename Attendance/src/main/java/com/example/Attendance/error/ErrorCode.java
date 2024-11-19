@@ -29,6 +29,8 @@ public enum ErrorCode {
     MISSING_GO_TO_WORK_RECODE(400,"출근 찍지 않음"),
     MISSING_LEAVE_WORK_RECODE(400,"퇴근 찍지 않음"),
     API_SERVER_ERROR(400,"금융 서버 오류 "),
+    INVALID_ENCRYPTION(401,"암호화가 유효하지 않습니다."),
+    INVALID_DECRYPTION(401,"복호화가 유효하지 않습니다."),
     INVALID_PAY_STATEMENT(400, "급여 기록 없음");
 
     private final int status;
