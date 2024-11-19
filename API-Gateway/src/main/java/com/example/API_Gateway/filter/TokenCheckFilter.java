@@ -3,6 +3,7 @@ package com.example.API_Gateway.filter;
 
 import com.example.API_Gateway.error.CustomException;
 import com.example.API_Gateway.error.ErrorCode;
+import com.example.API_Gateway.util.CryptoUtil;
 import com.example.API_Gateway.util.JWTUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -22,18 +23,15 @@ import java.util.Optional;
 public class TokenCheckFilter implements GlobalFilter, Ordered {
 
     private final JWTUtil jwtUtil;
+    private final CryptoUtil cryptoUtil;
     private  final List<String> permitUrl;
     private  final List<String> needIdUrl;
 
-    public TokenCheckFilter(JWTUtil jwtUtil, List<String> permitUrl, List<String> needIdUrl) {
+    public TokenCheckFilter(JWTUtil jwtUtil, List<String> permitUrl, List<String> needIdUrl,CryptoUtil cryptoUtil) {
         this.jwtUtil = jwtUtil;
         this.permitUrl = permitUrl;
         this.needIdUrl = needIdUrl;
-    }
-
-    @Override
-    public int getOrder() {
-        return -1;
+        this.cryptoUtil = cryptoUtil;
     }
 
     @Override
@@ -44,7 +42,7 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
         log.info("TokenCheckFilter path: {}", path);
 
         if(permitUrl.stream().anyMatch(path::contains)) {
-            log.info("통과");
+            log.info("인증 미필요 url통과");
             return chain.filter(exchange);
         }
 
@@ -56,18 +54,23 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
         Map<String, Object> payload = jwtUtil.validateToken(tokenStr,path);
 
         if(!needIdUrl.stream().anyMatch(path::contains)) {
-            log.info("통과");
+            log.info("id 필요 리스트 통과");
             return chain.filter(exchange);
         }
 
         // 숫자인지 한번 확인 필요할 수도 //필요한 것만 복호화 시키기
-        Integer id = jwtUtil.decrypt((String) payload.get("payload"));
+        Integer id = cryptoUtil.decrypt((String) payload.get("payload"));
         log.info("id: {}", id);
 
         ServerHttpRequest mutatedRequest = request.mutate()
                 .header("id", id.toString())
                 .build();
         return chain.filter(exchange.mutate().request(mutatedRequest).build());
+    }
+
+    @Override
+    public int getOrder() {
+        return -1;
     }
 //    private Mono<Void> onError(ServerWebExchange exchange, HttpStatus status) {
 //        exchange.getResponse().setStatusCode(status);
