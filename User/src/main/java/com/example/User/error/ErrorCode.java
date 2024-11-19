@@ -28,6 +28,8 @@ public enum ErrorCode {
 
     SERVER_ERROR(500, "서버 에러입니다. 서버 팀에 연락주세요!"),
     DB_DUPLICAE_ERROR(500, "DB 중복 ERROR입니다. DB팀에 연락해주세요"),
+    EMAIL_SEND_FAILED(500, "이메일 전송에 실패했습니다."),
+    MISMATCH_EMAIL(503, "이메일과 이름이 일치하지 않습니다."),
 
     USER_NOT_FOUND(404, "해당 아이디에 일치하는 유저가 없습니다"),
     STOREEMPLOYEE_NOT_FOUND(404, "해당 아이디에 일치하는 유저가 없습니다"),

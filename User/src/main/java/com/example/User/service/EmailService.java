@@ -1,20 +1,33 @@
 package com.example.User.service;
 
 
+import com.example.User.error.CustomException;
+import com.example.User.error.ErrorCode;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
+
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class EmailService {
 
     private final JavaMailSender javaMailSender;
+    private final SecureRandom rand;
+
+    private final String CHAR_SET;
+    private final int PASSWORD_LENGTH;
+
+    public EmailService(JavaMailSender mailSender) {
+        this.javaMailSender = mailSender;
+        this.rand = new SecureRandom();
+        CHAR_SET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        PASSWORD_LENGTH = 10;
+    }
 
     public String sendURLToEmail(String email, Integer storeId,String encryptedEmail) {  // 리턴 타입을 void로 변경
         try {
@@ -36,6 +49,47 @@ public class EmailService {
         } catch (MessagingException e) {
             log.error("이메일 전송 실패: {}", e.getMessage());
             throw new RuntimeException("메일 발송에 실패했습니다.", e);
+        }
+    }
+
+
+
+    // 임의의 비밀번호 생성
+    public String makeRandomPassword() {
+        StringBuilder password = new StringBuilder(PASSWORD_LENGTH);
+
+        for(int i = 0; i < PASSWORD_LENGTH; i++) {
+            int randIdx = rand.nextInt(CHAR_SET.length());
+            password.append(CHAR_SET.charAt(randIdx));
+        }
+        return password.toString();
+    }
+
+    // mail 양식 설정
+    public String joinEmail(String email) {
+        String authPassword = makeRandomPassword();
+        String title = "[집계사장] 임시 비밀번호를 보내드립니다."; // 이메일 제목
+        String content =
+                "집계사장을 사용해주셔서 감사합니다. 🦀🍔🍟" +
+                        "<br><br> " +
+                        "임시 비밀번호는 " + authPassword + "입니다." +
+                        "<br> " +
+                        "보안을 위해 로그인 후에는 꼭 비밀번호를 변경해주세요!"; // 이메일 내용
+        mailSend(email, title, content);
+        return authPassword;
+    }
+
+    private void mailSend(String toMail, String title, String content) {
+        MimeMessage message = javaMailSender.createMimeMessage(); // MimeMessage 객체 생성
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
+            helper.setTo(toMail); // 이메일 수신자 주소 설정
+            helper.setSubject(title); // 이메일 주소 설정
+            helper.setText(content, true); // 이메일의 내용
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+            log.error("이메일 전송 실패: {}", e.getMessage());
+            throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
         }
     }
 
