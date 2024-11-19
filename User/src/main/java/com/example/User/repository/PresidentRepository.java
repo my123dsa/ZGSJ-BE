@@ -28,5 +28,10 @@ public interface PresidentRepository extends JpaRepository<President, Integer> {
     int updatePhoneNumberAndBirthDate(@Param("id") Integer id,
                                       @Param("phoneNumber") String phoneNumber,
                                       @Param("birthDate") LocalDate birthDate);
+
+    //jwt토큰에서 id로사장 name추출??
+     @Query("SELECT p.name FROM President p WHERE p.id = :id")
+     Optional<String> findNameById(@Param("id") Integer id);
+
 }
 

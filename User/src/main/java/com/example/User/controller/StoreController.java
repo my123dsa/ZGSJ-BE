@@ -23,29 +23,13 @@ import java.util.List;
 public class StoreController {
 
     private final StoreService storeService;
-    private final PresidentService presidentService;
-    private final EmailService emailService;
-    @PostMapping
-    private ResponseEntity<byte[]> store(@MasterId Integer id, @RequestBody StoreRequest storeRequest) {
-        List<Object> idAndEmail= storeService.registerStore(id,storeRequest);
-//      (int)idAndEmail.get(0),(String)idAndEmail.get(1)
-        byte[] image=emailService.sendQRToEmail("j0303p@gmail.com",4);
-//        return ResponseEntity.ok();
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_PNG)
-                .body(image);
-    }
-     @GetMapping("/resend-QR")
-     private ResponseEntity<byte[]> resendQRCode(@MasterId Integer id,@RequestParam("storeid") Integer storeId) {
-         log.info("id: {} ",id);
-         President president= presidentService.findById(id);
-         //president.getEmail(),storeId
-         byte[] image=emailService.sendQRToEmail(president.getEmail(),storeId);
 
-         return ResponseEntity.ok()
-                 .contentType(MediaType.IMAGE_PNG)
-                 .body(image);
-     }
+    @PostMapping
+    private ResponseEntity<Void> store(@MasterId Integer id, @RequestBody StoreRequest storeRequest) {
+        storeService.registerStore(id,storeRequest);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/storelist")
     private ResponseEntity<List<StoreResponse>> showStores(@MasterId Integer presidentId) {
         List<StoreResponse> storeResponse = storeService.showStores(presidentId);

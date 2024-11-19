@@ -40,7 +40,7 @@ public class President {
     @Column(name = "terms_accept", nullable = false)
     private Boolean termsAccept;
 
-    @OneToMany(mappedBy = "president")
+    @OneToMany(mappedBy = "president", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Store> stores = new ArrayList<>();
 
     private President(String name, String address, String email,String password,
