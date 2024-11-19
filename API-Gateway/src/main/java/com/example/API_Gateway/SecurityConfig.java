@@ -1,6 +1,7 @@
 package com.example.API_Gateway;
 
 import com.example.API_Gateway.filter.TokenCheckFilter;
+import com.example.API_Gateway.util.CryptoUtil;
 import com.example.API_Gateway.util.JWTUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,32 @@ import java.util.List;
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
+
+    @Bean
+    public TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil,CryptoUtil cryptoUtil) {
+        List<String> permitUrls = new ArrayList<>();
+        permitUrls.add("/president/login");
+        permitUrls.add("/president/regist");
+        permitUrls.add("commute/QRCheck");
+        permitUrls.add("/leave-work");
+        permitUrls.add("/go-to-work");
+        permitUrls.add("/president/id-find"); // id 찾기는 인증 없이도 가능하도록 해야하니까
+        permitUrls.add("/president/check/email");
+        permitUrls.add("/president/resetPassword");
+
+        List<String> needIdUrls = new ArrayList<>();
+        needIdUrls.add("/president/logout");
+        needIdUrls.add("/president/refresh");
+        needIdUrls.add("/president/modify");
+        needIdUrls.add("/president/change-password");
+        needIdUrls.add("/president/account-check");
+        needIdUrls.add("/user/store");
+        needIdUrls.add("/president/mypage");
+        needIdUrls.add("/president/secession");
+        needIdUrls.add("/user/account-check");
+
+        return new TokenCheckFilter(jwtUtil, permitUrls, needIdUrls, cryptoUtil);
+    }
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
@@ -44,31 +71,5 @@ public class SecurityConfig {
                 new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
-
-    @Bean
-    public TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil) {
-        List<String> permitUrls = new ArrayList<>();
-        permitUrls.add("/president/login");
-        permitUrls.add("/president/regist");
-        permitUrls.add("commute/QRCheck");
-        permitUrls.add("/leave-work");
-        permitUrls.add("/go-to-work");
-        permitUrls.add("/president/id-find"); // id 찾기는 인증 없이도 가능하도록 해야하니까
-        permitUrls.add("/president/check/email");
-        permitUrls.add("/president/resetPassword");
-
-        List<String> needIdUrls = new ArrayList<>();
-        needIdUrls.add("/president/logout");
-        needIdUrls.add("/president/refresh");
-        needIdUrls.add("/president/modify");
-        needIdUrls.add("/president/change-password");
-        needIdUrls.add("/president/account-check");
-        needIdUrls.add("/user/store");
-        needIdUrls.add("/president/mypage");
-        needIdUrls.add("/president/secession");
-        needIdUrls.add("/user/account-check");
-
-        return new TokenCheckFilter(jwtUtil, permitUrls, needIdUrls);
     }
 }
