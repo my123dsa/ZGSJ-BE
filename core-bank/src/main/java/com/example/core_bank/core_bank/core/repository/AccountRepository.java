@@ -12,4 +12,9 @@ import java.util.Optional;
 public interface AccountRepository extends JpaRepository<Account, Integer> {
     @Query("select a from Account a join fetch a.bank where a.accountNumber = :accountNumber")
     Optional<Account> findByAccountNumberWithBank(String accountNumber);
+
+    @Query("SELECT COUNT(a) > 0 FROM Account a " +
+            "JOIN a.bank b " +
+            "WHERE a.name = :name AND a.accountNumber = :accountNumber AND b.bankCode = :bankCode")
+    boolean existsByNameAndAccountNumberAndBankCode(String name, String accountNumber, String bankCode);
 }
