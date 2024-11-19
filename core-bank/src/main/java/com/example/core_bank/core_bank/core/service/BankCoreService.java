@@ -2,15 +2,20 @@ package com.example.core_bank.core_bank.core.service;
 
 import com.example.core_bank.core_bank.core.dto.transfer.TransferRequest;
 import com.example.core_bank.core_bank.core.model.Account;
+import com.example.core_bank.core_bank.core.model.Classfication;
+import com.example.core_bank.core_bank.core.model.TransactionHistory;
 import com.example.core_bank.core_bank.core.repository.AccountRepository;
 import com.example.core_bank.core_bank.core.repository.TransactionHistoryRepository;
 import com.example.core_bank.core_bank.global.error.CustomException;
 import com.example.core_bank.core_bank.global.error.ErrorCode;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +23,7 @@ public class BankCoreService {
 
     private final AccountRepository accountRepository;
     private final TransactionHistoryRepository transactionHistoryRepository;
+    private final EntityManager entityManager;
 
     @Transactional
     public LocalDate transfer(TransferRequest transferRequest) {
@@ -30,19 +36,25 @@ public class BankCoreService {
         validateBalance(fromAccount, transferRequest.getAmount());
 
         LocalDate now = LocalDate.now();
-
-        processTransfer(fromAccount, toAccount, transferRequest.getAmount(), now);
-
+        updateBalances(fromAccount, toAccount, transferRequest.getAmount());
+        createHistories(fromAccount, toAccount,transferRequest.getAmount(),now);
         return now;
     }
 
-    private void processTransfer(Account fromAccount, Account toAccount, Long amount, LocalDate now){
+    private void updateBalances(Account fromAccount, Account toAccount, Long amount){
         Long fromResult=fromAccount.getBalance() -amount;
         Long toResult=toAccount.getBalance() + amount;
         accountRepository.updateBalances(fromAccount.getId(),toAccount.getId(),fromResult,toResult);
+    }
 
-        transactionHistoryRepository.saveTransactionHistories(fromAccount.getId(),toAccount.getId(),
-                amount,3,26,now);
+    public void createHistories(Account fromAccount, Account toAccount,Long amount,LocalDate now) {
+        Classfication transfer = entityManager.getReference(Classfication.class, 3);
+        Classfication deposit = entityManager.getReference(Classfication.class, 26);
+        List<TransactionHistory> transactionHistories =Arrays.asList(TransactionHistory.createTransactionHistory
+                        (amount,now, false, "이체", fromAccount, transfer),
+                TransactionHistory.createTransactionHistory
+                        (amount,now, true, "입금", toAccount, deposit));
+        transactionHistoryRepository.saveAll(transactionHistories);
     }
 
     private void validateBalance(Account account, Long amount) {
