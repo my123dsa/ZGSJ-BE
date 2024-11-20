@@ -19,15 +19,15 @@ public class TransferRequest {
     private String toAccountDepositor;
     private String fromAccountDepositor;
 
-    public static TransferRequest from(BatchInputData batchInputData) {
+    public static TransferRequest from(BatchInputDataWithAllowance bidwa,BatchInputData bid) {
         return new TransferRequest(
-                batchInputData.getFromAccount(),
-                batchInputData.getFromBankCode(),
-                batchInputData.getToAccount(),
-                batchInputData.getToBankCode(),
-                batchInputData.getAmount(),
-                batchInputData.getToAccountDepositor(),
-                batchInputData.getFromAccountDepositor()
+                bid.getFromAccount(),
+                bid.getFromBankCode(),
+                bid.getToAccount(),
+                bid.getToBankCode(),
+                bidwa.getTotal(),
+                bid.getToAccountDepositor(),
+                bid.getFromAccountDepositor()
         );
     }
 }
