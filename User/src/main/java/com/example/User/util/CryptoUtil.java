@@ -65,7 +65,7 @@ public class CryptoUtil {
             Cipher cipher = Cipher.getInstance(ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, this.secretKey);
             byte[] encryptedBytes = cipher.doFinal(idBytes);
-            String s = Base64.getUrlEncoder().withoutPadding().encodeToString(encryptedBytes);
+            String s = Base64.getEncoder().encodeToString(encryptedBytes);
             return Map.of("payload", s);
         } catch (Exception e) {
             throw new CustomException(ErrorCode.INVALID_ENCRYPTION);
@@ -76,7 +76,7 @@ public class CryptoUtil {
         try {
             Cipher cipher = Cipher.getInstance(ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, this.secretKey);
-            byte[] decodedBytes = Base64.getUrlDecoder().decode(encryptedText);
+            byte[] decodedBytes = Base64.getDecoder().decode(encryptedText);
             byte[] decryptedBytes = cipher.doFinal(decodedBytes);
             ByteBuffer buffer = ByteBuffer.wrap(decryptedBytes);
             return buffer.getInt();

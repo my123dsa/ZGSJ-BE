@@ -30,7 +30,7 @@ public class CryptoUtil {
         try {
             Cipher cipher = Cipher.getInstance(ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, this.secretKey);
-            byte[] decodedBytes = Base64.getUrlDecoder().decode(encryptedText);
+            byte[] decodedBytes = Base64.getDecoder().decode(encryptedText);
             byte[] decryptedBytes = cipher.doFinal(decodedBytes);
             ByteBuffer buffer = ByteBuffer.wrap(decryptedBytes);
             return buffer.getInt();
