@@ -52,6 +52,8 @@ public class SecurityConfig {
                 .authorizeExchange(exchanges -> exchanges
                         .anyExchange().permitAll()
                 )
+                .formLogin( form-> form.disable())
+                .httpBasic(basic-> basic.disable())
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));
 

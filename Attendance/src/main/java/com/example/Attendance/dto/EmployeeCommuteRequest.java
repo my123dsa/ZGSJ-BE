@@ -11,4 +11,8 @@ public class EmployeeCommuteRequest {
     private Double latitude;
     @NotNull
     private Double longitude;
+    @NotNull
+    private Integer storeId;
+    @NotNull
+    private String email;
 }
