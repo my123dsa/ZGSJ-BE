@@ -14,19 +14,19 @@ public class BatchInputData {
     private Boolean employmentType;
     private String toAccount;
     private String toBankCode;
-    private Long amount;
+    private Long salary;
     private String toAccountDepositor;
     private String fromAccountDepositor;
 
     public BatchInputData(Integer seId, String fromAccount,Boolean employmentType, String fromBankCode, String toAccount,
-                          String toBankCode, Long amount, String toAccountDepositor, String fromAccountDepositor) {
+                          String toBankCode, Long salary, String toAccountDepositor, String fromAccountDepositor) {
         this.seId = seId;
         this.fromAccount = fromAccount;
         this.employmentType = employmentType;
         this.fromBankCode = fromBankCode;
         this.toAccount = toAccount;
         this.toBankCode = toBankCode;
-        this.amount = amount;
+        this.salary = salary;
         this.toAccountDepositor = toAccountDepositor;
         this.fromAccountDepositor = fromAccountDepositor;
     }
@@ -34,7 +34,7 @@ public class BatchInputData {
     public void changeSalary(Long commuteDuration){
         if (this.getEmploymentType()){ // true - 알바라고 가정
             // 분단위인데 시급 어케 줄지 기준이 30분 단위 들이다
-            this.amount*=commuteDuration/60;
+            this.salary*=commuteDuration/60;
         }
     }
 }
