@@ -2,6 +2,7 @@ package com.example.Attendance.service;
 
 import com.example.Attendance.dto.CommuteByPresidentRequest;
 import com.example.Attendance.dto.CommuteMonthlyResponse;
+import com.example.Attendance.dto.CommuteSummary;
 import com.example.Attendance.error.CustomException;
 import com.example.Attendance.error.ErrorCode;
 import com.example.Attendance.model.Commute;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -83,6 +85,14 @@ public class CommuteService {
     public List<CommuteMonthlyResponse> getMonthlyCommuteList(int storeId, int year, int month) {
         return commuteRepository.findMonthlyCommutesByStore(storeId,year,month)
                 .stream().map(CommuteMonthlyResponse::from).toList();
+    }
+    public List<CommuteSummary> findAllByCommuteDateBetween(List<Integer> employeeIds,LocalDate date){
+        LocalDate startDate = date.minusMonths(1); // 지난 달의 오늘 날짜부터
+        LocalDate endDate = date.minusDays(1); // 오늘 날짜의 하루 전까지
+        // 오늘이 11월 13일이라면 10월 13일 ~ 11월 12일까지
+
+        // 출퇴근 데이터 조회
+        return commuteRepository.findAllByCommuteDateBetween(startDate, endDate, employeeIds);
     }
 }
 
