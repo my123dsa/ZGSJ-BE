@@ -28,7 +28,7 @@ public interface StoreEmployeeRepository extends JpaRepository<StoreEmployee, In
 //    List<StoreEmployee> findAllByPaymentDate(Integer paymentDate);
 
     @Query("SELECT new com.example.Attendance.dto.BatchInputData(" +
-            "se.id, s.accountNumber, se.employmentType,'020', se.accountNumber, se.bankCode, " +
+            "se.id, s.accountNumber,'020',se.employmentType, se.accountNumber, se.bankCode, " +
             "se.salary, se.name, p.name) " +
             "FROM StoreEmployee se " +
             "JOIN se.store s " +
