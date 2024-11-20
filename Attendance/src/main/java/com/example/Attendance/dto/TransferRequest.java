@@ -19,13 +19,13 @@ public class TransferRequest {
     private String toAccountDepositor;
     private String fromAccountDepositor;
 
-    public static TransferRequest from(BatchInputDataWithAllowance bidwa,BatchInputData bid) {
+    public static TransferRequest from(Long amount,BatchInputData bid) {
         return new TransferRequest(
                 bid.getFromAccount(),
                 bid.getFromBankCode(),
                 bid.getToAccount(),
                 bid.getToBankCode(),
-                bidwa.getTotal(),
+                amount,
                 bid.getToAccountDepositor(),
                 bid.getFromAccountDepositor()
         );
