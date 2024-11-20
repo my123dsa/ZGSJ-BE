@@ -13,13 +13,17 @@ import java.util.List;
 @Component
 @JobScope   // Job 스코프로 생성
 @Getter
-@Setter
+
 public class BatchJobState {
     private List<BatchInputData> employees;
     private int currentIndex = 0;
     private LocalDate localDate;
     private List<CommuteSummary> commutes;
     private List<Integer> employeeIds;
+
+    public void setCommutes(List<CommuteSummary> commutes) {
+        this.commutes = commutes;
+    }
 
     public void setEmployees(List<BatchInputData> employees) {
         this.employees = employees;
@@ -42,5 +46,12 @@ public class BatchJobState {
                 .map(CommuteSummary::getCommuteDuration)
                 .findFirst()
                 .orElse(0L);
+    }
+    public void reset(){
+        this.currentIndex = 0;
+        this.employees = null;
+        this.commutes = null;
+        this.localDate = null;
+        this.employeeIds= null;
     }
 }
