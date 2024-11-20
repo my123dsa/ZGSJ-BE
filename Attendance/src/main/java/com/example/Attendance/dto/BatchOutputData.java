@@ -17,27 +17,26 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class BatchOutputData {
     private Integer seId;
     private Integer status;
     private LocalDateTime issuanceDate;
     private String message;
-    private Long amount;
 
-    public BatchOutputData(Integer seId, Integer status, LocalDateTime issuanceDate, String message, Long amount) {
-        this.seId = seId;
-        this.status = status;
-        this.issuanceDate = issuanceDate;
-        this.message = message;
-        this.amount = amount;
-    }
+    private Long total;
+    private Long salary;
+    private Long allowance;
+    private Long charge;
 
-    public static BatchOutputData of(Integer seId, Long amount, TransferResponse transferResponse) {
+    public static BatchOutputData of(BatchInputDataWithAllowance bidwa, TransferResponse transferResponse,Integer seId) {
 
-        return new BatchOutputData(seId, transferResponse.getStatus(), LocalDateTime.now(), transferResponse.getMessage(), amount);
+        return new BatchOutputData(seId, transferResponse.getStatus(),
+                transferResponse.getIssuanceDate(), transferResponse.getMessage(), bidwa.getTotal()
+                ,bidwa.getSalary(),bidwa.getAllowance(),bidwa.getCharge());
     }
 
     public PayStatement toEntity() {
-        return PayStatement.createPayStatement("12342412", this.getIssuanceDate().toLocalDate(),this.getSeId(), this.getAmount().intValue());
+        return PayStatement.createPayStatement("12342412", this.getIssuanceDate().toLocalDate(),this.getSeId(), this.getTotal().intValue());
     }
 }
