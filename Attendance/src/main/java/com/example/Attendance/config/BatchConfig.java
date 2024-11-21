@@ -1,5 +1,6 @@
 package com.example.Attendance.config;
 
+import com.example.Attendance.service.AttendanceConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.launch.JobLauncher;
@@ -37,5 +38,10 @@ public class BatchConfig {
         launcher.setJobRepository(jobRepository);
         launcher.afterPropertiesSet();
         return launcher;
+    }
+
+    @Bean
+    public AttendanceConstants attendanceConstants() {
+        return new AttendanceConstants();
     }
 }
