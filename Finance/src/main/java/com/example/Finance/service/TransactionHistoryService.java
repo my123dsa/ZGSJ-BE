@@ -3,6 +3,7 @@ package com.example.Finance.service;
 import com.example.Finance.dto.TransactionChartResponse;
 import com.example.Finance.dto.TransactionHistoryRequest;
 import com.example.Finance.dto.TransactionHistoryResponse;
+import com.example.Finance.dto.TransactionHistoryWithCounterPartyResponse;
 import com.example.Finance.feign.CoreBankFeign;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -68,6 +69,16 @@ public class TransactionHistoryService {
     {
         return coreBankFeign.getTransactionHistoryList(transactionHistoryRequest, year, month);
     }
+
+    //요청받은 request로, feign으로 송,수취인 이름 포함된 거래내역 받아오기<11-21에 만들어버리기!>
+    public List<TransactionHistoryWithCounterPartyResponse> getYearMonthlyTransactionsWithCounterPartyName(
+            TransactionHistoryRequest transactionHistoryRequest,
+            Integer year,
+            Integer month)
+    {
+        return coreBankFeign.getTransactionHistoryYearSalesListWithCounterParty(transactionHistoryRequest, year, month);
+    }
+
     public List<TransactionHistoryResponse> getYearlyTransactions(
             TransactionHistoryRequest transactionHistoryRequest,
             Integer year
