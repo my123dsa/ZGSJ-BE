@@ -2,7 +2,9 @@ package com.example.Finance.feign;
 
 import com.example.Finance.dto.TransactionHistoryRequest;
 import com.example.Finance.dto.TransactionHistoryResponse;
+import com.example.Finance.dto.TransactionHistoryWithCounterPartyResponse;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,4 +26,10 @@ public interface CoreBankFeign {
     List<TransactionHistoryResponse> getTransactionHistoryYearSalesList
             (@RequestBody TransactionHistoryRequest transactionHistoryRequest,
              @RequestParam Integer year);
+
+    @PostMapping("/year/list-counterparty")
+    public List<TransactionHistoryWithCounterPartyResponse> getTransactionHistoryYearSalesListWithCounterParty
+            (@RequestBody TransactionHistoryRequest request,
+             @RequestParam Integer year,
+             @RequestParam Integer month);
 }
