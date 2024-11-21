@@ -1,0 +1,89 @@
+package com.example.core_bank.core_bank.core.service;
+
+import com.example.core_bank.core_bank.core.dto.transfer.TransferRequest;
+import com.example.core_bank.core_bank.core.model.Account;
+import com.example.core_bank.core_bank.core.model.Classfication;
+import com.example.core_bank.core_bank.core.model.TransactionHistory;
+import com.example.core_bank.core_bank.core.repository.AccountRepository;
+import com.example.core_bank.core_bank.core.repository.TransactionHistoryRepository;
+import com.example.core_bank.core_bank.global.error.CustomException;
+import com.example.core_bank.core_bank.global.error.ErrorCode;
+import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class BankCoreService {
+
+    private final AccountRepository accountRepository;
+    private final TransactionHistoryRepository transactionHistoryRepository;
+    private final EntityManager entityManager;
+
+    @Transactional
+    public LocalDate transfer(TransferRequest transferRequest) {
+
+        // 리스트 정렬해서 받음.
+        // 여기 로직 더 효율적이게 변경 되어야함
+        Account fromAccount = findFromAccount(transferRequest);
+        Account toAccount = findToAccount(transferRequest);
+
+        validateBalance(fromAccount, transferRequest.getAmount());
+
+        LocalDate now = LocalDate.now();
+        updateBalances(fromAccount, toAccount, transferRequest.getAmount());
+        createHistories(fromAccount, toAccount,transferRequest.getAmount(),now);
+        return now;
+    }
+
+    private void updateBalances(Account fromAccount, Account toAccount, Long amount){
+        Long fromResult=fromAccount.getBalance() -amount;
+        Long toResult=toAccount.getBalance() + amount;
+        accountRepository.updateBalances(fromAccount.getId(),toAccount.getId(),fromResult,toResult);
+    }
+
+    private void createHistories(Account fromAccount, Account toAccount,Long amount,LocalDate now) {
+        Classfication transfer = entityManager.getReference(Classfication.class, 3);
+        Classfication deposit = entityManager.getReference(Classfication.class, 26);
+        List<TransactionHistory> transactionHistories =Arrays.asList(TransactionHistory.createTransactionHistory
+                        (amount,now, false, "이체", fromAccount, transfer),
+                TransactionHistory.createTransactionHistory
+                        (amount,now, true, "입금", toAccount, deposit));
+        transactionHistoryRepository.saveAll(transactionHistories);
+    }
+
+    private void validateBalance(Account account, Long amount) {
+        if (account.getBalance() < amount) {
+            throw new CustomException(ErrorCode.INSUFFICIENT_BALANCE);
+        }
+    }
+
+    private Account findAccount(String accountNumber, String bankCode, String depositorName) {
+        return accountRepository.findByAccountNumberAndBankCodeAndName(
+                        accountNumber,
+                        bankCode,
+                        depositorName)
+                .orElseThrow(() -> new CustomException(ErrorCode.ACCOUNT_NOT_FOUND));
+    }
+
+    private Account findFromAccount(TransferRequest request){
+        return findAccount(
+                request.getFromAccount(),
+                request.getFromBankCode(),
+                request.getFromAccountDepositor()
+        );
+    }
+
+    private Account findToAccount(TransferRequest request) {
+        return findAccount(
+                request.getToAccount(),
+                request.getToBankCode(),
+                request.getToAccountDepositor()
+        );
+    }
+}
