@@ -47,7 +47,8 @@ public class StoreEmployee {
     private Integer salary;
 
     @Column(name = "employment_type", nullable = false)
-    private Boolean employmentType;
+    @Min(0)
+    private Byte employmentType;
 
     @Column(name = "bank_code", nullable = false, length = 50)
     private String bankCode;
@@ -65,7 +66,7 @@ public class StoreEmployee {
     private Store store;
 
     private StoreEmployee(String name, Boolean sex, String address, LocalDate birthDate, String phoneNumber,
-                          String email, Integer salary, Boolean employmentType, String bankCode,
+                          String email, Integer salary, Byte employmentType, String bankCode,
                           String accountNumber, Integer paymentDate, Store store) {
         this.name = name;
         this.sex = sex;
@@ -83,7 +84,7 @@ public class StoreEmployee {
 
     public static StoreEmployee createStoreEmployee(String name, Boolean sex, String address, LocalDate birthDate,
                                                     String phoneNumber, String email, Integer salary,
-                                                    Boolean employmentType, String bankCode, String accountNumber,
+                                                    Byte employmentType, String bankCode, String accountNumber,
                                                     Integer paymentDate, Store store) {
         return new StoreEmployee(name, sex, address, birthDate, phoneNumber, email, salary,
                 employmentType, bankCode, accountNumber, paymentDate, store);

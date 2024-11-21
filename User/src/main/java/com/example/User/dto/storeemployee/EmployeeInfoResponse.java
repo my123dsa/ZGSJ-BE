@@ -19,7 +19,7 @@ public class EmployeeInfoResponse {
     private String phoneNumber;
     private String email;
     private Integer salary;
-    private Boolean employmentType;
+    private Byte employmentType;
     private String bankCode;
     private String accountNumber;
     private Integer paymentDate;
