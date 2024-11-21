@@ -15,11 +15,12 @@ public class BatchInputDataWithAllowance {
     private Long allowance;
     private Long charge;
 
+
     public static BatchInputDataWithAllowance of(
             Long allowance, Long total, Long salary,
-            Long nationalCharge, Long insuranceCharge,Long employmentCharge) {
+            Long nationalCharge, Long insuranceCharge,Long employmentCharge,Long incomeTax) {
 
-        Long charge = employmentCharge + insuranceCharge + nationalCharge;
+        Long charge = employmentCharge + insuranceCharge + nationalCharge+incomeTax;
         return new BatchInputDataWithAllowance(total, salary, allowance, charge);
     }
 }
