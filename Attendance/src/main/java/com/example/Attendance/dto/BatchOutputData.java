@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 public class BatchOutputData {
     private Integer seId;
     private Integer status;
-    private LocalDateTime issuanceDate;
+    private LocalDate issuanceDate;
     private String message;
     // 일 한 기록
     //이름 //전화번호, 생년월일 필요함
@@ -34,6 +35,6 @@ public class BatchOutputData {
     }
 
     public PayStatement toEntity() {
-        return PayStatement.createPayStatement("12342412", this.getIssuanceDate().toLocalDate(),this.getSeId(), this.getTotal().intValue());
+        return PayStatement.createPayStatement("12342412", this.getIssuanceDate(),this.getSeId(), this.getTotal().intValue());
     }
 }
