@@ -21,7 +21,7 @@ public class TransactionHistory {
     private LocalDate transactionDate ;
 
     @Column(name= "amount", nullable = false)
-    private Integer amount;
+    private Long amount;
 
     @Column(columnDefinition = "TINYINT(1)", name = "is_deposit", nullable = false)
     private Boolean isDeposit;
@@ -40,9 +40,9 @@ public class TransactionHistory {
     @JoinColumn(name = "classfication_id")
     private Classfication classfication;
 
-    public TransactionHistory(LocalDate transactionDate, Integer amount, boolean isDeposit, String transactionType, String counterpartyName, Account account, Classfication classfication) {
+    public TransactionHistory(LocalDate transactionDate, Long amount, boolean isDeposit, String transactionType, String counterpartyName, Account account, Classfication classfication) {
         this.transactionDate = transactionDate;
-        this.amount = amount;
+        this.amount= amount;
         this.isDeposit = isDeposit;
         this.transactionType = transactionType;
         this.counterpartyName = counterpartyName;
@@ -50,7 +50,7 @@ public class TransactionHistory {
         this.classfication = classfication;
     }
 
-    public static TransactionHistory createTransactionHistory(LocalDate transactionDate, Integer amount, boolean isDeposit, String transactionType, String counterpartyName, Account account, Classfication classfication)
+    public static TransactionHistory createTransactionHistory(LocalDate transactionDate, Long amount, boolean isDeposit, String transactionType, String counterpartyName, Account account, Classfication classfication)
     {
         return new TransactionHistory(transactionDate, amount, isDeposit, transactionType, counterpartyName, account, classfication);
     }
