@@ -47,7 +47,7 @@ public class BankCoreService {
         accountRepository.updateBalances(fromAccount.getId(),toAccount.getId(),fromResult,toResult);
     }
 
-    public void createHistories(Account fromAccount, Account toAccount,Long amount,LocalDate now) {
+    private void createHistories(Account fromAccount, Account toAccount,Long amount,LocalDate now) {
         Classfication transfer = entityManager.getReference(Classfication.class, 3);
         Classfication deposit = entityManager.getReference(Classfication.class, 26);
         List<TransactionHistory> transactionHistories =Arrays.asList(TransactionHistory.createTransactionHistory
