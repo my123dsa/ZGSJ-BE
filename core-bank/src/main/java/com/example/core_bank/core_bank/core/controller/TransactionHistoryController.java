@@ -56,7 +56,7 @@ public class TransactionHistoryController {
     }
 
     //간편장부를 위한 데이터 전송(이름포함) + feign이므로 response entity에 보내지 않음
-    @PostMapping("/year/list-counterparty")
+    @PostMapping("/list-counterparty")
     public List<TransactionHistoryWithCounterPartyResponse> getTransactionHistoryYearSalesListWithCounterParty
             (@RequestBody TransactionHistoryRequest request,
              @RequestParam Integer year,
