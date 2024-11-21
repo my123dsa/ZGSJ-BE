@@ -94,12 +94,14 @@ public class CommuteService {
                     StoreEmployee employee = commute.getStoreEmployee();
                     Long commuteAmount;
 
-                    if (!employee.getEmploymentType()) {  //0이면시급
+                    // 여기 로직 바꿔야함
+                    /////////////
+                    if (employee.getEmploymentType()== 0) {  //0이면시급
                         commuteAmount = Math.round((employee.getSalary() * commute.getCommuteDuration()) / 60.0);
                     } else {  //1(true)면 월급
                         commuteAmount = employee.getSalary();
                     }
-
+                    //////
                     return new CommuteDailyResponse(
                             commute.getId(),
                             employee.getName(),
