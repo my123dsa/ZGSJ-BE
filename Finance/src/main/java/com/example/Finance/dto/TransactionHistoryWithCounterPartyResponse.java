@@ -5,9 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class TransactionHistoryWithCounterPartyResponse extends TransactionHistoryRequest {
+public class TransactionHistoryWithCounterPartyResponse extends TransactionHistoryResponse {
     private String counterpartyName;
 
+    public TransactionHistoryWithCounterPartyResponse(String transactionDate, Integer amount, Boolean isDeposit, String transactionType, String classificationName) {
+        super(transactionDate, amount, isDeposit, transactionType, classificationName);
+    }
 }
