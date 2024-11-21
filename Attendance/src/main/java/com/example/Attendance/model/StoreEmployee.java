@@ -50,7 +50,7 @@ public class StoreEmployee {
 
 
     @Column(name = "birth_date",nullable = false)
-    private LocalDate brithDate;
+    private LocalDate birthDate;
 
     @Column(name = "phone_number",nullable = false,length = 50)
     private String phoneNumber;
