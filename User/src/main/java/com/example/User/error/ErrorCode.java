@@ -20,6 +20,7 @@ public enum ErrorCode {
     SNAPSHOT_NOT_FOUND(404, "존재하지 않는 스냅샷 ID 입니다."),
     PRESIDENT_NOT_FOUND(404, "사장님을 찾을 수 없습니다."),
     STORE_NOT_FOUND(404, "가게를 찾을 수 없습니다."),
+    ACCOUNT_NOT_FOUND(404,"계좌를 찾을 수 없습니다."),
 
     DUPLICATE_STORE_NAME(409, "이미 존재하는 가게 이름입니다."),
 
@@ -44,7 +45,14 @@ public enum ErrorCode {
     INVALID_REQUEST(400, "잘못된 요청입니다"),
     INVALID_NUMBER_FORMAT(400, "숫자 형식이 올바르지 않습니다"),
     INVALID_EMPLOYEE(400,"직원 정보가 없음"),
-    PASSWORD_CONFIRM_NOT_MATCH(400,"새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+    PASSWORD_CONFIRM_NOT_MATCH(400,"새 비밀번호와 확인 비밀번호가 일치하지 않습니다."),
+    BANK_ERROR(404,"은행쪽 에러입니다."),
+    UNACCEPT_TOKEN(401, "Token is null or too short"),
+    BADTYPE_BEARER(401, "Token type Bearer"),
+    MALFORM_TOKEN(403, "Malformed Token"),
+    BADSIGN_TOKEN(403, "BadSignatured Token"),
+    EXPIRED_TOKEN(403, "Expired Token"),
+    ;
 
 
     private final int status;

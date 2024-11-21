@@ -3,8 +3,10 @@ package com.example.User.service;
 
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
+import com.example.User.util.CryptoUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -14,60 +16,34 @@ import java.security.SecureRandom;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class EmailService {
 
     private final JavaMailSender javaMailSender;
-    private final SecureRandom rand;
-
-    private final String CHAR_SET;
-    private final int PASSWORD_LENGTH;
-
-    public EmailService(JavaMailSender mailSender) {
-        this.javaMailSender = mailSender;
-        this.rand = new SecureRandom();
-        CHAR_SET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-        PASSWORD_LENGTH = 10;
+    private final CryptoUtil cryptoUtil;
+    public String sendPinNumberToEmail(String email){
+        String title ="[집계사장]직원 PinNumber";
+        String pinNumber=cryptoUtil.makeRandomInteger();
+        String content =
+                "집계사장을 사용해주셔서 감사합니다. 🦀🍔🍟" +
+                        "<br><br> " +
+                        "인증 번호는 " + pinNumber + "입니다." +
+                        "<br> "; // 이메일 내용
+        mailSend(email, title, content);
+        return pinNumber;
     }
 
     public String sendURLToEmail(String email, Integer storeId,String encryptedEmail) {  // 리턴 타입을 void로 변경
-        try {
-
-            String ip="localhost";
-            String url = String.format("http://%s:8888/%d/commute/%s",ip, storeId, encryptedEmail);
-
-            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-            helper.setTo(email);
-            helper.setSubject("[집계사장]직원 URL");
-
-            helper.setText(createHTML(url), true);
-
-            javaMailSender.send(mimeMessage);
-            log.info("이메일 전송 완료: {}", email);
-            return url;
-        } catch (MessagingException e) {
-            log.error("이메일 전송 실패: {}", e.getMessage());
-            throw new RuntimeException("메일 발송에 실패했습니다.", e);
-        }
-    }
-
-
-
-    // 임의의 비밀번호 생성
-    public String makeRandomPassword() {
-        StringBuilder password = new StringBuilder(PASSWORD_LENGTH);
-
-        for(int i = 0; i < PASSWORD_LENGTH; i++) {
-            int randIdx = rand.nextInt(CHAR_SET.length());
-            password.append(CHAR_SET.charAt(randIdx));
-        }
-        return password.toString();
+        String ip="localhost";
+        String url = String.format("http://%s:3000/employee/%d/commute/%s",ip, storeId, encryptedEmail);
+        String title ="[집계사장]직원 URL";
+        mailSend(email, title, createHTML(url));
+        return url;
     }
 
     // mail 양식 설정
-    public String joinEmail(String email) {
-        String authPassword = makeRandomPassword();
+    public String temporaryPasswordEmail(String email) {
+        String authPassword = cryptoUtil.makeRandomPassword();
         String title = "[집계사장] 임시 비밀번호를 보내드립니다."; // 이메일 제목
         String content =
                 "집계사장을 사용해주셔서 감사합니다. 🦀🍔🍟" +

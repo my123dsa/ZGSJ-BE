@@ -22,24 +22,25 @@ public class StoreEmployeeController {
     private final StoreEmployeeService storeEmployeeService;
     private final CommuteService commuteService;
 
-    @PostMapping("/{storeid}/go-to-work/{encryptemail}")
-    public ResponseEntity<String> goToWork(@PathVariable("storeid") Integer storeId
-            , @RequestBody EmployeeCommuteRequest commuteRequest
-            ,@PathVariable("encryptemail")String encryptEmail){
-        StoreEmployee storeEmployee=storeEmployeeService.findStoreEmployeeByEmailAndStoreId(storeId,commuteRequest,encryptEmail);
+    @PostMapping("/go-to-work")
+    public ResponseEntity<String> goToWork(@RequestBody EmployeeCommuteRequest commuteRequest
+            ){
+        log.info("컷");
+        log.info("commuteRequest: {} {}", commuteRequest.getEmail(),commuteRequest.getStoreId());
+        StoreEmployee storeEmployee=storeEmployeeService.findStoreEmployeeByEmailAndStoreId(commuteRequest.getStoreId(),commuteRequest,commuteRequest.getEmail());
         boolean result= commuteService.goToWork(storeEmployee);
         if(!result){
+            log.info("컷");
             return ResponseEntity.status(HttpStatus.ACCEPTED)
                     .body("이전 퇴근을 찍지 않았습니다 사장님께 연락해주세요");
         }
+
         return ResponseEntity.ok("출근이 찍혔습니다");
     }
 
-    @PostMapping("/{storeid}/leave-work/{encryptemail}")
-    public ResponseEntity<Void> leaveWork(@PathVariable("storeid") Integer storeId
-            ,@RequestBody EmployeeCommuteRequest commuteRequest
-            ,@PathVariable("encryptemail")String encryptEmail){
-        StoreEmployee storeEmployee=storeEmployeeService.findStoreEmployeeByEmailAndStoreId(storeId,commuteRequest,encryptEmail);
+    @PostMapping("/leave-work")
+    public ResponseEntity<Void> leaveWork(@RequestBody EmployeeCommuteRequest commuteRequest){
+        StoreEmployee storeEmployee=storeEmployeeService.findStoreEmployeeByEmailAndStoreId(commuteRequest.getStoreId(),commuteRequest,commuteRequest.getEmail());
         commuteService.leaveWork(storeEmployee);
         return ResponseEntity.ok().build();
     }

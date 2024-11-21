@@ -25,4 +25,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .message(errorCode.getMessage())
                 .build();
     }
+
+    //여기 특정 에러 ex index에러 같은 거 추가
+    // 그리고 최종적으로 Exception 적음
 }
