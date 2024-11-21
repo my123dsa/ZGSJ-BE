@@ -151,11 +151,11 @@ public class CommuteServiceTest {
         //mock 데이터만들기
         StoreEmployee regularEmployee = Mockito.mock(StoreEmployee.class);
         when(regularEmployee.getName()).thenReturn("김정규");
-        when(regularEmployee.getEmploymentType()).thenReturn(true);
+        when(regularEmployee.getEmploymentType()).thenReturn((byte)1);
         when(regularEmployee.getSalary()).thenReturn(3000000L);
         StoreEmployee partTimeEmployee = Mockito.mock(StoreEmployee.class);
         when(partTimeEmployee.getName()).thenReturn("이알바");
-        when(partTimeEmployee.getEmploymentType()).thenReturn(false);
+        when(partTimeEmployee.getEmploymentType()).thenReturn((byte)1);
         when(partTimeEmployee.getSalary()).thenReturn(12000L);
 
         List<Commute> commutes = Arrays.asList(
@@ -182,13 +182,13 @@ public class CommuteServiceTest {
         CommuteDailyResponse regularResult = result.get(0);
         assertThat(regularResult.getName()).isEqualTo("김정규");
         assertThat(regularResult.getCommuteAmount()).isEqualTo(3000000);
-        assertThat(regularResult.isEmployeeType()).isTrue();
+        assertThat(regularResult.getEmployeeType()).isEqualTo(1);
         assertThat(regularResult.getCommuteDuration()).isEqualTo(540L);
 
         CommuteDailyResponse partTimeResult = result.get(1);
         assertThat(partTimeResult.getName()).isEqualTo("이알바");
         assertThat(partTimeResult.getCommuteAmount()).isEqualTo(72000);
-        assertThat(partTimeResult.isEmployeeType()).isFalse();
+        assertThat(partTimeResult.getEmployeeType()).isEqualTo(1);
         assertThat(partTimeResult.getCommuteDuration()).isEqualTo(360L);
 
     }

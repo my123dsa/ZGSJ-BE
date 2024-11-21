@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "store_employee",
         uniqueConstraints = {
@@ -32,7 +34,8 @@ public class StoreEmployee {
     private Long salary;
 
     @Column(name = "employment_type", nullable = false)
-    private Boolean employmentType;
+    @Min(0)
+    private Byte employmentType;
 
     @Column(name = "bank_code", length = 50, nullable = false)
     private String bankCode;
@@ -44,6 +47,13 @@ public class StoreEmployee {
     @Min(1)
     @Max(28)
     private Integer paymentDate;
+
+
+    @Column(name = "birth_date",nullable = false)
+    private LocalDate brithDate;
+
+    @Column(name = "phone_number",nullable = false,length = 50)
+    private String phoneNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
