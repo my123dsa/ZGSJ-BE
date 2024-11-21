@@ -2,6 +2,7 @@ package com.example.core_bank.core_bank.core.controller;
 
 import com.example.core_bank.core_bank.core.dto.TransactionHistoryRequest;
 import com.example.core_bank.core_bank.core.dto.TransactionHistoryResponse;
+import com.example.core_bank.core_bank.core.dto.TransactionHistoryWithCounterPartyResponse;
 import com.example.core_bank.core_bank.core.service.TransactionHistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,5 +53,19 @@ public class TransactionHistoryController {
 
         return ResponseEntity.ok(transactionHistoryRes);
 
+    }
+
+    //간편장부를 위한 데이터 전송(이름포함) + feign이므로 response entity에 보내지 않음
+    @PostMapping("/year/list-counterparty")
+    public List<TransactionHistoryWithCounterPartyResponse> getTransactionHistoryYearSalesListWithCounterParty
+            (@RequestBody TransactionHistoryRequest request,
+             @RequestParam Integer year,
+             @RequestParam Integer month)
+    {
+        String bankCode = request.getBankCode();
+        String accountNumber = request.getAccount();
+
+        return transactionHistoryService
+                .getTransactionHistoryWithCounterParty(bankCode, accountNumber, year,month);
     }
 }
