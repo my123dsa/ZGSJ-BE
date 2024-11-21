@@ -26,13 +26,15 @@ public class BigService {
         Long insuranceCharge = insuranceCharge(total);
         Long employmentCharge = employmentCharge(total);
         Long incomeTax=incomeTax(total,bid.getEmploymentType());
+        log.info("계산 값: total: {} salary: {} nation: {} insurance: {} employmentCharge: {} incomeTax: {}",
+                total, salary, nationalCharge, insuranceCharge, employmentCharge ,incomeTax);
         return BatchInputDataWithAllowance.of
                 (allowance, total, salary, nationalCharge, insuranceCharge, employmentCharge,incomeTax);
     }
 
     public long incomeTax(Long total,Byte type){
 
-        if (type==1){
+        if (type==4){
             return 0L;
         } else if (type==2){
             return Math.round(total*0.033);

@@ -41,8 +41,8 @@ public class BatchJobState {
     }
 
     public Long getCommuteDuration(Integer seId) {
-        return this.getCommutes().stream()
-                .filter(commuteSummary -> commuteSummary.getEmployeeId().equals(seId))
+        return commutes.stream()
+                .filter(cs -> cs.getEmployeeId().equals(seId))
                 .map(CommuteSummary::getCommuteDuration)
                 .findFirst()
                 .orElse(0L);
