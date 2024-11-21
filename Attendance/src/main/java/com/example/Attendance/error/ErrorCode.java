@@ -31,7 +31,9 @@ public enum ErrorCode {
     API_SERVER_ERROR(400,"금융 서버 오류 "),
     INVALID_ENCRYPTION(401,"암호화가 유효하지 않습니다."),
     INVALID_DECRYPTION(401,"복호화가 유효하지 않습니다."),
-    INVALID_PAY_STATEMENT(400, "급여 기록 없음");
+    INVALID_PAY_STATEMENT(400, "급여 기록 없음"),
+    INSUFFICIENT_BALANCE(400, "출금 금액이 잔액보다 큽니다."),
+    ACCOUNT_NOT_FOUND(404, "계좌 정보를 찾을 수 없습니다."),;
 
     private final int status;
     private final String message;
