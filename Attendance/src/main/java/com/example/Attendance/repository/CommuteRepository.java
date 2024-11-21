@@ -46,13 +46,12 @@ public interface CommuteRepository extends JpaRepository<Commute, Integer> {
             @Param("endDate")LocalDate endDate,
             @Param("employeeIds") List<Integer> employeeIds);
 
-//    @Query("SELECT c " +
-//            "FROM Commute c " +
-//            "WHERE c.commuteDate BETWEEN :startDate AND :endDate AND c.storeEmployee.id IN :employeeIds"
-//    )
-//    List<Commute> findAllByCommuteDateBetweenAll(
-//            @Param("startDate")LocalDate startDate,
-//            @Param("endDate")LocalDate endDate,
-//            @Param("employeeIds") List<Integer> employeeIds);
-
+    @Query("SELECT c FROM Commute c " +
+            "JOIN FETCH c.storeEmployee se " +
+            "WHERE se.store.id = :storeId " +
+            "AND c.commuteDate = :commuteDate")
+    List<Commute> findByStoreIdAndCommuteDate(
+            @Param("storeId") Integer storeId,
+            @Param("commuteDate") LocalDate commuteDate
+    );
 }
