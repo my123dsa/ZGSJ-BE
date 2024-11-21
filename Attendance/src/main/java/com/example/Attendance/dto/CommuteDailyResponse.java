@@ -17,7 +17,7 @@ public class CommuteDailyResponse {
     private LocalDateTime endTime;
     private Long commuteDuration;
     private Long commuteAmount;
-    private boolean employeeType; //0이 시급 1이 월급
+    private Byte employeeType; //0이 시급 1이 월급
 
     public static CommuteDailyResponse from(Commute commute, Long commuteAmount) {
         return new CommuteDailyResponse(

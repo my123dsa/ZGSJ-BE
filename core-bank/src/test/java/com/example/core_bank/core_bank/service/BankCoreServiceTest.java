@@ -3,9 +3,12 @@ package com.example.core_bank.core_bank.service;
 import com.example.core_bank.core_bank.core.dto.transfer.TransferRequest;
 import com.example.core_bank.core_bank.core.model.Account;
 import com.example.core_bank.core_bank.core.model.Bank;
+import com.example.core_bank.core_bank.core.model.Classfication;
 import com.example.core_bank.core_bank.core.repository.AccountRepository;
+import com.example.core_bank.core_bank.core.repository.TransactionHistoryRepository;
 import com.example.core_bank.core_bank.core.service.BankCoreService;
 import com.example.core_bank.core_bank.global.error.CustomException;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +31,11 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class BankCoreServiceTest {
 
+    @Mock
+    private TransactionHistoryRepository transactionHistoryRepository;
 
+    @Mock
+    private EntityManager entityManager;
     @Mock
     private AccountRepository accountRepository;
 
@@ -83,7 +90,11 @@ public class BankCoreServiceTest {
                 transferRequest.getToAccountDepositor()))
                 .willReturn(Optional.of(toAccount));
 
-        doNothing().when(bankCoreService).createHistories(any(), any(), any(), any());
+        Classfication transfer = new Classfication();
+        Classfication deposit = new Classfication();
+        when(entityManager.getReference(Classfication.class, 3)).thenReturn(transfer);
+        when(entityManager.getReference(Classfication.class, 26)).thenReturn(deposit);
+
         // when
         LocalDate result = bankCoreService.transfer(transferRequest);
 
