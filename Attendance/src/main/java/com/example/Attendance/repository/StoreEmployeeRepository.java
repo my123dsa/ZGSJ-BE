@@ -35,4 +35,12 @@ public interface StoreEmployeeRepository extends JpaRepository<StoreEmployee, In
             "JOIN s.president p " +
             "WHERE se.paymentDate = :paymentDate")
     List<BatchInputData> findAllBatchInputDataByPaymentDate(@Param("paymentDate") Integer paymentDate);
+
+//    @Query("SELECT DISTINCT  se FROM StoreEmployee se " +
+//            "JOIN FETCH se.commutes c " +
+//            "JOIN FETCH se.store s " +
+//            "JOIN FETCH s.president p " +
+//            "WHERE se.paymentDate = :paymentDate")
+//    List<StoreEmployee> findAllBatchInputDataByPaymentDateBeta(@Param("paymentDate") Integer paymentDate);
+
 }

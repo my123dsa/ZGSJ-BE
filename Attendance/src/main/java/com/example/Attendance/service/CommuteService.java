@@ -95,33 +95,5 @@ public class CommuteService {
         // 출퇴근 데이터 조회
         return commuteRepository.findAllByCommuteDateBetween(startDate, endDate, employeeIds);
     }
-
-    public List<CommuteDailyResponse> getDailyCommuteList(int storeid, LocalDate commuteDate) {
-        return commuteRepository.findByStoreIdAndCommuteDate(storeid, commuteDate)
-                .stream()
-                .map(commute -> {
-                    StoreEmployee employee = commute.getStoreEmployee();
-                    Long commuteAmount;
-
-                    // 여기 로직 바꿔야함
-                    /////////////
-                    if (employee.getEmploymentType()== 0) {  //0이면시급
-                        commuteAmount = Math.round((employee.getSalary() * commute.getCommuteDuration()) / 60.0);
-                    } else {  //1(true)면 월급
-                        commuteAmount = employee.getSalary();
-                    }
-                    //////
-                    return new CommuteDailyResponse(
-                            commute.getId(),
-                            employee.getName(),
-                            commute.getStartTime(),
-                            commute.getEndTime(),
-                            commute.getCommuteDuration(),
-                            commuteAmount,
-                            employee.getEmploymentType()
-                    );
-                })
-                .toList();
-    }
 }
 
