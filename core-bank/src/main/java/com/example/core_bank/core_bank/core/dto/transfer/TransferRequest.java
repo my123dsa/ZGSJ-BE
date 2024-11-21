@@ -1,15 +1,11 @@
-package com.example.core_bank.core_bank.authentication.dto;
+package com.example.core_bank.core_bank.core.dto.transfer;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class TransferRequest {
     private String fromAccount;
     private String fromBankCode;
@@ -18,5 +14,4 @@ public class TransferRequest {
     private Long amount;
     private String toAccountDepositor;
     private String fromAccountDepositor;
-
 }

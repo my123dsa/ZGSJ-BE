@@ -21,7 +21,7 @@ public class StoreEmployeeRequest {
     private LocalDate birthDate;
     private Boolean sex;
     private String phoneNumber;
-    private Boolean employmentType;
+    private Byte employmentType;
     private String bankCode;
     private String accountNumber;
     private Integer salary;
@@ -31,7 +31,7 @@ public class StoreEmployeeRequest {
     private String address;
 
     public static StoreEmployeeRequest of(String email, String name, LocalDate birthDate,
-                                          Boolean sex, String phoneNumber, Boolean employmentType,
+                                          Boolean sex, String phoneNumber, Byte employmentType,
                                           String bankCode, String accountNumber, Integer salary,
                                           Integer paymentDate, String address) {
         return new StoreEmployeeRequest(email, name, birthDate, sex, phoneNumber,

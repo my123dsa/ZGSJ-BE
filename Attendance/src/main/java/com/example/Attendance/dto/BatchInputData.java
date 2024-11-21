@@ -13,7 +13,7 @@ public class BatchInputData {
     private Integer seId;
     private String fromAccount;
     private String fromBankCode;
-    private Boolean employmentType;
+    private Byte employmentType;
     private String toAccount;
     private String toBankCode;
     private Long salary;

@@ -1,21 +1,28 @@
 package com.example.Attendance.service;
 
 
+import com.example.Attendance.dto.CommuteDailyResponse;
 import com.example.Attendance.error.CustomException;
 import com.example.Attendance.error.ErrorCode;
 import com.example.Attendance.model.Commute;
 import com.example.Attendance.model.StoreEmployee;
 import com.example.Attendance.repository.CommuteRepository;
 import com.example.Attendance.repository.StoreEmployeeRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -134,4 +141,56 @@ public class CommuteServiceTest {
         // Then: 퇴근 기록이 없으면 예외가 발생해야 함
         assertEquals(ErrorCode.INVALID_COMMUTE, thrown.getErrorCode());
     }
+
+    @Test
+    @DisplayName("getDailyCommuteList: 정규직과 비정규직급여 계산")
+    void getDailyCommuteList_ShouldCalculateCorrectAmount() {
+        int storeId = 5;
+        LocalDate commuteDate = LocalDate.of(2024, 11, 19);
+
+        //mock 데이터만들기
+        StoreEmployee regularEmployee = Mockito.mock(StoreEmployee.class);
+        when(regularEmployee.getName()).thenReturn("김정규");
+        when(regularEmployee.getEmploymentType()).thenReturn((byte)1);
+        when(regularEmployee.getSalary()).thenReturn(3000000L);
+        StoreEmployee partTimeEmployee = Mockito.mock(StoreEmployee.class);
+        when(partTimeEmployee.getName()).thenReturn("이알바");
+        when(partTimeEmployee.getEmploymentType()).thenReturn((byte)1);
+        when(partTimeEmployee.getSalary()).thenReturn(12000L);
+
+        List<Commute> commutes = Arrays.asList(
+                Commute.createCompleteCommute(
+                        commuteDate,
+                        LocalDateTime.of(2024, 11, 19, 9, 0),
+                        LocalDateTime.of(2024, 11, 19, 18, 0),
+                        regularEmployee),
+                Commute.createCompleteCommute(
+                        commuteDate,
+                        LocalDateTime.of(2024, 11, 19, 12, 0),
+                        LocalDateTime.of(2024, 11, 19, 18, 0),
+                        partTimeEmployee)
+        );
+
+        //repository는 모킹
+        when(commuteRepository.findByStoreIdAndCommuteDate(storeId, commuteDate))
+                .thenReturn(commutes);
+
+        List<CommuteDailyResponse> result = commuteService.getDailyCommuteList(storeId, commuteDate);
+
+
+        //계산로직 테스트.
+        CommuteDailyResponse regularResult = result.get(0);
+        assertThat(regularResult.getName()).isEqualTo("김정규");
+        assertThat(regularResult.getCommuteAmount()).isEqualTo(3000000);
+        assertThat(regularResult.getEmployeeType()).isEqualTo(1);
+        assertThat(regularResult.getCommuteDuration()).isEqualTo(540L);
+
+        CommuteDailyResponse partTimeResult = result.get(1);
+        assertThat(partTimeResult.getName()).isEqualTo("이알바");
+        assertThat(partTimeResult.getCommuteAmount()).isEqualTo(72000);
+        assertThat(partTimeResult.getEmployeeType()).isEqualTo(1);
+        assertThat(partTimeResult.getCommuteDuration()).isEqualTo(360L);
+
+    }
+
 }
