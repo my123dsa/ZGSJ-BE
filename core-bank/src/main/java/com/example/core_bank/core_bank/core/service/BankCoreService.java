@@ -51,9 +51,9 @@ public class BankCoreService {
         Classfication transfer = entityManager.getReference(Classfication.class, 3);
         Classfication deposit = entityManager.getReference(Classfication.class, 26);
         List<TransactionHistory> transactionHistories =Arrays.asList(TransactionHistory.createTransactionHistory
-                        (amount,now, false, "이체", fromAccount, transfer),
+                        (now, amount,false, "이체", toAccount.getName(),fromAccount, transfer),
                 TransactionHistory.createTransactionHistory
-                        (amount,now, true, "입금", toAccount, deposit));
+                        (now,amount, true, "입금", fromAccount.getName(),toAccount, deposit));
         transactionHistoryRepository.saveAll(transactionHistories);
     }
 
