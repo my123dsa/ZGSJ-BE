@@ -27,7 +27,7 @@ public interface CoreBankFeign {
             (@RequestBody TransactionHistoryRequest transactionHistoryRequest,
              @RequestParam Integer year);
 
-    @PostMapping("/year/list-counterparty")
+    @PostMapping("/bank/list-counterparty")
     public List<TransactionHistoryWithCounterPartyResponse> getTransactionHistoryYearSalesListWithCounterParty
             (@RequestBody TransactionHistoryRequest request,
              @RequestParam Integer year,
