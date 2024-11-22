@@ -46,7 +46,7 @@ class TransactionHistoryRepositoryTest {
 
     @Test
     @Transactional
-    @DisplayName("거래내역 월별 조회 쿼리 테스트")
+    @DisplayName("거래내역 년, 월별 조회 쿼리 테스트")
     void findByAccountIdAndYearAndMonthWithClassfication() {
         // 실제 DB에서 Bank 조회
         Bank bank = em.createQuery("SELECT b FROM Bank b WHERE b.bankCode = :bankCode", Bank.class)
@@ -100,27 +100,80 @@ class TransactionHistoryRepositoryTest {
         List<TransactionHistory> result = transactionHistoryRepository
                 .findByAccountIdAndYearAndMonthWithClassfication(account.getId(), 2024, 11);
 
-        System.out.println("\n=== 조회된 거래 내역 ===");
-        result.forEach(transaction -> {
-            System.out.println("\n거래 상세 정보:");
-            System.out.println("거래 ID: " + transaction.getId());
-            System.out.println("거래 일자: " + transaction.getTransactionDate());
-            System.out.println("거래 금액: " + (transaction.getAmount()));
-            System.out.println("거래 유형: " + (transaction.getIsDeposit() ? "입금" : "출금"));
-            System.out.println("거래 분류: " + transaction.getClassfication().getClassficationName());
-            System.out.println("거래처명: " + transaction.getCounterpartyName());
-            System.out.println("계좌번호: " + transaction.getAccount().getAccountNumber());
-            System.out.println("계좌명: " + transaction.getAccount().getName());
-            System.out.println("은행: " + transaction.getAccount().getBank().getBankName());
-            System.out.println("----------------------------------------");
-        });
-        System.out.println("\n총 " + result.size() + "건의 거래내역이 조회되었습니다.");
-
         assertAll(
                 () -> assertThat(result).hasSize(2),
                 () -> assertThat(result).allMatch(transaction ->
                         transaction.getTransactionDate().getYear() == 2024 &&
                                 transaction.getTransactionDate().getMonthValue() == 11 &&
+                                transaction.getAccount().getId().equals(account.getId())
+                ),
+                () -> assertThat(result).isSortedAccordingTo(
+                        Comparator.comparing(TransactionHistory::getTransactionDate)
+                )
+        );
+    }
+
+
+    @Test
+    @Transactional
+    @DisplayName("거래내역 연간 조회")
+    void findByAccountIdAndYearWithClassfication() {
+        // 실제 DB에서 Bank 조회
+        Bank bank = em.createQuery("SELECT b FROM Bank b WHERE b.bankCode = :bankCode", Bank.class)
+                .setParameter("bankCode", "004")
+                .getSingleResult();
+
+        Account account = Account.createAccount(
+                "1234567890",
+                "테스트계좌",
+                bank  // DB에서 조회한 Bank 사용
+        );
+        accountRepository.save(account);
+
+        Classfication classification = Classfication.createClassfication("식비");
+        classficationRepository.save(classification);
+
+
+        transactionHistoryRepository.save(new TransactionHistory(
+                LocalDate.of(2024, 11, 15),
+                50000L,
+                true,
+                "입금",
+                "거래처2",
+                account,
+                classification
+        ));
+
+        // 2024년 11월 데이터 (조회되어야 함)
+        transactionHistoryRepository.save(new TransactionHistory(
+                LocalDate.of(2024, 11, 1),
+                100000L,
+                true,
+                "입금",
+                "거래처1",
+                account,
+                classification
+        ));
+
+
+        // 다른 날짜 데이터 (조회되지 않아야 함)
+        transactionHistoryRepository.save(new TransactionHistory(
+                LocalDate.of(2022, 10, 1),
+                30000L,
+                true,
+                "입금",
+                "거래처3",
+                account,
+                classification
+        ));
+
+        List<TransactionHistory> result = transactionHistoryRepository
+                .findByAccountIdYearlyWithClassfication(account.getId(), 2024);
+
+        assertAll(
+                () -> assertThat(result).hasSize(2),
+                () -> assertThat(result).allMatch(transaction ->
+                        transaction.getTransactionDate().getYear() == 2024 &&
                                 transaction.getAccount().getId().equals(account.getId())
                 ),
                 () -> assertThat(result).isSortedAccordingTo(
