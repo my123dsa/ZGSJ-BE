@@ -20,25 +20,31 @@ public class BatchOutputData {
     private String message;
     // 일 한 기록
     //이름 //전화번호, 생년월일 필요함
+    private String name;
     private String email;
     private LocalDate birthDate;
     private String phoneNumber;
 
-
-    private Long total;
     private Long salary;
     private Long allowance;
-    private Long charge;
+    private Long nationalCharge;
+    private Long insuranceCharge;
+    private Long employmentCharge;
+    private Long incomeTax;
 
-    public static BatchOutputData of(BatchInputDataWithAllowance bidwa, TransferResponse transferResponse,BatchInputData bid ) {
+    public static BatchOutputData of(TransferResponse transferResponse,BatchInputData bid ) {
 
         return new BatchOutputData(bid.getSeId(), transferResponse.getStatus(),
                 transferResponse.getIssuanceDate(), transferResponse.getMessage()
-                ,bid.getEmail(),bid.getBirthDate(),bid.getPhoneNumber()
-                , bidwa.getTotal(),bidwa.getSalary(),bidwa.getAllowance(),bidwa.getCharge());
+                ,bid.getToAccountDepositor() ,bid.getEmail(),bid.getBirthDate(),bid.getPhoneNumber()
+                , bid.getSalaryAfter(),bid.getAllowance()
+                ,bid.getNationalCharge(),bid.getInsuranceCharge(),bid.getEmploymentCharge(),bid.getIncomeTax());
     }
 
-    public PayStatement toEntity() {
-        return PayStatement.createPayStatement("12342412", this.getIssuanceDate(),this.getSeId(), (int)(this.getTotal()-this.getCharge()) );
+    public PayStatement toEntity(String url) {
+        long amount =salary+allowance
+                - nationalCharge- employmentCharge
+                - insuranceCharge -incomeTax;
+        return PayStatement.createPayStatement(url, this.getIssuanceDate(),this.getSeId(), (int)amount);
     }
 }
