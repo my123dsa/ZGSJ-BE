@@ -1,25 +1,28 @@
-package com.example.Attendance.config;
+package com.example.Attendance.config.attendanceJob;
 
 import com.example.Attendance.dto.BatchInputData;
 import com.example.Attendance.dto.CommuteSummary;
+import com.example.Attendance.error.ErrorDTO;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 @JobScope   // Job 스코프로 생성
 @Getter
-
 public class BatchJobState {
     private List<BatchInputData> employees;
     private int currentIndex = 0;
     private LocalDate localDate;
     private List<CommuteSummary> commutes;
     private List<Integer> employeeIds;
+    private final List<BatchInputData> failedEmployee= new ArrayList<>();
+    //여기 사장 이메일과 직원 이름 계좌 ?    정도만 넣어 메일 보내자
+
 
     public void setCommutes(List<CommuteSummary> commutes) {
         this.commutes = commutes;
@@ -40,12 +43,12 @@ public class BatchJobState {
         this.currentIndex+=1;
     }
 
-    public Long getCommuteDuration(Integer seId) {
+    public CommuteSummary getCommuteDuration(Integer seId) {
         return commutes.stream()
                 .filter(cs -> cs.getEmployeeId().equals(seId))
-                .map(CommuteSummary::getCommuteDuration)
+                .map(CommuteSummary::updateDuration)
                 .findFirst()
-                .orElse(0L);
+                .orElse(null);
     }
     public void reset(){
         this.currentIndex = 0;
@@ -53,5 +56,9 @@ public class BatchJobState {
         this.commutes = null;
         this.localDate = null;
         this.employeeIds= null;
+//        this.failedEmployee.clear();
+    }
+    private void handleInsufficientBalance(BatchInputData item, ErrorDTO dto) {
+        failedEmployee.add(item);
     }
 }
