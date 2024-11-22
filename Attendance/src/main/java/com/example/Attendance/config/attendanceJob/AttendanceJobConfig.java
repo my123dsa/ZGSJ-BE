@@ -32,7 +32,7 @@ public class AttendanceJobConfig {
     @Bean
     public Job attendanceJob() {
         return new JobBuilder("automaticTransferJob", jobRepository)
-                .listener(attendanceJobListener()) // Listener 등록
+                .listener(batchJobListener.attendanceJobListener()) // Listener 등록
                 .start(attendanceStep())
                 .build();
     }
@@ -45,17 +45,5 @@ public class AttendanceJobConfig {
                 .processor(batchProcessor.attendanceProcessor()) // 데이터 처리
                 .writer(batchWriter.attendanceWriter())       // 데이터 쓰기
                 .build();
-    }
-
-    @Bean
-    public JobExecutionListener attendanceJobListener() {
-        return new JobExecutionListener() {
-            @Override
-            public void afterJob(JobExecution jobExecution) {
-                // 컨텍스트에 다시 저장
-//                batchJobState.getFailedEmployee().stream().map();
-                // 사장에게 메일보내기 한번에
-            }
-        };
     }
 }
