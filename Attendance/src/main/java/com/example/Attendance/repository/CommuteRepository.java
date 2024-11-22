@@ -36,10 +36,10 @@ public interface CommuteRepository extends JpaRepository<Commute, Integer> {
 
     Optional<Commute> findTopByStoreEmployeeIdOrderByStartTimeDesc(Integer seId);
 
-    @Query("SELECT new com.example.Attendance.dto.CommuteSummary(c.storeEmployee.id, sum(c.commuteDuration)) " +
+    @Query("SELECT new com.example.Attendance.dto.CommuteSummary(c.storeEmployee.id, sum(c.commuteDuration), DATEDIFF(max(c.commuteDate), min(c.commuteDate)) + 1) " +
             "FROM Commute c " +
             "WHERE c.commuteDate BETWEEN :startDate AND :endDate AND c.storeEmployee.id IN :employeeIds " +
-            "GROUP BY c.storeEmployee.id"
+            "GROUP BY c.storeEmployee.id "
     )
     List<CommuteSummary> findAllByCommuteDateBetween(
             @Param("startDate")LocalDate startDate,
