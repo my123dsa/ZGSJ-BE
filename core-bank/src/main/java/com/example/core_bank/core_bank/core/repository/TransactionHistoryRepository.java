@@ -11,24 +11,26 @@ import java.util.List;
 
 public interface TransactionHistoryRepository extends JpaRepository<TransactionHistory, Integer> {
 
-    // fetch join
+    //연+월 조회
     @Query("SELECT th FROM TransactionHistory th " +
             "JOIN FETCH th.classfication " +
             "WHERE th.account.id = :accountId " +
             "AND YEAR(th.transactionDate) = :year " +
-            "AND MONTH(th.transactionDate) = :month")
+            "AND MONTH(th.transactionDate) = :month " +
+            "ORDER BY th.transactionDate ASC")
     List<TransactionHistory> findByAccountIdAndYearAndMonthWithClassfication(
             @Param("accountId") Integer accountId,
             @Param("year") Integer year,
             @Param("month") Integer month
     );
 
-    // 특정 가게의 특정 년도 매출데이터를 모두 제공하는
+    // 연간 데이터
     @Query("SELECT th FROM TransactionHistory th " +
             "LEFT JOIN FETCH th.classfication " +
             "WHERE th.account.id = :accountId " +
             "AND FUNCTION('YEAR', th.transactionDate) = :year " +
-            "AND th.isDeposit = true")
+            "AND th.isDeposit = true " +
+            "ORDER BY th.transactionDate ASC")
     List<TransactionHistory> findByAccountIdYearlyWithClassfication(
             @Param("accountId") Integer accountId,
             @Param("year") Integer year
