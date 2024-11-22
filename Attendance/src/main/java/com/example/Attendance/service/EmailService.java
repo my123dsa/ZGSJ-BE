@@ -1,7 +1,5 @@
 package com.example.Attendance.service;
 
-
-
 import com.example.Attendance.error.CustomException;
 import com.example.Attendance.error.ErrorCode;
 import jakarta.mail.MessagingException;
@@ -12,8 +10,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -21,15 +17,14 @@ public class EmailService {
 
     private final JavaMailSender javaMailSender;
 
-    public void sendPayStatement(String email,String url){
-        String title ="[집계사장]직원 PinNumber";
+    public void sendPayStatement(String email, String url) {
+        String title = "[집계사장]직원 급여명세서";
         String content =
                 "집계사장을 사용해주셔서 감사합니다. 🦀🍔🍟" +
                         "<br><br> " +
-                        "급여 명세서 url은 " +url+ "입니다." +
+                        "급여 명세서 url은 " + url + "입니다." +
                         "<br> "; // 이메일 내용
         mailSend(email, title, content);
-
     }
 
     private void mailSend(String toMail, String title, String content) {
