@@ -35,6 +35,7 @@ public class EmailService {
             helper.setSubject(title); // 이메일 주소 설정
             helper.setText(content, true); // 이메일의 내용
             javaMailSender.send(message);
+            log.info(" {}에게 급여명세서: {} 전송에 성공했습니다:", toMail, content);
         } catch (MessagingException e) {
             log.error("이메일 전송 실패: {}", e.getMessage());
             throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
