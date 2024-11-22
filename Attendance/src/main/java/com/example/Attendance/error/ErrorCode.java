@@ -33,7 +33,12 @@ public enum ErrorCode {
     INVALID_DECRYPTION(401,"복호화가 유효하지 않습니다."),
     INVALID_PAY_STATEMENT(400, "급여 기록 없음"),
     INSUFFICIENT_BALANCE(400, "출금 금액이 잔액보다 큽니다."),
-    ACCOUNT_NOT_FOUND(404, "계좌 정보를 찾을 수 없습니다."),;
+    ACCOUNT_NOT_FOUND(404, "계좌 정보를 찾을 수 없습니다."),
+    ERROR_NOT_FOUND(400, "FEGIN에서 에러 정보를 찾을 수 없습니다."),
+    RETRY_BATCH_STEP(503, "일시적인 서버 오류가 발생했습니다. 재시도 중입니다."),
+    EMAIL_SEND_FAILED(500, "이메일 전송에 실패했습니다."),
+    PDF_CREATE_ERROR(500, "PDF 생성 중 오류가 발생했습니다."),
+    ;
 
     private final int status;
     private final String message;
