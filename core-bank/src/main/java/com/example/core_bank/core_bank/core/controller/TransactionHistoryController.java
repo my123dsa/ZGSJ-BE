@@ -40,6 +40,7 @@ public class TransactionHistoryController {
         return ResponseEntity.ok(transactionHistoryRes);
     }
 
+    //년별 데이터중 , 매출만 조회
     @PostMapping("/year/list")
     public ResponseEntity<List<TransactionHistoryResponse>> getTransactionHistoryYearSalesList
             (@RequestBody TransactionHistoryRequest request,

@@ -22,6 +22,7 @@ public interface CoreBankFeign {
              @RequestParam Integer year,
              @RequestParam Integer month);
 
+    //년 별 매출 only 조회 feign
     @PostMapping("/bank/year/list")
     List<TransactionHistoryResponse> getTransactionHistoryYearSalesList
             (@RequestBody TransactionHistoryRequest transactionHistoryRequest,
