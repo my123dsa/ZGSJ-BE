@@ -120,29 +120,24 @@ public class SimpleLedgerPdfService extends PdfService {
                 html.append("<td class='amount'>").append(formatNumber(amount)).append("</td>")
                         .append("<td class='amount'>").append(taxType ? formatNumber(vat.longValue()) : "").append("</td>")
                         .append("<td></td><td></td>")
-                        .append("<td class='empty-cell'>&nbsp;</td><td class='empty-cell'>&nbsp;</td>");
-            } else {
-                html.append("<td></td><td></td>")
-                        .append("<td class='amount'>").append(formatNumber(amount)).append("</td>")
-                        .append("<td></td>")
-                        .append("<td class='empty-cell'>&nbsp;</td><td class='empty-cell'>&nbsp;</td>");
-            }
-
-            if (transaction.getIsDeposit()) {
-                html.append("<td>")
+                        .append("<td class='empty-cell'>&nbsp;</td><td class='empty-cell'>&nbsp;</td>")
+                        .append("<td>")
                         .append(escapeHtml(transaction.getClassificationName()))
                         .append("(")
                         .append(formatNumber(amount))
                         .append(")")
                         .append("</td>");
             } else {
-                html.append("<td>")
-                        .append("계")
-                        .append("</td>");
+                html.append("<td></td><td></td>")
+                        .append("<td class='amount'>").append(formatNumber(amount)).append("</td>")
+                        .append("<td></td>")
+                        .append("<td class='empty-cell'>&nbsp;</td><td class='empty-cell'>&nbsp;</td>")
+                        .append("<td>계</td>");
             }
             html.append("</tr>");
         }
 
+        //밑에 10 줄 만들기(직접 작성용)
         for (int i = 0; i < 10; i++) {
             html.append("<tr class='empty-row'>")
                     .append("<td>&nbsp;</td>")
