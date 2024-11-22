@@ -2,7 +2,6 @@ package com.example.Attendance.service;
 
 
 import com.example.Attendance.dto.BatchInputData;
-import com.example.Attendance.dto.BatchInputDataWithAllowance;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ public class BigService {
     private final AttendanceConstants AC;
 
     // 완전 일일알바일경우 3.3%
-    public BatchInputDataWithAllowance calculate(BatchInputData bid, Long commuteDuration) {
+    public void calculate(BatchInputData bid, Long commuteDuration) {
         Long allowance = allowance(bid.getEmploymentType(), commuteDuration, bid.getSalary());
         Long salary = salary(bid.getEmploymentType(), bid.getSalary(), commuteDuration);
         Long total = allowance + salary;
@@ -28,8 +27,13 @@ public class BigService {
         Long incomeTax=incomeTax(total,bid.getEmploymentType());
         log.info("계산 값: total: {} salary: {} nation: {} insurance: {} employmentCharge: {} incomeTax: {}",
                 total, salary, nationalCharge, insuranceCharge, employmentCharge ,incomeTax);
-        return BatchInputDataWithAllowance.of
-                (allowance, total, salary, nationalCharge, insuranceCharge, employmentCharge,incomeTax);
+        bid.setSalaryAfter(salary);
+        bid.setAllowance(allowance);
+
+        bid.setEmploymentCharge(employmentCharge);
+        bid.setInsuranceCharge(insuranceCharge);
+        bid.setNationalCharge(nationalCharge);
+        bid.setIncomeTax(incomeTax);
     }
 
     public long incomeTax(Long total,Byte type){
