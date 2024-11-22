@@ -20,7 +20,7 @@ public class TransferRequest {
     private String fromAccountDepositor;
 
     public static TransferRequest from(BatchInputData bid) {
-        Long amount = bid.getSalary() + bid.getAllowance()
+        Long amount = bid.getSalaryAfter() + bid.getAllowance()
                 - bid.getNationalCharge() - bid.getEmploymentCharge()
                 - bid.getInsuranceCharge() - bid.getIncomeTax();
         return new TransferRequest(
