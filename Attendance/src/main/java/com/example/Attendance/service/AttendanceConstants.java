@@ -24,23 +24,23 @@ public class AttendanceConstants {
     public final double TAX_RATE_8 = 0.45;
 
     // Tax Brackets
-    public final long TAX_BRACKET_1 = 14_000_000L;
-    public final long TAX_BRACKET_2 = 50_000_000L;
-    public final long TAX_BRACKET_3 = 88_000_000L;
-    public final long TAX_BRACKET_4 = 150_000_000L;
-    public final long TAX_BRACKET_5 = 300_000_000L;
-    public final long TAX_BRACKET_6 = 500_000_000L;
-    public final long TAX_BRACKET_7 = 1_000_000_000L;
+    public final long TAX_BRACKET_1 = 1_166_666L;
+    public final long TAX_BRACKET_2 = 4_166_666L;
+    public final long TAX_BRACKET_3 = 7_333_333L;
+    public final long TAX_BRACKET_4 = 12_500_000L;
+    public final long TAX_BRACKET_5 = 25_000_000L;
+    public final long TAX_BRACKET_6 = 41_666_666L;
+    public final long TAX_BRACKET_7 = 83_333_333L;
 
     // Tax Deductions
     public final long DEDUCTION_1 = 0L;
-    public final long DEDUCTION_2 = 1_260_000L;
-    public final long DEDUCTION_3 = 5_760_000L;
-    public final long DEDUCTION_4 = 15_440_000L;
-    public final long DEDUCTION_5 = 19_940_000L;
-    public final long DEDUCTION_6 = 25_940_000L;
-    public final long DEDUCTION_7 = 35_940_000L;
-    public final long DEDUCTION_8 = 65_940_000L;
+    public final long DEDUCTION_2 = 105_000L;
+    public final long DEDUCTION_3 = 480_000L;
+    public final long DEDUCTION_4 = 1_286_666L;
+    public final long DEDUCTION_5 = 1_661_666L;
+    public final long DEDUCTION_6 = 2_161_666L;
+    public final long DEDUCTION_7 = 2_995_000L;
+    public final long DEDUCTION_8 = 5_495_000L;
 
     public final TaxRateWithDeduction[] TAX_INFO = {
             TaxRateWithDeduction.of(TAX_RATE_1, DEDUCTION_1),
