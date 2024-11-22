@@ -17,14 +17,12 @@ public class PayStatementService {
 
     public List<PayStatementResponse> getPayStatementMonthlyYearly(
             Integer storeId, Integer year, Integer month
-    )
-    {
+    ) {
         return payStatementRepository.findPayStatementResponsesByStoreAndDateWithFetch(storeId, year, month);
 
     }
 
-    public String getPayStatementUrl(Integer payStatementId)
-    {
+    public String getPayStatementUrl(Integer payStatementId) {
         return payStatementRepository.findPayStatementURL(payStatementId).orElseThrow(
                 () -> new CustomException(ErrorCode.INVALID_PAY_STATEMENT)
         );

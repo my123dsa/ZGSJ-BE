@@ -1,6 +1,6 @@
 package com.example.Attendance.config.attendanceJob;
 
-import com.example.Attendance.dto.BatchOutputData;
+import com.example.Attendance.dto.batch.BatchOutputData;
 import com.example.Attendance.model.PayStatement;
 import com.example.Attendance.repository.PayStatementRepository;
 import com.example.Attendance.service.EmailService;
@@ -28,8 +28,8 @@ public class BatchWriter {
     public ItemWriter<BatchOutputData> attendanceWriter() {
         return chunk -> {
             List<PayStatement> payStatements = chunk.getItems().stream()
-                    .map(item-> {
-                        byte[] pdf =payStatementPdfService.generateIncomeStatementPdf(item);
+                    .map(item -> {
+                        byte[] pdf = payStatementPdfService.generateIncomeStatementPdf(item);
                         String url = gCPService.uploadObject(pdf);
 //                        emailService.sendPayStatement(item.getEmail(),url);
                         return item.toEntity(url);

@@ -1,7 +1,8 @@
 package com.example.Attendance;
 
-import com.example.Attendance.dto.TransferRequest;
-import com.example.Attendance.dto.TransferResponse;
+import com.example.Attendance.config.FeignConfig;
+import com.example.Attendance.dto.batch.TransferRequest;
+import com.example.Attendance.dto.batch.TransferResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;

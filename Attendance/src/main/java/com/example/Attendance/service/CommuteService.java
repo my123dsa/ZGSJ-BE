@@ -3,7 +3,7 @@ package com.example.Attendance.service;
 import com.example.Attendance.dto.CommuteByPresidentRequest;
 import com.example.Attendance.dto.CommuteDailyResponse;
 import com.example.Attendance.dto.CommuteMonthlyResponse;
-import com.example.Attendance.dto.CommuteSummary;
+import com.example.Attendance.dto.batch.CommuteSummary;
 import com.example.Attendance.error.CustomException;
 import com.example.Attendance.error.ErrorCode;
 import com.example.Attendance.model.Commute;

@@ -1,7 +1,7 @@
 package com.example.Attendance.config.attendanceJob;
 
-import com.example.Attendance.dto.BatchInputData;
-import com.example.Attendance.dto.BatchOutputData;
+import com.example.Attendance.dto.batch.BatchInputData;
+import com.example.Attendance.dto.batch.BatchOutputData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;

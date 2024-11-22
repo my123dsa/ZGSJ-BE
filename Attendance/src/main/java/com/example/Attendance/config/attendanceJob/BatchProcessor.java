@@ -1,7 +1,7 @@
 package com.example.Attendance.config.attendanceJob;
 
 import com.example.Attendance.FeignWithCoreBank;
-import com.example.Attendance.dto.*;
+import com.example.Attendance.dto.batch.*;
 import com.example.Attendance.error.CustomException;
 import com.example.Attendance.error.ErrorCode;
 import com.example.Attendance.error.FeignExceptionHandler;
@@ -29,7 +29,7 @@ public class BatchProcessor {
             try {
                 CommuteSummary commuteSummary = batchJobState.getCommuteDuration(item.getSeId());
                 //여기 들어오기전에 0인애들 필터링 하면 좋을 듯
-                if (commuteSummary==null) {
+                if (commuteSummary == null) {
                     return null;
                 }
                 bigService.calculate(item, commuteSummary);
@@ -39,7 +39,7 @@ public class BatchProcessor {
                 TransferResponse response = feignWithCoreBank.automaticTransfer(request);
 
                 return BatchOutputData.of(response, item);
-            } catch (FeignException fe){
+            } catch (FeignException fe) {
 //                if (dto.getCode().equals("ACCOUNT_NOT_FOUND"))
 //                    throw new CustomException(ErrorCode.ACCOUNT_NOT_FOUND);
 //                ErrorDTO dto =  handler.feToErrorDTO(fe);

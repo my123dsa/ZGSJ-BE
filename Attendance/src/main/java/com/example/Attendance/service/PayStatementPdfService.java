@@ -1,7 +1,7 @@
 package com.example.Attendance.service;
 
 
-import com.example.Attendance.dto.BatchOutputData;
+import com.example.Attendance.dto.batch.BatchOutputData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class PayStatementPdfService extends PdfService {
-
 
     public byte[] generateIncomeStatementPdf(BatchOutputData bod) {
         // 손익 계산하기
@@ -26,7 +25,8 @@ public class PayStatementPdfService extends PdfService {
     private String generateHtml(BatchOutputData bod) {
         StringBuilder html = new StringBuilder();
         html.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
-                .append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">")
+                .append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3" +
+                        ".org/TR/xhtml1/DTD/xhtml1-strict.dtd\">")
                 .append("<html xmlns=\"http://www.w3.org/1999/xhtml\">")
                 .append("<head>")
                 .append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>")
@@ -107,7 +107,7 @@ public class PayStatementPdfService extends PdfService {
                 .append("<tr>")
                 .append("<th>지급액(a+b-c-d-e-f)</th>")
                 .append("<td>").append(String.format("%,d원",
-                                bod.getSalary() + bod.getAllowance() -
+                        bod.getSalary() + bod.getAllowance() -
                                 bod.getNationalCharge() - bod.getInsuranceCharge() -
                                 bod.getEmploymentCharge() - bod.getIncomeTax())).append("</td>")
                 .append("</tr>")
@@ -120,7 +120,6 @@ public class PayStatementPdfService extends PdfService {
                 .append("</div>")
 
                 .append("</body></html>");
-
         return html.toString();
     }
 }

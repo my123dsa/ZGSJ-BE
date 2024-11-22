@@ -1,8 +1,8 @@
 package com.example.Attendance.service;
 
 
-import com.example.Attendance.dto.BatchInputData;
-import com.example.Attendance.dto.CommuteSummary;
+import com.example.Attendance.dto.batch.BatchInputData;
+import com.example.Attendance.dto.batch.CommuteSummary;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,9 +22,9 @@ public class BigService {
         Long salary = salary(bid.getEmploymentType(), bid.getSalary(), commuteSummary.getCommuteDuration());
         Long total = allowance + salary;
 
-        Long nationalCharge = nationalCharge(total,bid.getEmploymentType());
-        Long insuranceCharge = insuranceCharge(total,bid.getEmploymentType());
-        Long employmentCharge = employmentCharge(total,bid.getEmploymentType());
+        Long nationalCharge = nationalCharge(total, bid.getEmploymentType());
+        Long insuranceCharge = insuranceCharge(total, bid.getEmploymentType());
+        Long employmentCharge = employmentCharge(total, bid.getEmploymentType());
         Long incomeTax = incomeTax(total, bid.getEmploymentType());
         log.info("계산 값: total: {} salary: {} nation: {} insurance: {} employmentCharge: {} incomeTax: {}",
                 total, salary, nationalCharge, insuranceCharge, employmentCharge, incomeTax);
@@ -54,8 +54,8 @@ public class BigService {
         return salary * (commuteDuration);
     }
 
-    public long nationalCharge(Long total,Byte type) {
-        if (type != 1){ //3번은 4대보험 됨
+    public long nationalCharge(Long total, Byte type) {
+        if (type != 1) { //3번은 4대보험 됨
             return 0L;
         }
         if (total > AC.NATIONAL_PENSION_LIMIT_UPPER) {
@@ -68,18 +68,18 @@ public class BigService {
                 .longValue();
     }
 
-    public long insuranceCharge(Long total,Byte type) {
-        if (type != 1){ //3번은 4대보험 됨
+    public long insuranceCharge(Long total, Byte type) {
+        if (type != 1) { //3번은 4대보험 됨
             return 0L;
         }
-        if(total > AC.HEALTH_INSURANCE_LIMIT_UPPER){
+        if (total > AC.HEALTH_INSURANCE_LIMIT_UPPER) {
             return Math.round(AC.HEALTH_INSURANCE_LIMIT_UPPER * 0.040041);
         }
         return Math.round(total * 0.040041);
     }
 
-    public long employmentCharge(Long total,Byte type) {
-        if (type != 1){
+    public long employmentCharge(Long total, Byte type) {
+        if (type != 1) {
             return 0L;
         }
         return Math.round(total * 0.009);
@@ -92,8 +92,8 @@ public class BigService {
         if (type == 6) //수당 받는 직원
             return salary / 5;
 
-        int weekTime =(int) Math.floor(commuteSummary.getCommuteDuration() /
-                        (double) (commuteSummary.getDayLength() / 7));
+        int weekTime = (int) Math.floor(commuteSummary.getCommuteDuration() /
+                (double) (commuteSummary.getDayLength() / 7));
         if (weekTime >= 15)
             return weekTime * salary / 5;
         return 0L;
