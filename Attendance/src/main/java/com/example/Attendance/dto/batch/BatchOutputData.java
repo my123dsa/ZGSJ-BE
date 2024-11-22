@@ -1,4 +1,4 @@
-package com.example.Attendance.dto;
+package com.example.Attendance.dto.batch;
 
 import com.example.Attendance.model.PayStatement;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -32,19 +31,19 @@ public class BatchOutputData {
     private Long employmentCharge;
     private Long incomeTax;
 
-    public static BatchOutputData of(TransferResponse transferResponse,BatchInputData bid ) {
+    public static BatchOutputData of(TransferResponse transferResponse, BatchInputData bid) {
 
         return new BatchOutputData(bid.getSeId(), transferResponse.getStatus(),
                 transferResponse.getIssuanceDate(), transferResponse.getMessage()
-                ,bid.getToAccountDepositor() ,bid.getEmail(),bid.getBirthDate(),bid.getPhoneNumber()
-                , bid.getSalaryAfter(),bid.getAllowance()
-                ,bid.getNationalCharge(),bid.getInsuranceCharge(),bid.getEmploymentCharge(),bid.getIncomeTax());
+                , bid.getToAccountDepositor(), bid.getEmail(), bid.getBirthDate(), bid.getPhoneNumber()
+                , bid.getSalaryAfter(), bid.getAllowance()
+                , bid.getNationalCharge(), bid.getInsuranceCharge(), bid.getEmploymentCharge(), bid.getIncomeTax());
     }
 
     public PayStatement toEntity(String url) {
-        long amount =salary+allowance
-                - nationalCharge- employmentCharge
-                - insuranceCharge -incomeTax;
-        return PayStatement.createPayStatement(url, this.getIssuanceDate(),this.getSeId(), (int)amount);
+        long amount = salary + allowance
+                - nationalCharge - employmentCharge
+                - insuranceCharge - incomeTax;
+        return PayStatement.createPayStatement(url, this.getIssuanceDate(), this.getSeId(), (int) amount);
     }
 }

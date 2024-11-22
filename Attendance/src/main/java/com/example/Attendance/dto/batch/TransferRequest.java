@@ -1,4 +1,4 @@
-package com.example.Attendance.dto;
+package com.example.Attendance.dto.batch;
 
 
 import lombok.AllArgsConstructor;
@@ -20,9 +20,9 @@ public class TransferRequest {
     private String fromAccountDepositor;
 
     public static TransferRequest from(BatchInputData bid) {
-        Long amount = bid.getSalary()+bid.getAllowance()
-                - bid.getNationalCharge()- bid.getEmploymentCharge()
-                - bid.getInsuranceCharge() -bid.getIncomeTax();
+        Long amount = bid.getSalary() + bid.getAllowance()
+                - bid.getNationalCharge() - bid.getEmploymentCharge()
+                - bid.getInsuranceCharge() - bid.getIncomeTax();
         return new TransferRequest(
                 bid.getFromAccount(),
                 bid.getFromBankCode(),
