@@ -12,6 +12,7 @@ public class StoreResponse {
     private String businessNumber;
     private String accountNumber;
     private String bankCode;
+    private String location;
 
     public static StoreResponse from(Store store) {
         return new StoreResponse(
@@ -19,7 +20,8 @@ public class StoreResponse {
                 store.getStoreName(),
                 store.getBusinessNumber(),
                 store.getAccountNumber(),
-                store.getBankCode()
+                store.getBankCode(),
+                store.getLocation()
         );
     }
 }
