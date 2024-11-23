@@ -1,7 +1,7 @@
 package com.example.User.controller;
 
-import com.example.User.dto.authserver.AuthServerEmailPinNumber;
-import com.example.User.dto.authserver.AuthServerPinNumber;
+import com.example.User.dto.authserver.AuthServerEmailPinNumberRequest;
+import com.example.User.dto.authserver.AuthServerPinNumberRequest;
 import com.example.User.dto.corebank.AccountAndCodeRequest;
 import com.example.User.dto.authserver.AuthServerProfileRequest;
 import com.example.User.resolver.MasterId;
@@ -41,13 +41,13 @@ public class AccountAuthController {
     }
 
     @PostMapping("/email/pin")
-    public ResponseEntity<Boolean> checkAuthEmailPinNumber(@RequestBody AuthServerEmailPinNumber emailPinNumber){
+    public ResponseEntity<Boolean> checkAuthEmailPinNumber(@RequestBody AuthServerEmailPinNumberRequest emailPinNumber){
         boolean result= coreBankService.checkEmailPinNumber(emailPinNumber);
         return ResponseEntity.ok(result);
     }
 
     @PostMapping("/pin")
-    public ResponseEntity<Boolean> checkAuthPinNumber(@RequestBody AuthServerPinNumber pinNumber){
+    public ResponseEntity<Boolean> checkAuthPinNumber(@RequestBody AuthServerPinNumberRequest pinNumber){
         boolean result= coreBankService.checkPinNumber(pinNumber);
         return ResponseEntity.ok(result);
     }

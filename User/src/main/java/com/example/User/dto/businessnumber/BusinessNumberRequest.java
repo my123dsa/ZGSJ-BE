@@ -10,6 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BusinessNumberRequest {
-
-    String BusinessNumber;
+    private String storeName;
+    private String BusinessNumber;
 }
