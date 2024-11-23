@@ -1,12 +1,13 @@
 package com.example.core_bank.core_bank.authentication.controller;
 
-import com.example.core_bank.core_bank.authentication.dto.ReqAuthentication;
+import com.example.core_bank.core_bank.authentication.dto.AuthServerEmailPinNumberRequest;
+import com.example.core_bank.core_bank.authentication.dto.AuthServerPinNumberRequest;
+import com.example.core_bank.core_bank.authentication.dto.AuthServerProfileRequest;
 import com.example.core_bank.core_bank.authentication.service.AuthenticationService;
 import com.example.core_bank.core_bank.authentication.service.EmailService;
 import com.example.core_bank.core_bank.authentication.service.VerificationNumberStorage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,26 +23,29 @@ public class AuthenticationController {
     private final EmailService emailService;
 
     @PostMapping("/pincheck")
-    public ResponseEntity<?> verifyPinNumberAndEmail(@RequestBody ReqAuthentication reqAuthentication) {
-        log.info("Check email pin number" + reqAuthentication.getEmail());
-        boolean result = authenticationService.checkEmailAndPinNumber(reqAuthentication);
+    public boolean verifyPinNumberAndEmail(@RequestBody AuthServerPinNumberRequest pinNumberRequest) {
+        log.info("Check email pin number" + pinNumberRequest.getEmail());
+        boolean result = authenticationService.checkEmailAndPinNumber(pinNumberRequest);
         if (!result)
-            return ResponseEntity.badRequest().build();
+            return false;
 
-        String verificationNumber = emailService.sendVerificationEmail(reqAuthentication.getEmail());
-        verificationNumberStorage.saveNumber(reqAuthentication.getEmail(), verificationNumber);
+        String verificationNumber = emailService.sendVerificationEmail(pinNumberRequest.getEmail());
+        verificationNumberStorage.saveNumber(pinNumberRequest.getEmail(), verificationNumber);
 
-        return ResponseEntity.ok().build();
+        return true;
     }
 
-    @PostMapping("/emailcheck")
-    public ResponseEntity<?> verifyEmailCode(@RequestBody ReqAuthentication reqAuthentication) {
-        log.info("Check email pin number: " + reqAuthentication.getEmail());
-        boolean result = verificationNumberStorage.verifyNumber(reqAuthentication);
+    @PostMapping("/email/pincheck")
+    public boolean verifyEmailCode(@RequestBody AuthServerEmailPinNumberRequest emailPinNumberRequest) {
+        boolean result = verificationNumberStorage.verifyNumber(emailPinNumberRequest);
 
         if (!result)
-            return ResponseEntity.badRequest().build();
+            return false;
+        return true;
+    }
 
-        return ResponseEntity.ok().build();
+    @PostMapping("/profile/check")
+    public boolean verifyProfile(@RequestBody AuthServerProfileRequest profileRequest) {
+        return authenticationService.verifyProfile(profileRequest);
     }
 }
