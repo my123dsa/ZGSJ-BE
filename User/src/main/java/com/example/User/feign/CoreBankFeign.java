@@ -1,7 +1,7 @@
 package com.example.User.feign;
 
-import com.example.User.dto.authserver.AuthServerEmailPinNumber;
-import com.example.User.dto.authserver.AuthServerPinNumber;
+import com.example.User.dto.authserver.AuthServerEmailPinNumberRequest;
+import com.example.User.dto.authserver.AuthServerPinNumberRequest;
 import com.example.User.dto.businessnumber.BusinessNumberResponse;
 import com.example.User.dto.corebank.AccountCheckRequest;
 import com.example.User.dto.authserver.AuthServerProfileRequest;
@@ -24,8 +24,8 @@ public interface CoreBankFeign {
     boolean verifyProfile(@RequestBody AuthServerProfileRequest profileRequest);
 
     @PostMapping("/authentication/email/pincheck")
-    boolean checkEmailPinNumber(@RequestBody AuthServerEmailPinNumber emailPinNumber);
+    boolean checkEmailPinNumber(@RequestBody AuthServerEmailPinNumberRequest emailPinNumber);
 
     @PostMapping("/authentication/pincheck")
-    boolean checkPinNumber(@RequestBody AuthServerPinNumber checkPinNumber);
+    boolean checkPinNumber(@RequestBody AuthServerPinNumberRequest checkPinNumber);
 }
