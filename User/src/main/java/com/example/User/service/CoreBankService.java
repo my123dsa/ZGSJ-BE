@@ -1,7 +1,7 @@
 package com.example.User.service;
 
-import com.example.User.dto.authserver.AuthServerEmailPinNumber;
-import com.example.User.dto.authserver.AuthServerPinNumber;
+import com.example.User.dto.authserver.AuthServerEmailPinNumberRequest;
+import com.example.User.dto.authserver.AuthServerPinNumberRequest;
 import com.example.User.dto.corebank.AccountCheckRequest;
 import com.example.User.dto.corebank.AccountInfoResponse;
 import com.example.User.dto.authserver.AuthServerProfileRequest;
@@ -56,7 +56,7 @@ public class CoreBankService {
         }
     }
 
-    public boolean checkEmailPinNumber(AuthServerEmailPinNumber emailPinNumber) {
+    public boolean checkEmailPinNumber(AuthServerEmailPinNumberRequest emailPinNumber) {
         try {
             return  coreBankFeign.checkEmailPinNumber(emailPinNumber);
         }catch (FeignException e){
@@ -64,7 +64,7 @@ public class CoreBankService {
         }
     }
 
-    public boolean checkPinNumber(AuthServerPinNumber checkPinNumber) {
+    public boolean checkPinNumber(AuthServerPinNumberRequest checkPinNumber) {
         try {
             return  coreBankFeign.checkPinNumber(checkPinNumber);
         }catch (FeignException e){
