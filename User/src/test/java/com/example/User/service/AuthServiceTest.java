@@ -1,6 +1,7 @@
 package com.example.User.service;
 
 
+import com.example.User.repository.PresidentRepository;
 import com.example.User.util.JWTUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,9 @@ public class AuthServiceTest {
 
     @Mock
     private RedisTokenService tokenService;
+
+    @Mock
+    private PresidentRepository presidentRepository;
 
     @InjectMocks
     private AuthService authService;
