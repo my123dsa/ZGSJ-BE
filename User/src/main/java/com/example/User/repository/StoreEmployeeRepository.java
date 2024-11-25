@@ -27,11 +27,7 @@ public interface StoreEmployeeRepository extends JpaRepository<StoreEmployee, In
     List<StoreEmployee> findByStoreIdWithFetch(@Param("storeId") Integer storeId);
 
     @Query("UPDATE StoreEmployee se " +
-            "SET se.bankCode = '000', " +
-            "se.accountNumber = '탈퇴하여 계좌 정보를 가져올 수 없습니다.', " +
-            "se.email = '*****@*****.***', " +
-            "se.phoneNumber = '***-****-****', " +
-            "se.address = '탈퇴한 회원입니다.' " +
+            "SET se.employmentType = 10 " +
             "WHERE se.id = :seId")
     @Modifying
     void updateEmployeeReplaceDelete(@Param("seId") Integer seId);
