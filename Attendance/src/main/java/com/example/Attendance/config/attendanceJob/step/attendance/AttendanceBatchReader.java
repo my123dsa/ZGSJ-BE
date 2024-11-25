@@ -29,8 +29,8 @@ public class AttendanceBatchReader {
                 if (batchJobState.getEmployees() == null) {
                     batchJobState.setLocalDate();
                     batchJobState.setEmployees(storeEmployeeRepository
-                            .findAllBatchInputDataByPaymentDate(20)); //테스트용
-//                            .findAllBatchInputDataByPaymentDate(batchJobState.getLocalDate().getDayOfMonth()));
+//                            .findAllBatchInputDataByPaymentDate(20)); //테스트용
+                            .findAllBatchInputDataByPaymentDate(batchJobState.getLocalDate().getDayOfMonth()));
                     if (batchJobState.getEmployees().isEmpty()) {
                         log.info("처리할 직원 데이터가 없습니다.");
                         return null;

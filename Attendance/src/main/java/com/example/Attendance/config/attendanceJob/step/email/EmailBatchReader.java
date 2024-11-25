@@ -1,14 +1,9 @@
 package com.example.Attendance.config.attendanceJob.step.email;
 
-import com.example.Attendance.config.attendanceJob.BatchJobState;
 import com.example.Attendance.config.attendanceJob.BatchService;
-import com.example.Attendance.dto.batch.BatchInputData;
 import com.example.Attendance.dto.batch.email.EmailInputData;
-import com.example.Attendance.dto.batch.pdf.PdfInputData;
 import com.example.Attendance.error.CustomException;
 import com.example.Attendance.error.ErrorCode;
-import com.example.Attendance.repository.StoreEmployeeRepository;
-import com.example.Attendance.service.CommuteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.annotation.StepScope;

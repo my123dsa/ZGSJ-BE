@@ -1,17 +1,11 @@
 package com.example.Attendance.config.attendanceJob.step.pdf;
 
-import com.example.Attendance.FeignWithCoreBank;
-import com.example.Attendance.config.attendanceJob.BatchJobState;
-import com.example.Attendance.dto.batch.*;
 import com.example.Attendance.dto.batch.pdf.PdfInputData;
 import com.example.Attendance.dto.batch.pdf.PdfOutputData;
 import com.example.Attendance.error.CustomException;
 import com.example.Attendance.error.ErrorCode;
-import com.example.Attendance.error.FeignExceptionHandler;
-import com.example.Attendance.service.BigService;
 import com.example.Attendance.service.GCPService;
 import com.example.Attendance.service.PayStatementPdfService;
-import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.annotation.StepScope;

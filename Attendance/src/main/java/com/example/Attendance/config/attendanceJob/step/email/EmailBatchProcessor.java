@@ -1,16 +1,10 @@
 package com.example.Attendance.config.attendanceJob.step.email;
 
-import com.example.Attendance.FeignWithCoreBank;
-import com.example.Attendance.config.attendanceJob.BatchJobState;
-import com.example.Attendance.dto.batch.*;
 import com.example.Attendance.dto.batch.email.EmailInputData;
 import com.example.Attendance.dto.batch.email.EmailOutputData;
 import com.example.Attendance.error.CustomException;
 import com.example.Attendance.error.ErrorCode;
-import com.example.Attendance.error.FeignExceptionHandler;
-import com.example.Attendance.service.BigService;
 import com.example.Attendance.service.EmailService;
-import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.annotation.StepScope;

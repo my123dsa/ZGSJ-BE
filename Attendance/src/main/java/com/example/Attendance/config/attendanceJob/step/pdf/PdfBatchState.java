@@ -4,7 +4,6 @@ import com.example.Attendance.config.attendanceJob.Batch;
 import com.example.Attendance.dto.batch.pdf.PdfInputData;
 import lombok.Getter;
 import org.springframework.batch.core.configuration.annotation.JobScope;
-import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
