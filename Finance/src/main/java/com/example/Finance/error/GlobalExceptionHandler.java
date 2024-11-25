@@ -12,17 +12,21 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(FeignException.class)
-    public ResponseEntity<Object> handleFeignException(FeignException e) {
+    private ResponseEntity<ErrorDTO> handleFeignException(FeignException e) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(e.contentUTF8());
-            String detail = jsonNode.get("detail").asText();
-            return ResponseEntity.status(e.status())
-                    .body(new ErrorDTO("FEIGN_ERROR", detail));
+            return ResponseEntity
+                    .status(500)
+                    .body(ErrorDTO.builder()
+                            .code("FEIGN_ERROR")
+                            .message(e.getMessage())
+                            .build());
         } catch (Exception ex) {
-            // 변환 과정 다시 오류 발생 시, 기본 값 전달
-            return ResponseEntity.status(e.status())
-                    .body(new ErrorDTO("FEIGN_ERROR", e.contentUTF8()));
+            return ResponseEntity
+                    .status(500)
+                    .body(ErrorDTO.builder()
+                            .code("FEIGN_EXCEPTION_ERROR")
+                            .message("EXCEPTION_ERROR")
+                            .build());
         }
     }
 

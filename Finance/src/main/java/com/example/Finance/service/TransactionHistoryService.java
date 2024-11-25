@@ -3,6 +3,7 @@ package com.example.Finance.service;
 import com.example.Finance.dto.TransactionChartResponse;
 import com.example.Finance.dto.TransactionHistoryRequest;
 import com.example.Finance.dto.TransactionHistoryResponse;
+import com.example.Finance.dto.TransactionHistoryWithCounterPartyResponse;
 import com.example.Finance.feign.CoreBankFeign;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,13 +38,13 @@ public class TransactionHistoryService {
         TransactionChartResponse transactionChartResponse = new TransactionChartResponse();
 
         transactionChartResponse.setSales(
-                calculateMonthlyExpenses(transactionHistoryResponses)
+                calculateMonthlySales(transactionHistoryResponses)
         );
         transactionChartResponse.setExpenses(
                 calculateMonthlyExpenses(transactionHistoryResponses)
         );
 
-        Map<Integer, Long> monthlySalesMap = calculateMonthlySales(transactionHistoryResponsesYear);
+        Map<Integer, Long> monthlySalesMap = calculateMonthlySalesDetail(transactionHistoryResponsesYear);
         List<Long> monthlySalesData = new ArrayList<>(12);
         for (int i = 1; i <= 12; i++) {
             monthlySalesData.add(i - 1, monthlySalesMap.getOrDefault(i, 0L));
@@ -68,6 +69,15 @@ public class TransactionHistoryService {
     {
         return coreBankFeign.getTransactionHistoryList(transactionHistoryRequest, year, month);
     }
+
+    public List<TransactionHistoryWithCounterPartyResponse> getYearMonthlyTransactionsWithCounterPartyName(
+            TransactionHistoryRequest transactionHistoryRequest,
+            Integer year,
+            Integer month)
+    {
+        return coreBankFeign.getTransactionHistoryYearSalesListWithCounterParty(transactionHistoryRequest, year, month);
+    }
+
     public List<TransactionHistoryResponse> getYearlyTransactions(
             TransactionHistoryRequest transactionHistoryRequest,
             Integer year
@@ -75,7 +85,7 @@ public class TransactionHistoryService {
         return coreBankFeign.getTransactionHistoryYearSalesList(transactionHistoryRequest, year);
     }
 
-    public Map<Integer, Long> calculateMonthlySales(
+    public Map<Integer, Long> calculateMonthlySalesDetail(
             List<TransactionHistoryResponse> transactionHistoryResponses
     ) {
         return transactionHistoryResponses.stream()
@@ -84,6 +94,14 @@ public class TransactionHistoryService {
                         tr -> Integer.valueOf(tr.getTransactionDate().split("-")[1]),
                         Collectors.summingLong(TransactionHistoryResponse::getAmount)
                 ));
+    }
+
+    public List<TransactionHistoryResponse> calculateMonthlySales(
+            List<TransactionHistoryResponse> transactionHistoryResponses
+    ) {
+        return transactionHistoryResponses.stream()
+                .filter(TransactionHistoryResponse::getIsDeposit)
+                .collect(Collectors.toList());
     }
 
     public List<TransactionHistoryResponse> calculateMonthlyExpenses(
@@ -98,7 +116,7 @@ public class TransactionHistoryService {
             List<TransactionHistoryResponse> transactionHistoryResponses
     ) {
         return transactionHistoryResponses.stream()
-                .filter(tr -> tr.getIsDeposit())
+                .filter(TransactionHistoryResponse::getIsDeposit)
                 .mapToLong(TransactionHistoryResponse::getAmount)
                 .sum();
     }

@@ -63,7 +63,18 @@ public class Commute {
     }
 
     private void calculateDuration(LocalDateTime startTime, LocalDateTime endTime) {
-        this.commuteDuration = Duration.between(startTime, endTime).toMinutes();
+        if (endTime.toLocalTime().equals(LocalTime.MIDNIGHT)) {
+            LocalDateTime adjustedEndTime = endTime.plusDays(1);
+            this.commuteDuration = Duration.between(startTime, adjustedEndTime).toMinutes();
+        } else if (endTime.isBefore(startTime)) {
+            // 퇴근 시간이 출근 시간보다 이전인 경우 (자정을 넘긴 경우)
+            // 이거 말고 다른 오전 값은 들어올 수 없음(FRONT 측 계산)
+            LocalDateTime adjustedEndTime = endTime.plusDays(1);
+            this.commuteDuration = Duration.between(startTime, adjustedEndTime).toMinutes();
+        } else {
+            // 일반적인 경우
+            this.commuteDuration = Duration.between(startTime, endTime).toMinutes();
+        }
     }
 
     public void setEndTime(LocalDateTime endTime) {
