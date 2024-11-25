@@ -36,11 +36,13 @@ public class BatchInputData implements Serializable {
     private Long employmentCharge;
     private Long incomeTax;
 
+    private String presidentEmail;
+
     private int retryCount = 0;
 
     public BatchInputData(Integer seId, String fromAccount, String fromBankCode, Byte employmentType,
                           String toAccount, String toBankCode, Long salary, String toAccountDepositor,
-                          String fromAccountDepositor, String email, LocalDate birthDate, String phoneNumber) {
+                          String fromAccountDepositor, String email, LocalDate birthDate, String phoneNumber,String presidentEmail) {
         this.seId = seId;
         this.fromAccount = fromAccount;
         this.fromBankCode = fromBankCode;
@@ -53,5 +55,6 @@ public class BatchInputData implements Serializable {
         this.email = email;
         this.birthDate = birthDate;
         this.phoneNumber = phoneNumber;
+        this.presidentEmail= presidentEmail;
     }
 }
