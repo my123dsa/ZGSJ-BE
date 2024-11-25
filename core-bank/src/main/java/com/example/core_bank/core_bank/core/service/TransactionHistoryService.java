@@ -1,21 +1,18 @@
 package com.example.core_bank.core_bank.core.service;
 
-import com.example.core_bank.core_bank.core.dto.TransactionHistoryRequest;
 import com.example.core_bank.core_bank.core.dto.TransactionHistoryResponse;
+import com.example.core_bank.core_bank.core.dto.TransactionHistoryWithCounterPartyResponse;
 import com.example.core_bank.core_bank.core.model.Account;
 import com.example.core_bank.core_bank.core.model.TransactionHistory;
-import com.example.core_bank.core_bank.core.repository.TransactionHistoryRepository;
 import com.example.core_bank.core_bank.core.repository.AccountRepository;
+import com.example.core_bank.core_bank.core.repository.TransactionHistoryRepository;
 import com.example.core_bank.core_bank.global.error.CustomException;
 import com.example.core_bank.core_bank.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.ErrorResponse;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -85,6 +82,29 @@ public class TransactionHistoryService {
 
         return transactionSalesYearHistory.stream()
                 .map(TransactionHistoryResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    //응답에 송, 수취인을 붙여서 추가
+    public List<TransactionHistoryWithCounterPartyResponse> getTransactionHistoryWithCounterParty(
+            String bankCode,
+            String accountNumber,
+            Integer year,
+            Integer month
+    ){
+        Account account = accountRepository.findByAccountNumberWithBank(accountNumber)
+                .orElseThrow(()->new CustomException(ErrorCode.ACCOUNT_NOT_FOUND));
+
+        if (!account.getBank().getBankCode().equals(bankCode)) {
+            throw new CustomException(ErrorCode.BANKCODE_NOT_MATCH);
+        }
+
+        List<TransactionHistory> transactionHistories =
+                transactionHistoryRepository.findByAccountIdAndYearAndMonthWithClassfication(account.getId(), year, month);
+
+        // 거래 내역을 TransactionHistoryResponse로 변경
+        return transactionHistories.stream()
+                .map(TransactionHistoryWithCounterPartyResponse::from)
                 .collect(Collectors.toList());
     }
 }

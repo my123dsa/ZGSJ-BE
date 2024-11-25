@@ -3,6 +3,7 @@ package com.example.Finance.service;
 import com.example.Finance.dto.TransactionChartResponse;
 import com.example.Finance.dto.TransactionHistoryRequest;
 import com.example.Finance.dto.TransactionHistoryResponse;
+import com.example.Finance.dto.TransactionHistoryWithCounterPartyResponse;
 import com.example.Finance.feign.CoreBankFeign;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -68,6 +69,15 @@ public class TransactionHistoryService {
     {
         return coreBankFeign.getTransactionHistoryList(transactionHistoryRequest, year, month);
     }
+
+    public List<TransactionHistoryWithCounterPartyResponse> getYearMonthlyTransactionsWithCounterPartyName(
+            TransactionHistoryRequest transactionHistoryRequest,
+            Integer year,
+            Integer month)
+    {
+        return coreBankFeign.getTransactionHistoryYearSalesListWithCounterParty(transactionHistoryRequest, year, month);
+    }
+
     public List<TransactionHistoryResponse> getYearlyTransactions(
             TransactionHistoryRequest transactionHistoryRequest,
             Integer year
