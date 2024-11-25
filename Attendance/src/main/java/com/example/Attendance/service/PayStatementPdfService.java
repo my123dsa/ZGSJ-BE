@@ -2,6 +2,7 @@ package com.example.Attendance.service;
 
 
 import com.example.Attendance.dto.batch.BatchOutputData;
+import com.example.Attendance.dto.batch.pdf.PdfInputData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,18 +12,18 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PayStatementPdfService extends PdfService {
 
-    public byte[] generateIncomeStatementPdf(BatchOutputData bod) {
+    public byte[] generateIncomeStatementPdf(PdfInputData  pid) {
         // 손익 계산하기
 
         // 게산한 손익관련 자료로 HTML 생성
-        String html = generateHtml(bod);
+        String html = generateHtml(pid);
         log.info("Generated HTML: {}", html);
 
         // HTML을 PDF로 변환
         return convertHtmlToPdf(html);
     }
 
-    private String generateHtml(BatchOutputData bod) {
+    private String generateHtml(PdfInputData  pid) {
         StringBuilder html = new StringBuilder();
         html.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
                 .append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3" +
@@ -49,8 +50,8 @@ public class PayStatementPdfService extends PdfService {
 
                 // 제목
                 .append("<div class=\"title\">급여지급명세서</div>")
-                .append("<div class=\"date\">").append(bod.getIssuanceDate().getYear()).append("년 ")
-                .append(bod.getIssuanceDate().getMonthValue()).append("월</div>")
+                .append("<div class=\"date\">").append(pid.getIssuanceDate().getYear()).append("년 ")
+                .append(pid.getIssuanceDate().getMonthValue()).append("월</div>")
 
                 // 기본 정보
                 .append("<div class=\"section\">")
@@ -60,15 +61,15 @@ public class PayStatementPdfService extends PdfService {
                 .append("</tr>")
                 .append("<tr>")
                 .append("<th>이름</th>")
-                .append("<td>").append(bod.getName()).append("</td>")
+                .append("<td>").append(pid.getName()).append("</td>")
                 .append("<th>이메일</th>")
-                .append("<td>").append(bod.getEmail()).append("</td>")
+                .append("<td>").append(pid.getEmail()).append("</td>")
                 .append("</tr>")
                 .append("<tr>")
                 .append("<th>전화번호</th>")
-                .append("<td>").append(bod.getPhoneNumber()).append("</td>")
+                .append("<td>").append(pid.getPhoneNumber()).append("</td>")
                 .append("<th>생년월일</th>")
-                .append("<td>").append(bod.getBirthDate()).append("</td>")
+                .append("<td>").append(pid.getBirthDate()).append("</td>")
                 .append("</tr>")
                 .append("</table>")
                 .append("</div>")
@@ -82,41 +83,41 @@ public class PayStatementPdfService extends PdfService {
                 .append("</tr>")
                 .append("<tr>")
                 .append("<th>기본급여(a)</th>")
-                .append("<td>").append(String.format("%,d원", bod.getSalary())).append("</td>")
+                .append("<td>").append(String.format("%,d원", pid.getSalary())).append("</td>")
                 .append("</tr>")
                 .append("<tr>")
                 .append("<th>주휴 수당(b)</th>")
-                .append("<td>").append(String.format("%,d원", bod.getAllowance())).append("</td>")
+                .append("<td>").append(String.format("%,d원", pid.getAllowance())).append("</td>")
                 .append("</tr>")
                 .append("<tr>")
                 .append("<th>국민연금(c)</th>")
-                .append("<td>").append(String.format("%,d원", bod.getNationalCharge())).append("</td>")
+                .append("<td>").append(String.format("%,d원", pid.getNationalCharge())).append("</td>")
                 .append("</tr>")
                 .append("<tr>")
                 .append("<th>건보료 + 장기요양보험료(d)</th>")
-                .append("<td>").append(String.format("%,d원", bod.getInsuranceCharge())).append("</td>")
+                .append("<td>").append(String.format("%,d원", pid.getInsuranceCharge())).append("</td>")
                 .append("</tr>")
                 .append("<tr>")
                 .append("<th>고용 보험료(e)</th>")
-                .append("<td>").append(String.format("%,d원", bod.getEmploymentCharge())).append("</td>")
+                .append("<td>").append(String.format("%,d원", pid.getEmploymentCharge())).append("</td>")
                 .append("</tr>")
                 .append("<tr>")
                 .append("<th>소득세(f)</th>")
-                .append("<td>").append(String.format("%,d원", bod.getIncomeTax())).append("</td>")
+                .append("<td>").append(String.format("%,d원", pid.getIncomeTax())).append("</td>")
                 .append("</tr>")
                 .append("<tr>")
                 .append("<th>지급액(a+b-c-d-e-f)</th>")
                 .append("<td>").append(String.format("%,d원",
-                        bod.getSalary() + bod.getAllowance() -
-                                bod.getNationalCharge() - bod.getInsuranceCharge() -
-                                bod.getEmploymentCharge() - bod.getIncomeTax())).append("</td>")
+                        pid.getSalary() + pid.getAllowance() -
+                                pid.getNationalCharge() - pid.getInsuranceCharge() -
+                                pid.getEmploymentCharge() - pid.getIncomeTax())).append("</td>")
                 .append("</tr>")
                 .append("</table>")
                 .append("</div>")
 
                 // 발행일자
                 .append("<div class=\"footer\">")
-                .append("발행일자: ").append(bod.getIssuanceDate())
+                .append("발행일자: ").append(pid.getIssuanceDate())
                 .append("</div>")
 
                 .append("</body></html>");

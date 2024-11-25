@@ -10,6 +10,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -23,6 +25,26 @@ public class EmailService {
                 "집계사장을 사용해주셔서 감사합니다. 🦀🍔🍟" +
                         "<br><br> " +
                         "급여 명세서 url은 " + url + "입니다." +
+                        "<br> "; // 이메일 내용
+        mailSend(email, title, content);
+    }
+
+    public void sendBankFail(String email, String name , LocalDate date,String message){
+        String title = "[집계사장]직원 자동 이체 실패";
+        String content =
+                "집계사장을 사용해주셔서 감사합니다. 🦀🍔🍟" +
+                        "<br><br> " +
+                        "자동이체는"+message+ "로 인해 "+name+"의" + date +"날짜의 자동이체가 실패했습니다." +
+                        "<br> "; // 이메일 내용
+        mailSend(email, title, content);
+    }
+
+    public void sendPdfFail(String email, String name , LocalDate date,String message){
+        String title = "[집계사장]직원 급여 명세서 발급 실패";
+        String content =
+                "집계사장을 사용해주셔서 감사합니다. 🦀🍔🍟" +
+                        "<br><br> " +
+                        "급여명세서는 "+message+ "로 인해 "+name+"의" + date +"날짜의 급여명세서 발급에 실패했습니다." +
                         "<br> "; // 이메일 내용
         mailSend(email, title, content);
     }
