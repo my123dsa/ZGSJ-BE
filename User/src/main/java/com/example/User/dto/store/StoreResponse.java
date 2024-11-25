@@ -9,11 +9,19 @@ import lombok.Getter;
 public class StoreResponse {
     private Integer id;
     private String storeName;
+    private String businessNumber;
+    private String accountNumber;
+    private String bankCode;
+    private String location;
 
     public static StoreResponse from(Store store) {
         return new StoreResponse(
                 store.getId(),
-                store.getStoreName()
+                store.getStoreName(),
+                store.getBusinessNumber(),
+                store.getAccountNumber(),
+                store.getBankCode(),
+                store.getLocation()
         );
     }
 }
