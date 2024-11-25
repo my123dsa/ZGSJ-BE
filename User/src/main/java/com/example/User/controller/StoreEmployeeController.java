@@ -23,6 +23,7 @@ public class StoreEmployeeController {
     private final StoreEmployeeService storeemployeeService;
     private final EmailService emailService;
     private final CryptoUtil cryptoUtil;
+    private final StoreEmployeeService storeEmployeeService;
 
     @PostMapping
     public ResponseEntity<String> registerEmployee(
@@ -66,6 +67,12 @@ public class StoreEmployeeController {
         String url= emailService.sendURLToEmail(email, storeId,encryptedEmail);
 
         return ResponseEntity.ok(url);
-}
+    }
+
+    @PostMapping("/masking/list")
+    public Boolean getMaskingIds(@RequestBody List<Integer> ids){
+        log.info(ids.toString());
+        return storeEmployeeService.updateMasking(ids);
+    }
 }
 

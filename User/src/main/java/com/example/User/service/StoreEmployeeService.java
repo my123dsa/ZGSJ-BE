@@ -9,13 +9,15 @@ import com.example.User.model.Store;
 import com.example.User.model.StoreEmployee;
 import com.example.User.repository.StoreEmployeeRepository;
 import com.example.User.repository.StoreRepository;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class StoreEmployeeService {
@@ -59,5 +61,17 @@ public class StoreEmployeeService {
         StoreEmployee storeEmployee= storeEmployeeRepository.findById(seId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_EMPLOYEE));
         return storeEmployee.getEmail();
+    }
+
+    @Transactional
+    public Boolean updateMasking(List<Integer> ids){
+        try {
+            Byte newType = 11;
+            int updatedCount = storeEmployeeRepository.updateEmploymentTypeByIds(ids, newType);
+            return updatedCount > 0;  // 업데이트된 레코드가 있으면 true
+        } catch (Exception e) {
+            log.error("마스킹 업데이트 실패: {}", e.getMessage());
+            return false;
+        }
     }
 }
