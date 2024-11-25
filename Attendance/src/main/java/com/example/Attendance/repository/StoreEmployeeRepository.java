@@ -30,7 +30,7 @@ public interface StoreEmployeeRepository extends JpaRepository<StoreEmployee, In
 
     @Query("SELECT new com.example.Attendance.dto.batch.BatchInputData(" +
             "se.id, s.accountNumber,'020',se.employmentType, se.accountNumber, se.bankCode, " +
-            "se.salary, se.name, p.name,se.email,se.birthDate,se.phoneNumber) " +
+            "se.salary, se.name, p.name,se.email,se.birthDate,se.phoneNumber,p.email) " +
             "FROM StoreEmployee se " +
             "JOIN se.store s " +
             "JOIN s.president p " +
