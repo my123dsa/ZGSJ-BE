@@ -1,5 +1,6 @@
-package com.example.Attendance.config.attendanceJob;
+package com.example.Attendance.config.attendanceJob.step.attendance;
 
+import com.example.Attendance.config.attendanceJob.BatchJobState;
 import com.example.Attendance.dto.batch.BatchInputData;
 import com.example.Attendance.error.CustomException;
 import com.example.Attendance.error.ErrorCode;
@@ -15,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @RequiredArgsConstructor
 
-public class BatchReader {
+public class AttendanceBatchReader {
 
     private final BatchJobState batchJobState;
     private final StoreEmployeeRepository storeEmployeeRepository;

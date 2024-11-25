@@ -1,6 +1,7 @@
-package com.example.Attendance.config.attendanceJob;
+package com.example.Attendance.config.attendanceJob.step.attendance;
 
 import com.example.Attendance.FeignWithCoreBank;
+import com.example.Attendance.config.attendanceJob.BatchJobState;
 import com.example.Attendance.dto.batch.*;
 import com.example.Attendance.error.CustomException;
 import com.example.Attendance.error.ErrorCode;
@@ -16,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class BatchProcessor {
+public class AttendanceBatchProcessor {
 
     private final FeignWithCoreBank feignWithCoreBank;
     private final BigService bigService;
@@ -55,5 +56,4 @@ public class BatchProcessor {
             }
         };
     }
-
 }
