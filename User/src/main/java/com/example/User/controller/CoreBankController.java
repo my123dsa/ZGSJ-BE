@@ -42,11 +42,7 @@ public class CoreBankController {
     public ResponseEntity<Boolean> getAccountBankcodeAndAccountNumberEmployeename(
             @RequestBody AccountCheckRequest accountCheckRequest) {
         // 서비스 호출
-        boolean isValid = coreBankService.getNameByIdAndBankCodeAndAccountNumberEmployeename(
-                accountCheckRequest.getName(),
-                accountCheckRequest.getAccountNumber(),
-                accountCheckRequest.getBankCode()
-        );
+        boolean isValid = coreBankService.getNameByIdAndBankCodeAndAccountNumberEmployeename(accountCheckRequest);
 
         // 프론트로 boolean 값 반환
         return ResponseEntity.ok(isValid);

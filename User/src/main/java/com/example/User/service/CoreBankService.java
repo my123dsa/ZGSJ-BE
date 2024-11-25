@@ -50,12 +50,8 @@ public class CoreBankService {
     }
 
     //직원계좌 확인
-    public boolean getNameByIdAndBankCodeAndAccountNumberEmployeename(String name, String accountNumber, String bankCode) {
-
-        // 1. 요청 DTO 생성
-        AccountCheckRequest accountCheckRequest = AccountCheckRequest.of(accountNumber, bankCode, name);
-
-        // 2. CoreBankFeign 호출
+    public boolean getNameByIdAndBankCodeAndAccountNumberEmployeename(AccountCheckRequest accountCheckRequest) {
+        // 1. CoreBankFeign 호출
         try {
             return coreBankFeign.verifyAccountEmployee(accountCheckRequest);
         }catch (FeignException e){
