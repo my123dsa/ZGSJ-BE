@@ -25,4 +25,4 @@ spring:
             enable: true # 7
 
 server:
-  port: 8211
+  port: 3030

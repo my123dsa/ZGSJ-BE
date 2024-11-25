@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 @Component
-@FeignClient(name = "User")
+@FeignClient(name = "User",url = "http://localhost:7070/user")
 public interface UserFeignService {
 
     @PostMapping("/employee/masking/list")
