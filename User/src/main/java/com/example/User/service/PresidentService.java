@@ -46,6 +46,13 @@ public class PresidentService {
         return president.getId();
     }
 
+    public void emialvalidation(String email) {
+        boolean emailExists = presidentRepository.existsByEmail(email);
+        if (emailExists) {
+            throw new CustomException(ErrorCode.EMAIL_ALREADY_EXISTS);
+        }
+    }
+
     @Transactional
     public void remove(Integer id){
         //확인 후 삭제하기
