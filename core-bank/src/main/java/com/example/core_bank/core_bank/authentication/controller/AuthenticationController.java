@@ -29,9 +29,6 @@ public class AuthenticationController {
         if (!result)
             return false;
 
-        String verificationNumber = emailService.sendVerificationEmail(pinNumberRequest.getEmail());
-        verificationNumberStorage.saveNumber(pinNumberRequest.getEmail(), verificationNumber);
-
         return true;
     }
 
@@ -46,6 +43,11 @@ public class AuthenticationController {
 
     @PostMapping("/profile/check")
     public boolean verifyProfile(@RequestBody AuthServerProfileRequest profileRequest) {
-        return authenticationService.verifyProfile(profileRequest);
+        boolean result = authenticationService.verifyProfile(profileRequest);
+        if (!result)
+            return false;
+        String verificationNumber = emailService.sendVerificationEmail(profileRequest.getEmail());
+        verificationNumberStorage.saveNumber(profileRequest.getEmail(), verificationNumber);
+        return true;
     }
 }
