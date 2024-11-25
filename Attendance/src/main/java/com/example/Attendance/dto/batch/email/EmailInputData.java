@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class EmailInputData {
 
+    private Integer seId;
     private Integer batchId;
     private String name;
     private String employeeEmail;
@@ -24,8 +25,11 @@ public class EmailInputData {
     private LocalDate issuanceDate;
     private String message;
 
+    private Boolean isMask;
+
     public static EmailInputData from(Batch batch) {
         return new EmailInputData(
+                batch.getSeId(),
                 batch.getId(),
                 batch.getName(),
                 batch.getEmployeeEmail(),
@@ -34,7 +38,8 @@ public class EmailInputData {
                 batch.getBankResult(),
                 batch.getPdfResult(),
                 batch.getIssuanceDate(),
-                batch.getMessage()
+                batch.getMessage(),
+                batch.getIsMask()
         );
     }
 }

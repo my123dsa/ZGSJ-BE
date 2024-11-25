@@ -27,7 +27,7 @@ public class Batch {
     @Column(name = "issuance_date", nullable = false)
     private LocalDate issuanceDate;
 
-    @Column(name = "message", length = 255)
+    @Column(name = "message")
     private String message;
 
     @Column(name = "name", nullable = false, length = 50)
@@ -75,6 +75,9 @@ public class Batch {
     @Column(name = "email_result")
     private Boolean emailResult;
 
+    @Column(name = "is_mask")
+    private Boolean isMask;
+
 
     public static Batch from(BatchOutputData outputData) {
         return new Batch(
@@ -96,7 +99,8 @@ public class Batch {
                 null,                           // url
                 outputData.getBankResult(),     // bankResult
                 false,                          // pdfResult
-                false                           // emailResult
+                false,                           // emailResult
+                outputData.getIsMask()
         );
     }
 
@@ -118,7 +122,8 @@ public class Batch {
                  String url,                     // 16
                  Boolean bankResult,             // 17
                  Boolean pdfResult,              // 18
-                 Boolean emailResult) {          // 19
+                 Boolean emailResult,
+                 Boolean isMask) {          // 19
         this.seId = seId;
         this.status = status;
         this.issuanceDate = issuanceDate;
@@ -138,5 +143,6 @@ public class Batch {
         this.bankResult = bankResult;
         this.pdfResult = pdfResult;
         this.emailResult = emailResult;
+        this.isMask= isMask;
     }
 }

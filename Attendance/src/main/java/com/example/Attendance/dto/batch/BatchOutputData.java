@@ -38,15 +38,18 @@ public class BatchOutputData {
     private String employeeEmail;
     private Boolean bankResult;
 
+    private Boolean isMask;
+
     public static BatchOutputData of(TransferResponse transferResponse, BatchInputData bid) {
         boolean result= transferResponse.getStatus() ==200;
+        boolean mask= bid.getEmploymentType() ==10;
         log.info("여기요 {}",result);
         return new BatchOutputData(bid.getSeId(), transferResponse.getStatus(),
                 transferResponse.getIssuanceDate(), transferResponse.getMessage()
                 , bid.getToAccountDepositor(), bid.getEmail(), bid.getBirthDate(), bid.getPhoneNumber()
                 , bid.getSalaryAfter(), bid.getAllowance()
                 , bid.getNationalCharge(), bid.getInsuranceCharge(), bid.getEmploymentCharge(), bid.getIncomeTax()
-        ,bid.getPresidentEmail(),bid.getEmail(),result);
+        ,bid.getPresidentEmail(),bid.getEmail(),result,mask);
     }
 
     public PayStatement toEntity(String url) {

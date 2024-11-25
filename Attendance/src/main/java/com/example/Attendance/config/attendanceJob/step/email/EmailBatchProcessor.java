@@ -36,7 +36,7 @@ public class EmailBatchProcessor {
                     emailService.sendPdfFail(item.getPresidentEmail(), item.getName(), item.getIssuanceDate(), item.getMessage());
                 }else
                     emailService.sendBankFail(item.getPresidentEmail(),item.getName(),item.getIssuanceDate(),item.getMessage());
-                return EmailOutputData.of(item.getBatchId(),true);
+                return EmailOutputData.of(item.getSeId(),item.getBatchId(),true,item.getIsMask());
             } catch (Exception e) {
                 throw new CustomException(ErrorCode.SERVER_ERROR);
             }

@@ -14,10 +14,12 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class EmailOutputData {
 
+    private Integer seId;
     private Integer batchId;
     private Boolean result;
+    private Boolean isMask;
 
-    public static EmailOutputData of(Integer id, boolean result){
-        return new EmailOutputData(id,result);
+    public static EmailOutputData of(Integer seId,Integer batchId, Boolean result,Boolean isMask){
+        return new EmailOutputData(seId,batchId,result,isMask);
     }
 }

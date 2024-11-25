@@ -39,7 +39,9 @@ public enum ErrorCode {
     EMAIL_SEND_FAILED(500, "이메일 전송에 실패했습니다."),
     PDF_CREATE_ERROR(500, "PDF 생성 중 오류가 발생했습니다."),
     GCP_SETTING_ERROR(500, "구글 클라우드 설정 중 오류가 발생했습니다."),
-    GCP_ERROR(500, "구글 클라우드에 저장 중 오류가 발생했습니다.");
+    GCP_ERROR(500, "구글 클라우드에 저장 중 오류가 발생했습니다."),
+    Feign_Error(500,"MSA 통신 에러"),
+    UPDATE_FAIL(500,"type 업데이트 에러");
 
     private final int status;
     private final String message;
