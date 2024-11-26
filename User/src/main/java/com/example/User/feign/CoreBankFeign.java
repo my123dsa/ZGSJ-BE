@@ -17,4 +17,7 @@ public interface CoreBankFeign {
 
     @PostMapping("/bank/verify-account")
     boolean verifyAccount(@RequestBody AccountCheckRequest accountCheckRequest);
+
+    @PostMapping("/bank/verify-account-employee")
+    boolean verifyAccountEmployee(@RequestBody AccountCheckRequest accountCheckRequest);
 }
