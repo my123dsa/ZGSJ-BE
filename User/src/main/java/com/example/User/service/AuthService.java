@@ -8,6 +8,7 @@ import com.example.User.repository.PresidentRepository;
 import com.example.User.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -19,7 +20,7 @@ public class AuthService {
     private final JWTUtil jwtUtil;
     private final RedisTokenService tokenService;
     private final PresidentRepository presidentRepository;
-    private final UserConfig userConfig;
+    private final PasswordEncoder passwordEncoder;
 
     public String onAuthenticationSuccess(Integer id) {
         log.info("id {}", id);
@@ -37,7 +38,7 @@ public class AuthService {
         President president =  presidentRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRESIDENT_NOT_FOUND));
 
-       if (!userConfig.passwordEncoder().matches(passwordclaim, president.getPassword()))
+       if (!passwordEncoder.matches(passwordclaim, president.getPassword()))
        {
            throw new CustomException(ErrorCode.PASSWORD_WRONG);
        }

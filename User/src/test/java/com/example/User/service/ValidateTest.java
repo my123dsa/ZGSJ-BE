@@ -1,51 +1,47 @@
 package com.example.User.service;
 
-import com.example.User.config.MailConfig;
-import com.example.User.config.UserConfig;
 import com.example.User.error.CustomException;
 import com.example.User.model.President;
 import com.example.User.repository.PresidentRepository;
 import com.example.User.util.JWTUtil;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)  // SpringBootTest 대신 MockitoExtension 사용
 class ValidateTest {
 
-    @InjectMocks
-    private AuthService authService;
-
     @Mock
     private JWTUtil jwtUtil;
 
     @Mock
-    private RedisTokenService tokenService;
+    private RedisTokenService redisTokenService;
 
     @Mock
     private PresidentRepository presidentRepository;
 
-    @Mock
-    private UserConfig userConfig;
 
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    //실제로 encoder사용하기
-    private BCryptPasswordEncoder realPasswordEncoder = new BCryptPasswordEncoder();
+    private AuthService authService;
+
+    @BeforeEach
+    public void setup() {
+        this.authService = new AuthService(jwtUtil, redisTokenService, presidentRepository, passwordEncoder);
+    }
+
 
     @Test
     @DisplayName("비밀번호 인증 테스트 - 실제 인코딩")
@@ -53,7 +49,7 @@ class ValidateTest {
         // Given
         Integer userId = 1;
         String rawPassword = "qwer1234!";
-        String encodedPassword = realPasswordEncoder.encode(rawPassword);
+        String encodedPassword = passwordEncoder.encode(rawPassword);
 
         President president = President.createPresident(
                 "테스트", "테스트", "테스트이메일", encodedPassword,
@@ -62,7 +58,6 @@ class ValidateTest {
         );
 
         when(presidentRepository.findById(userId)).thenReturn(Optional.of(president));
-        when(userConfig.passwordEncoder()).thenReturn(realPasswordEncoder);
 
         assertThat(authService.validatePassword(userId, rawPassword)).isTrue();
     }
@@ -73,7 +68,7 @@ class ValidateTest {
         // Given
         Integer userId = 1;
         String rawPassword = "qwer1234!";
-        String encodedPassword = realPasswordEncoder.encode(rawPassword);
+        String encodedPassword = passwordEncoder.encode(rawPassword);
 
         President president = President.createPresident(
                 "테스트", "테스트", "테스트이메일", encodedPassword,
@@ -82,7 +77,6 @@ class ValidateTest {
         );
 
         when(presidentRepository.findById(userId)).thenReturn(Optional.of(president));
-        when(userConfig.passwordEncoder()).thenReturn(realPasswordEncoder);
 
         String password = "dowrong1234!";
 
