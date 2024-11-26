@@ -1,6 +1,6 @@
 package com.example.Attendance.config.attendanceJob.step.pdf;
 
-import com.example.Attendance.config.attendanceJob.Batch;
+import com.example.Attendance.model.Batch;
 import com.example.Attendance.dto.batch.pdf.PdfInputData;
 import lombok.Getter;
 import org.springframework.batch.core.configuration.annotation.JobScope;
