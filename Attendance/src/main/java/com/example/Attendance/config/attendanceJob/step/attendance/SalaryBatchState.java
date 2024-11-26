@@ -1,11 +1,10 @@
-package com.example.Attendance.config.attendanceJob;
+package com.example.Attendance.config.attendanceJob.step.attendance;
 
 import com.example.Attendance.dto.batch.BatchInputData;
 import com.example.Attendance.dto.batch.CommuteSummary;
 import com.example.Attendance.error.ErrorDTO;
 import lombok.Getter;
 import org.springframework.batch.core.configuration.annotation.JobScope;
-import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -18,7 +17,7 @@ import java.util.List;
 @JobScope   // StepScope 대신 JobScope 사용
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)   // Job 스코프로 생성
 @Getter
-public class BatchJobState {
+public class SalaryBatchState {
 
     private List<BatchInputData> employees;
     private int currentIndex = 0;
