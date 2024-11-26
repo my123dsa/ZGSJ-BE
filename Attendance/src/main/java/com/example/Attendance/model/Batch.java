@@ -1,4 +1,4 @@
-package com.example.Attendance.config.attendanceJob;
+package com.example.Attendance.model;
 
 import com.example.Attendance.dto.batch.BatchOutputData;
 import jakarta.persistence.*;

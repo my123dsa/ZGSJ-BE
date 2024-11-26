@@ -1,6 +1,6 @@
-package com.example.Attendance.config.attendanceJob;
+package com.example.Attendance.repository;
 
-import com.example.Attendance.dto.batch.email.EmailInputData;
+import com.example.Attendance.model.Batch;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

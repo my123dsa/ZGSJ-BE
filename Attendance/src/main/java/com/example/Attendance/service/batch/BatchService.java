@@ -1,13 +1,14 @@
-package com.example.Attendance.config.attendanceJob;
+package com.example.Attendance.service.batch;
 
 import com.example.Attendance.dto.batch.pdf.PdfSaveData;
+import com.example.Attendance.model.Batch;
+import com.example.Attendance.repository.BatchRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
