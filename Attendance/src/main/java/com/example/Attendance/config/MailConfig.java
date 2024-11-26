@@ -18,10 +18,6 @@ public class MailConfig {
     @Value("${EMAIL_USERNAME}")
     private String EMAIL_USERNAME;
 
-    @Value("${MAP_API_KEY}")
-    private String API_KEY;
-
-
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();

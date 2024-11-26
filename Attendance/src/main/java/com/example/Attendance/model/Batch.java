@@ -39,43 +39,43 @@ public class Batch {
     @Column(name = "phone_number", nullable = false, length = 20)
     private String phoneNumber;
 
-    @Column(name = "salary")
+    @Column(name = "salary",nullable = false)
     private Long salary;
 
-    @Column(name = "allowance")
+    @Column(name = "allowance",nullable = false)
     private Long allowance;
 
-    @Column(name = "national_charge")
+    @Column(name = "national_charge",nullable = false)
     private Long nationalCharge;
 
-    @Column(name = "insurance_charge")
+    @Column(name = "insurance_charge",nullable = false)
     private Long insuranceCharge;
 
-    @Column(name = "employment_charge")
+    @Column(name = "employment_charge",nullable = false)
     private Long employmentCharge;
 
-    @Column(name = "income_tax")
+    @Column(name = "income_tax",nullable = false)
     private Long incomeTax;
 
-    @Column(name = "president_email", length = 100)
+    @Column(name = "president_email", length = 100,nullable = false)
     private String presidentEmail;
 
-    @Column(name = "employee_email", length = 100)
+    @Column(name = "employee_email", length = 100,nullable = false)
     private String employeeEmail;
 
     @Column(name = "pdf_url")
     private String url;
 
-    @Column(name = "bank_result")
+    @Column(name = "bank_result",nullable = false)
     private Boolean bankResult;
 
-    @Column(name = "pdf_result")
+    @Column(name = "pdf_result",nullable = false)
     private Boolean pdfResult;
 
-    @Column(name = "email_result")
+    @Column(name = "email_result",nullable = false)
     private Boolean emailResult;
 
-    @Column(name = "is_mask")
+    @Column(name = "is_mask",nullable = false)
     private Boolean isMask;
 
 
