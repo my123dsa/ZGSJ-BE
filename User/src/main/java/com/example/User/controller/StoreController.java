@@ -44,7 +44,7 @@ public class StoreController {
     @GetMapping("/duplicate/name")
     private ResponseEntity<Boolean> duplicateCheckStoreName(@RequestParam("storeid") Integer storeId,
                                                             @RequestParam("storename") String storeName) {
-        boolean result = !storeService.duplicate(storeId, storeName);
+        boolean result = storeService.duplicate(storeId, storeName);
         return ResponseEntity.ok(result);
     }
 

@@ -54,7 +54,7 @@ public class StoreService {
         storeRepository.save(existedStore);
     }
     public boolean duplicate(Integer storeId, String storeName){
-        return storeRepository.existsByStoreNameAndIdNot(storeName, storeId);
+        return !storeRepository.existsByStoreNameAndIdNot(storeName, storeId);
     }
 
     @Transactional
