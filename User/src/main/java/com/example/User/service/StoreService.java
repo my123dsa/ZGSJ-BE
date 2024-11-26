@@ -23,7 +23,7 @@ public class StoreService {
     private final PresidentRepository presidentRepository;
 
     @Transactional
-    public void registerStore(Integer presidentId,StoreRequest storeRequest) {
+    public void registerStore(Integer presidentId, StoreRequest storeRequest) {
         President president = presidentRepository.findById(presidentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRESIDENT_NOT_FOUND));
         boolean isStoreNameExists = storeRepository.existsByStoreName(storeRequest.getStoreName());
@@ -50,10 +50,9 @@ public class StoreService {
                 .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 
         existedStore.updateByStoreRequest(request);
-
-        storeRepository.save(existedStore);
     }
-    public boolean duplicate(Integer storeId, String storeName){
+
+    public boolean duplicate(Integer storeId, String storeName) {
         return !storeRepository.existsByStoreNameAndIdNot(storeName, storeId);
     }
 
