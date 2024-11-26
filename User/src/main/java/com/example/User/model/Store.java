@@ -1,6 +1,7 @@
 package com.example.User.model;
 
 import com.example.User.dto.store.StoreRequest;
+import com.example.User.dto.store.StoreUpdateRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -62,10 +63,12 @@ public class Store {
         return new Store(storeName, businessNumber, accountNumber, bankCode, president,location,latitude,longitude);
     }
 
-    public void updateByStoreRequest(StoreRequest storeRequest) {
-        this.storeName = storeRequest.getStoreName();
-        this.businessNumber = storeRequest.getBusinessNumber();
-        this.accountNumber = storeRequest.getAccountNumber();
-        this.bankCode = storeRequest.getBankCode();
+    public void updateByStoreRequest(StoreUpdateRequest request) {
+        this.storeName = request.getStoreName();
+        this.accountNumber = request.getAccountNumber();
+        this.location= request.getLocation();
+        this.latitude = request.getLatitude();
+        this.longitude = request.getLongitude();
+
     }
 }
