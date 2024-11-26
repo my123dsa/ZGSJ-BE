@@ -1,4 +1,4 @@
-package com.example.Attendance.service;
+package com.example.Attendance.dto.batch;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

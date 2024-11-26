@@ -1,8 +1,9 @@
-package com.example.Attendance.service;
+package com.example.Attendance.service.batch;
 
 
 import com.example.Attendance.dto.batch.BatchInputData;
 import com.example.Attendance.dto.batch.CommuteSummary;
+import com.example.Attendance.dto.batch.TaxRateWithDeduction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ import java.math.RoundingMode;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class BigService {
+public class CalculateService {
     private final AttendanceConstants AC;
 
     // 완전 일일알바일경우 3.3%

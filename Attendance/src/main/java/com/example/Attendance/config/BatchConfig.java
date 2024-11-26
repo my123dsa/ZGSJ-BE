@@ -1,6 +1,6 @@
 package com.example.Attendance.config;
 
-import com.example.Attendance.service.AttendanceConstants;
+import com.example.Attendance.service.batch.AttendanceConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.launch.JobLauncher;

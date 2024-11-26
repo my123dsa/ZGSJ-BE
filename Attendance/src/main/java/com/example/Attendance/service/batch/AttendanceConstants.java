@@ -1,5 +1,6 @@
-package com.example.Attendance.service;
+package com.example.Attendance.service.batch;
 
+import com.example.Attendance.dto.batch.TaxRateWithDeduction;
 import org.springframework.stereotype.Component;
 
 

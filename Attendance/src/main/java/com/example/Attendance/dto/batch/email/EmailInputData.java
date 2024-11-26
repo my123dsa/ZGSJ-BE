@@ -1,6 +1,6 @@
 package com.example.Attendance.dto.batch.email;
 
-import com.example.Attendance.config.attendanceJob.Batch;
+import com.example.Attendance.model.Batch;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

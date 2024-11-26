@@ -1,7 +1,6 @@
-package com.example.Attendance.service;
+package com.example.Attendance.service.batch;
 
 
-import com.example.Attendance.dto.batch.BatchOutputData;
 import com.example.Attendance.dto.batch.pdf.PdfInputData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
