@@ -1,4 +1,4 @@
-package com.example.Attendance;
+package com.example.Attendance.feign;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;

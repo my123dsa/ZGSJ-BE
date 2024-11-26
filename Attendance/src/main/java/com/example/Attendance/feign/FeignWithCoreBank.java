@@ -1,4 +1,4 @@
-package com.example.Attendance;
+package com.example.Attendance.feign;
 
 import com.example.Attendance.config.FeignConfig;
 import com.example.Attendance.dto.batch.TransferRequest;
