@@ -5,8 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -16,11 +14,11 @@ public class AccountService {
 
     public boolean isAccountExists(String name, String accountNumber, String bankCode) {
 
-        Optional<Integer>  _id= accountRepository.existsByAccountNumberAndNameAndBankCode(name, accountNumber, bankCode);
-
-        if (_id.isPresent()) {
-            return true;
-        }
-        return false;
+        return accountRepository.findAllByAccountNumber(accountNumber)
+                .stream()
+                .anyMatch(account ->
+                        account.getBank().getBankCode().equals(bankCode) &&
+                                account.getName().equals(name)
+                );
     }
 }
