@@ -3,12 +3,14 @@ package com.example.User.controller;
 import com.example.User.dto.login.ReqLoginData;
 import com.example.User.dto.login.ReqRegist;
 import com.example.User.dto.login.ResNewAccessToken;
+import com.example.User.dto.passwordemail.PassWordValidate;
 import com.example.User.resolver.MasterId;
 import com.example.User.service.AuthService;
 import com.example.User.service.PresidentService;
 import com.example.User.service.RedisTokenService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -72,5 +74,15 @@ public class AuthController {
         Integer id = presidentService.regist(reqRegist);
 //        String accessToken = authService.onAuthenticationSuccess(id);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/validate-password")
+    ResponseEntity<Boolean> validatePassword(
+            @MasterId Integer id,
+            @Valid @RequestBody PassWordValidate passWordValidate)
+    {
+        return authService.validatePassword(id, passWordValidate.getPassword())
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
     }
 }

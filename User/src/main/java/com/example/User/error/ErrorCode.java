@@ -52,6 +52,7 @@ public enum ErrorCode {
     MALFORM_TOKEN(403, "Malformed Token"),
     BADSIGN_TOKEN(403, "BadSignatured Token"),
     EXPIRED_TOKEN(403, "Expired Token"),
+    PASSWORD_WRONG(400, "비밀번호가 다릅니다");
     ;
 
 

@@ -27,6 +27,10 @@ public class PresidentAccountController {
     @PostMapping("/check/email")
     public ResponseEntity<String> sendPinNumberToEmail(@RequestBody EmailOnlyRequest emailOnlyRequest) {
         log.info("email {}", emailOnlyRequest.getEmail());
+
+        // 여기에 이메일 존재 여부 판별 코드를 작성
+        presidentService.emialvalidation(emailOnlyRequest.getEmail());
+
         String pinNumber=emailService.sendPinNumberToEmail(emailOnlyRequest.getEmail());
         log.info("email send {}", pinNumber);
         return ResponseEntity.ok(pinNumber);

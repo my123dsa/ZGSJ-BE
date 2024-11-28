@@ -37,4 +37,23 @@ public class AccountVerifyController {
         log.info(String.valueOf(exists));
         return exists;
     }
+
+    @PostMapping("/verify-account-employee")
+    public boolean verifyAccountEmployee(@RequestBody AccountCheckRequest request) {
+//        boolean exists = accountService.isAccountExists(request.getName(), request.getAccountNumber(), request.getBankCode());
+//        if (exists) {
+//            return ResponseEntity.ok("계좌가 존재합니다.");
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("계좌가 존재하지 않습니다.");
+//        }
+
+        log.info(request.getBankCode());
+        boolean exists = accountService.isAccountExists(
+                request.getName(),
+                request.getAccountNumber(),
+                request.getBankCode()
+        );
+        log.info(String.valueOf(exists));
+        return exists;
+    }
 }

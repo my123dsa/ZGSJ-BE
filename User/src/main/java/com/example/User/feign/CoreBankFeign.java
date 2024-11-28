@@ -6,6 +6,7 @@ import com.example.User.dto.businessnumber.BusinessNumberResponse;
 import com.example.User.dto.corebank.AccountCheckRequest;
 import com.example.User.dto.authserver.AuthServerProfileRequest;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,9 @@ public interface CoreBankFeign {
 
     @PostMapping("/bank/verify-account")
     boolean verifyAccount(@RequestBody AccountCheckRequest accountCheckRequest);
+
+    @PostMapping("/bank/verify-account-employee")
+    boolean verifyAccountEmployee(@RequestBody AccountCheckRequest accountCheckRequest);
 
     @PostMapping("/authentication/profile/check")
     boolean verifyProfile(@RequestBody AuthServerProfileRequest profileRequest);
