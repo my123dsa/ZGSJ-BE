@@ -22,7 +22,7 @@ public class AuthService {
     private final PresidentRepository presidentRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public String onAuthenticationSuccess(Integer id) {
+    public String[] onAuthenticationSuccess(Integer id) {
         log.info("id {}", id);
         //원래 1일 또는 2일 으로 설정해야함
         String accessToken = jwtUtil.generateToken(id, 100);
@@ -30,7 +30,7 @@ public class AuthService {
 
         tokenService.setValues(id, refreshToken, Duration.ofDays(1));
 
-        return accessToken;
+        return new String[]{accessToken,refreshToken};
     }
 
     public boolean validatePassword(Integer id, String passwordclaim)

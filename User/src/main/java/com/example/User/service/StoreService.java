@@ -45,6 +45,7 @@ public class StoreService {
     @Transactional
     public void updateStore(Integer storeId, StoreRequest storeRequest) {
         // 기존 store 조회
+        //이거 기능 바꿀 수 있어야함
         Store existedStore = storeRepository.findById(storeId)
                 .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
 

@@ -1,5 +1,8 @@
 package com.example.User.service;
 
+import com.example.User.dto.authserver.AuthServerEmailPinNumberRequest;
+import com.example.User.dto.authserver.AuthServerPinNumberRequest;
+import com.example.User.dto.authserver.AuthServerProfileRequest;
 import com.example.User.dto.corebank.AccountCheckRequest;
 import com.example.User.dto.corebank.AccountInfoResponse;
 import com.example.User.error.CustomException;
@@ -10,9 +13,6 @@ import com.example.User.repository.StoreRepository;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -30,7 +30,7 @@ public class CoreBankService {
                 () -> new CustomException(ErrorCode.NO_STORE)
         ));
     }
-    
+
     //사장계좌 확인
     public boolean getNameByIdAndBankCodeAndAccountNumber(Integer id, String accountNumber, String bankCode) {
         // 1. id를 활용해 name을 조회한다.
@@ -54,6 +54,30 @@ public class CoreBankService {
         // 1. CoreBankFeign 호출
         try {
             return coreBankFeign.verifyAccountEmployee(accountCheckRequest);
+        }catch (FeignException e){
+            throw new CustomException(ErrorCode.BANK_ERROR);
+        }
+    }
+
+    public boolean verifyProfile(AuthServerProfileRequest profileRequest) {
+        try {
+            return  coreBankFeign.verifyProfile(profileRequest);
+        }catch (FeignException e){
+            throw new CustomException(ErrorCode.BANK_ERROR);
+        }
+    }
+
+    public boolean checkEmailPinNumber(AuthServerEmailPinNumberRequest emailPinNumber) {
+        try {
+            return  coreBankFeign.checkEmailPinNumber(emailPinNumber);
+        }catch (FeignException e){
+            throw new CustomException(ErrorCode.BANK_ERROR);
+        }
+    }
+
+    public boolean checkPinNumber(AuthServerPinNumberRequest checkPinNumber) {
+        try {
+            return  coreBankFeign.checkPinNumber(checkPinNumber);
         }catch (FeignException e){
             throw new CustomException(ErrorCode.BANK_ERROR);
         }

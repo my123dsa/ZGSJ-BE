@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,13 +17,8 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     Optional<Account> findByAccountNumberWithBank(String accountNumber);
 
 
-    @Query("SELECT a.id " +
-            "FROM Account a " +
-            "JOIN a.bank b " +
-            "WHERE b.bankCode = :bankCode " +
-            "AND a.name = :name " +
-            "AND a.accountNumber = :accountNumber")
-    Optional<Integer> existsByAccountNumberAndNameAndBankCode(String name, String accountNumber, String bankCode);
+    @Query("SELECT a FROM Account a JOIN FETCH a.bank b WHERE a.accountNumber = :accountNumber")
+    List<Account> findAllByAccountNumber(@Param("accountNumber") String accountNumber);
 
 
 
