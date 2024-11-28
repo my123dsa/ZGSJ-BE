@@ -17,10 +17,12 @@ public class ValidationService {
     private final CoreBankFeign coreBankFeign;
     private final StoreRepository storeRepository;
 
-    public BusinessNumberResponse validateBusinessNumber(BusinessNumberRequest businessNumberRequest) {
-         boolean result=  storeRepository.existsByStoreName(businessNumberRequest.getStoreName());
-         if (result)
-             throw new CustomException(ErrorCode.DUPLICATE_STORE_NAME);
-        return coreBankFeign.checkBusinessNumber(businessNumberRequest.getBusinessNumber());
+    public String validateBusinessNumber(BusinessNumberRequest businessNumberRequest) {
+        if (storeRepository.existsByStoreName(businessNumberRequest.getStoreName())) {
+            return "이미 존재하는 가게 명입니다";
+        }
+        return coreBankFeign.checkBusinessNumber(businessNumberRequest.getBusinessNumber()).isExists()
+                ? "ok"
+                : "존재하지 않는 사업자번호입니다";
     }
 }

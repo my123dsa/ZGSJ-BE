@@ -16,9 +16,12 @@ public class ValidationController {
     private final ValidationService validationService;
 
     @PostMapping("/store/businesscheck")
-    public ResponseEntity<Boolean> validateBusinessNumber(@RequestBody BusinessNumberRequest businessNumberRequest)
-    {
-        BusinessNumberResponse response = validationService.validateBusinessNumber(businessNumberRequest);
-        return ResponseEntity.ok(response.isExists());
+    public ResponseEntity<String> validateBusinessNumber(@RequestBody BusinessNumberRequest businessNumberRequest) {
+        String validationResult = validationService.validateBusinessNumber(businessNumberRequest);
+        if ("ok".equals(validationResult)) {
+            return ResponseEntity.ok(validationResult);
+        }
+        return ResponseEntity.badRequest().body(validationResult);
     }
+
 }
