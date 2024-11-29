@@ -4,7 +4,6 @@ import com.example.User.dto.manager.ManagerResponse;
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
 import com.example.User.model.President;
-import com.example.User.repository.ManagerRepository;
 import com.example.User.repository.PresidentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,11 +15,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ManagerService {
 
-    private final ManagerRepository managerRepository;
     private final PresidentRepository presidentRepository;
 
     public List<ManagerResponse> getAllPresidents() {
-        List<President> presidents = managerRepository.findAll();
+        List<President> presidents = presidentRepository.findAll();
 
         // President -> ManagerResponse 변환
         return presidents.stream()
@@ -37,7 +35,7 @@ public class ManagerService {
         // 삭제 전 해당 ID의 President가 존재하는지 확인
         boolean exists = presidentRepository.existsById(presidentId);
         if (!exists) {
-            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+            throw new CustomException(ErrorCode.PRESIDENT_NOT_FOUND);
         }
 
         // President 삭제
