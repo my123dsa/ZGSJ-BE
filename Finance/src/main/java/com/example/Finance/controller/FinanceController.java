@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @RestController
@@ -51,7 +50,7 @@ public class FinanceController {
             @RequestParam Integer storeid,
             @RequestParam Integer year,
             @RequestParam Integer month
-    ) throws UnsupportedEncodingException {
+    ) {
         TransactionHistoryRequest transactionHistoryRequest = TransactionHistoryRequest.from(userFeign.getStoreAccountInfo(storeid));
         List<TransactionHistoryResponse> transactionHistoryResponseList = transactionHistoryService.getYearMonthlyTransactions(transactionHistoryRequest, year, month);
 
@@ -59,8 +58,6 @@ public class FinanceController {
         byte[] pdfContent = incomeStatementPdfService.generateIncomeStatementPdf(
                 transactionHistoryResponseList
         );
-        System.out.println("pdfContent = " + pdfContent);
-
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
