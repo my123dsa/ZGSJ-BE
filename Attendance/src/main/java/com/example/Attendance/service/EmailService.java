@@ -49,6 +49,18 @@ public class EmailService {
         mailSend(email, title, content);
     }
 
+    public void sendBankFailToAdmin(String email, String presidentaccount, String employeeacount, LocalDate date,String message){
+        String title = "[집계사장 관리자 용 ] 직원 급여 이체 실패";
+        String content =
+                "관리자용 발송 메일입니다." +
+                        "<br><br> " +
+                        message+ "로 인해 사장님 계좌 : "+presidentaccount+" 의 직원 계좌 " + employeeacount
+                        + "로의 \n" + date +"날짜의 자동이체가 실패했습니다." +
+                        "<br> ";
+        mailSend(email, title, content);
+    }
+
+
     private void mailSend(String toMail, String title, String content) {
         MimeMessage message = javaMailSender.createMimeMessage(); // MimeMessage 객체 생성
         try {
