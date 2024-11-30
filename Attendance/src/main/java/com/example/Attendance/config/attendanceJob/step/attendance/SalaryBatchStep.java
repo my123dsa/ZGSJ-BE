@@ -1,5 +1,6 @@
 package com.example.Attendance.config.attendanceJob.step.attendance;
 
+import com.example.Attendance.error.log.ErrorType;
 import com.example.Attendance.feign.FeignWithCoreBank;
 import com.example.Attendance.model.Batch;
 import com.example.Attendance.repository.BatchRepository;
@@ -90,17 +91,12 @@ public class SalaryBatchStep {
 
                 return BatchOutputData.of(response, item);
             } catch (FeignException fe) {
-//                if (dto.getCode().equals("ACCOUNT_NOT_FOUND"))
-//                    throw new CustomException(ErrorCode.ACCOUNT_NOT_FOUND);
-//                ErrorDTO dto =  handler.feToErrorDTO(fe);
-//                if (dto.getCode().equals("INSUFFICIENT_BALANCE"))
-//                    throw new CustomException(ErrorCode.INSUFFICIENT_BALANCE);
-//                // 이것들은
-//                throw new CustomException(ErrorCode.RETRY_BATCH_STEP);
+                log.error("금융서버 통신 실패 - president_account={}, employee_account={}, error={}, type={}",
+                        item.getFromAccount(), item.getToAccount(), fe.getMessage(), ErrorType.FEIGN_EXCEPTION.name());
                 return null;
             } catch (Exception e) {
-                log.error("송금 내부 처리 실패 - employee: {}, error: {}",
-                        item.getSeId(), e.getMessage());
+                log.error("자동이체 처리 실패 - president_account={}, employee_account={}, error={}, type={}",
+                        item.getFromAccount(), item.getToAccount(), e.getMessage(), ErrorType.INTERNAL_ERROR.name());
                 throw new CustomException(ErrorCode.SERVER_ERROR);
             }
         };
