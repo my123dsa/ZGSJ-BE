@@ -1,16 +1,17 @@
 package com.example.Attendance.config.attendanceJob.step.attendance;
 
+import com.example.Attendance.dto.batch.*;
+import com.example.Attendance.error.CustomException;
+import com.example.Attendance.error.ErrorCode;
+import com.example.Attendance.error.ErrorDTO;
+import com.example.Attendance.error.FeignExceptionHandler;
 import com.example.Attendance.error.log.ErrorType;
 import com.example.Attendance.feign.FeignWithCoreBank;
 import com.example.Attendance.model.Batch;
 import com.example.Attendance.repository.BatchRepository;
-import com.example.Attendance.dto.batch.*;
-import com.example.Attendance.error.CustomException;
-import com.example.Attendance.error.ErrorCode;
-import com.example.Attendance.error.FeignExceptionHandler;
-import com.example.Attendance.repository.StoreEmployeeRepository;
-import com.example.Attendance.service.batch.CalculateService;
 import com.example.Attendance.service.CommuteService;
+import com.example.Attendance.service.StoreEmployeeService;
+import com.example.Attendance.service.batch.CalculateService;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ import java.util.List;
 public class SalaryBatchStep {
 
     private final SalaryBatchState salaryBatchState;
-    private final StoreEmployeeRepository storeEmployeeRepository;
+    private final StoreEmployeeService storeEmployeeService;
     private final CommuteService commuteService;
     private final BatchRepository batchRepository;
     private final FeignWithCoreBank feignWithCoreBank;
@@ -43,30 +44,20 @@ public class SalaryBatchStep {
     public ItemReader<BatchInputData> salaryReader() {
         return () -> {
             try {
+
                 if (salaryBatchState.getEmployees() == null) {
-                    salaryBatchState.setLocalDate();
-                    salaryBatchState.setEmployees(storeEmployeeRepository
-//                            .findAllBatchInputDataByPaymentDate(20)); //테스트용
-                            .findAllBatchInputDataByPaymentDate(salaryBatchState.getLocalDate().getDayOfMonth()));
-                    if (salaryBatchState.getEmployees().isEmpty()) {
-                        log.info("처리할 직원 데이터가 없습니다.");
+
+                    if (!salaryBatchState.setEmployees(storeEmployeeService.
+                            findStoreEmployeeByTypeAndPaymentDate(salaryBatchState.getPaymentDay()))) {
                         return null;
                     }
+
                     salaryBatchState.setCommutes(commuteService.
-                            findAllByCommuteDateBetween(salaryBatchState.getEmployeeIds(), salaryBatchState.getLocalDate()));
+                            findAllByCommuteDateBetween(salaryBatchState.getEmployeeIds(),
+                                                        salaryBatchState.getLocalDate()));
                 }
 
-                // 데이터 반환
-                if (salaryBatchState.getCurrentIndex() < salaryBatchState.getEmployees().size()) {
-                    BatchInputData bid = salaryBatchState.getEmployees()
-                            .get(salaryBatchState.getCurrentIndex());
-
-                    salaryBatchState.indexUp();
-                    return bid;
-                }
-
-                log.info("모든 직원 데이터 처리 완료");
-                return null;
+                return salaryBatchState.findBatchInputData();
             } catch (Exception e) {
                 log.error("데이터 읽기 실패: {}", e.getMessage(), e);
                 throw new CustomException(ErrorCode.API_SERVER_ERROR);
@@ -86,14 +77,26 @@ public class SalaryBatchStep {
                 calculateService.calculate(item, commuteSummary);
 
                 TransferRequest request = TransferRequest.from(item);
+                TransferRequest adminRequest = TransferRequest.fromForAdmin(request);
 
                 TransferResponse response = feignWithCoreBank.automaticTransfer(request);
 
-                return BatchOutputData.of(response, item);
+                try {
+                    TransferResponse responseAdmin = feignWithCoreBank.automaticTransfer(adminRequest);  // 수수료 이체
+                    return BatchOutputData.of(response, item,true);
+                } catch (FeignException fe) {
+                    // 수수료 이체 실패 시 로깅 및 알림
+                    log.error("수수료 이체 실패 - amount={}, error={}", adminRequest.getAmount(), fe.getMessage());
+
+                    // 직원급여는 정상 처리된 것으로 처리
+                    return BatchOutputData.of(response, item,false);
+                }
             } catch (FeignException fe) {
                 log.error("금융서버 통신 실패 - president_account={}, employee_account={}, error={}, type={}",
                         item.getFromAccount(), item.getToAccount(), fe.getMessage(), ErrorType.FEIGN_EXCEPTION.name());
-                return null;
+                ErrorDTO dto =  handler.feToErrorDTO(fe);
+                return BatchOutputData.ofFail(item,dto);
+
             } catch (Exception e) {
                 log.error("자동이체 처리 실패 - president_account={}, employee_account={}, error={}, type={}",
                         item.getFromAccount(), item.getToAccount(), e.getMessage(), ErrorType.INTERNAL_ERROR.name());
@@ -106,8 +109,15 @@ public class SalaryBatchStep {
     @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
     public ItemWriter<BatchOutputData> salaryWriter() {
         return chunk -> {
-            List<Batch> batches= chunk.getItems().stream().map(BatchOutputData::ToBatchEntity).toList();
+            List<Batch> batches= chunk.getItems().stream()
+                    .map(BatchOutputData::ToBatchEntity)
+                    .toList();
             batchRepository.saveAll(batches);
+
+            List<Integer> ids= chunk.getItems().stream()
+                    .filter(BatchOutputData::getIsMask)
+                    .map(BatchOutputData::getSeId).toList();
+            storeEmployeeService.updateEmployeeType(ids);
             log.info("급여 이체 결과 {} 건 저장 완료", chunk.size());
         };
     }

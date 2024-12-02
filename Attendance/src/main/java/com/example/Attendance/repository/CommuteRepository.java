@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface CommuteRepository extends JpaRepository<Commute, Integer> {
 
@@ -48,6 +49,7 @@ public interface CommuteRepository extends JpaRepository<Commute, Integer> {
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate,
             @Param("employeeIds") List<Integer> employeeIds);
+
 
     @Query("SELECT c FROM Commute c " +
             "JOIN FETCH c.storeEmployee se " +

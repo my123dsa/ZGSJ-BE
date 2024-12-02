@@ -2,7 +2,6 @@ package com.example.Attendance.config.attendanceJob.step.attendance;
 
 import com.example.Attendance.dto.batch.BatchInputData;
 import com.example.Attendance.dto.batch.CommuteSummary;
-import com.example.Attendance.error.ErrorDTO;
 import lombok.Getter;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.context.annotation.Scope;
@@ -32,19 +31,24 @@ public class SalaryBatchState {
         this.commutes = commutes;
     }
 
-    public void setEmployees(List<BatchInputData> employees) {
+    public boolean setEmployees(List<BatchInputData> employees) {
+        if (employees.isEmpty()) {
+            return false;
+        }
         this.employees = employees;
         this.employeeIds = employees.stream()
                 .map(BatchInputData::getSeId)
                 .toList();
+        return true;
     }
 
     public void setLocalDate() {
         this.localDate = LocalDate.now();
     }
 
-    public void indexUp() {
-        this.currentIndex += 1;
+    public int getPaymentDay(){
+        this.localDate= LocalDate.now();
+        return localDate.getDayOfMonth();
     }
 
     public CommuteSummary getCommuteDuration(Integer seId) {
@@ -64,7 +68,12 @@ public class SalaryBatchState {
 //        this.failedEmployee.clear();
     }
 
-    private void handleInsufficientBalance(BatchInputData item, ErrorDTO dto) {
-        failedEmployee.add(item);
+    public BatchInputData findBatchInputData(){
+        if (this.currentIndex < employees.size()) {
+            BatchInputData bid = employees.get(this.currentIndex);
+            currentIndex++;
+            return bid;
+        }
+        return null;
     }
 }
