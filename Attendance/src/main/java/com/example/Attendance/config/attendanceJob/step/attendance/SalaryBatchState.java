@@ -23,9 +23,6 @@ public class SalaryBatchState {
     private LocalDate localDate;
     private List<CommuteSummary> commutes;
     private List<Integer> employeeIds;
-    private final List<BatchInputData> failedEmployee = new ArrayList<>();
-    //여기 사장 이메일과 직원 이름 계좌 ?    정도만 넣어 메일 보내자
-
 
     public void setCommutes(List<CommuteSummary> commutes) {
         this.commutes = commutes;
@@ -40,10 +37,6 @@ public class SalaryBatchState {
                 .map(BatchInputData::getSeId)
                 .toList();
         return true;
-    }
-
-    public void setLocalDate() {
-        this.localDate = LocalDate.now();
     }
 
     public int getPaymentDay(){
@@ -65,7 +58,6 @@ public class SalaryBatchState {
         this.commutes = null;
         this.localDate = null;
         this.employeeIds = null;
-//        this.failedEmployee.clear();
     }
 
     public BatchInputData findBatchInputData(){

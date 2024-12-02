@@ -23,11 +23,16 @@ public class PdfBatchState {
     public void findAllByLocalDate(List<Batch> batches) {
         this.batches =batches.stream().map(PdfInputData::from).toList();
     }
-    public void upIndex(){
-        this.index++;
-    }
+
     public void reset(){
         this.index=0;
         this.batches=null;
+    }
+
+    public PdfInputData findBatchInputData(){
+        if (index<batches.size()) {
+            return batches.get(index++);
+        }
+        return null;
     }
 }

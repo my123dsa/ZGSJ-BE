@@ -42,21 +42,19 @@ public class SalaryBatchStep {
 
     @Bean
     public ItemReader<BatchInputData> salaryReader() {
+
+
         return () -> {
             try {
-
                 if (salaryBatchState.getEmployees() == null) {
-
                     if (!salaryBatchState.setEmployees(storeEmployeeService.
                             findStoreEmployeeByTypeAndPaymentDate(salaryBatchState.getPaymentDay()))) {
                         return null;
                     }
-
                     salaryBatchState.setCommutes(commuteService.
                             findAllByCommuteDateBetween(salaryBatchState.getEmployeeIds(),
-                                                        salaryBatchState.getLocalDate()));
+                                    salaryBatchState.getLocalDate()));
                 }
-
                 return salaryBatchState.findBatchInputData();
             } catch (Exception e) {
                 log.error("데이터 읽기 실패: {}", e.getMessage(), e);

@@ -1,5 +1,6 @@
 package com.example.Attendance.config.attendanceJob.step.pdf;
 
+import com.example.Attendance.service.PayStatementService;
 import com.example.Attendance.service.batch.BatchService;
 import com.example.Attendance.dto.batch.pdf.PdfInputData;
 import com.example.Attendance.dto.batch.pdf.PdfOutputData;
@@ -30,7 +31,7 @@ public class PdfBatchStep {
 
     private final BatchService batchService;
     private final PdfBatchState pdfBatchState;
-    private final PayStatementRepository payStatementRepository;
+    private final PayStatementService payStatementService;
     private final GCPService gCPService;
     private final PayStatementPdfService payStatementPdfService;
 
@@ -38,15 +39,15 @@ public class PdfBatchStep {
     @Bean
     @StepScope
     public ItemReader<PdfInputData> pdfReader() {
-        pdfBatchState.findAllByLocalDate(batchService.findAllByLocalDate(LocalDate.now()));
+
         return () -> {
             try {
-                if (pdfBatchState.getIndex()<pdfBatchState.getBatches().size()) {
-                    PdfInputData inputData= pdfBatchState.getBatches().get(pdfBatchState.getIndex());
-                    pdfBatchState.upIndex();
-                    return inputData;
+                if (pdfBatchState.getBatches()==null ) {
+                    pdfBatchState.findAllByLocalDate(
+                            batchService.findAllByLocalDateWithBankResultIsTrue(LocalDate.now()));
                 }
-                return null;
+
+                return pdfBatchState.findBatchInputData();
             } catch (Exception e) {
                 log.error("데이터 읽기 실패: {}", e.getMessage(), e);
                 throw new CustomException(ErrorCode.API_SERVER_ERROR);
@@ -79,7 +80,7 @@ public class PdfBatchStep {
                     .map(PdfOutputData::toPdfSaveData).toList();
 
             batchService.updatePdfResultsAndUrls(dataList);
-            payStatementRepository.saveAll(payStatements);
+            payStatementService.saveAll(payStatements);
             log.info("급여 이체 결과 {} 건 저장 완료", chunk.size());
         };
     }

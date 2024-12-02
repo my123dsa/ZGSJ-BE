@@ -30,23 +30,17 @@ public class EmailBatchStep {
     private final EmailBatchState emailBatchState;
     private final BatchService batchService;
     private final EmailService emailService;
-    private final UserFeignService feignService;
-    private final StoreEmployeeService storeEmployeeService;
-
 
     @Bean
     @StepScope
     public ItemReader<EmailInputData> emailReader() {
-        emailBatchState.findAllByLocalDate(batchService.findAllByLocalDate(LocalDate.now()));
         return () -> {
             try {
-                if (emailBatchState.getIndex()<emailBatchState.getBatches().size()) {
-                    EmailInputData inputData= emailBatchState.getBatches().get(emailBatchState.getIndex());
-                    emailBatchState.upIndex();
-                    return inputData;
+                if (emailBatchState.getBatches()==null){
+                    emailBatchState.findAllByLocalDate(
+                            batchService.findAllByLocalDate(LocalDate.now()));
                 }
-                log.info("모든 직원 데이터 처리 완료");
-                return null;
+                return emailBatchState.findBatchInputData();
             } catch (Exception e) {
                 throw new CustomException(ErrorCode.API_SERVER_ERROR);
             }
@@ -61,17 +55,33 @@ public class EmailBatchStep {
                 log.info("결과 : {} {} {}",item.getBankResult(),item.getPdfResult(),item.getBatchId());
                 if (item.getBankResult()){
                     if (!item.getIsCharge())
-                        emailService.sendChargeFail(item.getPresidentEmail(),item.getSalary());
+                        emailService.sendChargeFail(
+                                item.getPresidentEmail(),
+                                item.getSalary());
 
                     if (item.getPdfResult())
-                        emailService.sendPayStatement(item.getEmployeeEmail(),item.getUrl());
+                        emailService.sendPayStatement(
+                                item.getEmployeeEmail(),
+                                item.getUrl());
                     else
-                        emailService.sendPdfFail(item.getPresidentEmail(), item.getName(), item.getIssuanceDate(), item.getMessage());
+                        emailService.sendPdfFail(
+                                item.getPresidentEmail(),
+                                item.getName(),
+                                item.getIssuanceDate()
+                                );
                 } else{
-                    emailService.sendBankFail(item.getPresidentEmail(),item.getName(),item.getIssuanceDate(),item.getMessage());
+                    emailService.sendBankFail(
+                            item.getPresidentEmail(),
+                            item.getName(),
+                            item.getIssuanceDate(),
+                            item.getMessage());
                 }
 
-                return EmailOutputData.of(item.getSeId(),item.getBatchId(),true,item.getIsMask());
+                return EmailOutputData.of(
+                        item.getSeId(),
+                        item.getBatchId(),
+                        true,
+                        item.getIsMask());
             } catch (Exception e) {
                 throw new CustomException(ErrorCode.SERVER_ERROR);
             }
@@ -86,12 +96,7 @@ public class EmailBatchStep {
                     .filter(EmailOutputData::getResult)
                     .map(EmailOutputData::getBatchId)
                     .toList();
-            List<Integer> maskIds= chunk.getItems().stream()
-                    .filter(EmailOutputData::getIsMask)
-                    .map(EmailOutputData::getSeId)
-                    .toList();
             batchService.updateEmailResultByIds(batchIds);
         };
     }
-
 }

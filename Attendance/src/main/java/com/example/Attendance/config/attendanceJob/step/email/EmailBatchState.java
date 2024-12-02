@@ -23,11 +23,16 @@ public class EmailBatchState {
     public void findAllByLocalDate(List<Batch> batches) {
         this.batches =batches.stream().map(EmailInputData::from).toList();
     }
-    public void upIndex(){
-        this.index++;
-    }
+
     public void reset(){
         this.index=0;
         this.batches=null;
+    }
+
+    public EmailInputData findBatchInputData(){
+        if (index<batches.size()) {
+            return batches.get(index++);
+        }
+        return null;
     }
 }
