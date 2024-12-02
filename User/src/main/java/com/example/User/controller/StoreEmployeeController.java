@@ -7,6 +7,7 @@ import com.example.User.service.EmailService;
 import com.example.User.service.StoreEmployeeService;
 import com.example.User.util.CryptoUtil;
 import com.example.User.util.JWTUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class StoreEmployeeController {
 
     @PostMapping
     public ResponseEntity<String> registerEmployee(
-            @RequestBody StoreEmployeeRequest request,
+            @Valid @RequestBody StoreEmployeeRequest request,
             @RequestParam("storeid") Integer storeid
     ) {
         storeemployeeService.register(request, storeid);

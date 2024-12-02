@@ -2,6 +2,7 @@ package com.example.User.dto.storeemployee;
 
 import com.example.User.model.Store;
 import com.example.User.model.StoreEmployee;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AccessLevel;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class StoreEmployeeRequest {
 
+    @Email
     private String email;
     private String name;
     private LocalDate birthDate;
