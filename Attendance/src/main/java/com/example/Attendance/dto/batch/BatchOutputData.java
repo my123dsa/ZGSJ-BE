@@ -1,5 +1,6 @@
 package com.example.Attendance.dto.batch;
 
+import com.example.Attendance.error.ErrorDTO;
 import com.example.Attendance.model.Batch;
 import com.example.Attendance.model.PayStatement;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
 
@@ -40,7 +42,9 @@ public class BatchOutputData {
 
     private Boolean isMask;
 
-    public static BatchOutputData of(TransferResponse transferResponse, BatchInputData bid) {
+    private Boolean isCharge;
+
+    public static BatchOutputData of(TransferResponse transferResponse, BatchInputData bid,boolean isCharge) {
         boolean result= transferResponse.getStatus() ==200;
         boolean mask= bid.getEmploymentType() ==10;
         log.info("여기요 {}",result);
@@ -49,15 +53,19 @@ public class BatchOutputData {
                 , bid.getToAccountDepositor(), bid.getEmail(), bid.getBirthDate(), bid.getPhoneNumber()
                 , bid.getSalaryAfter(), bid.getAllowance()
                 , bid.getNationalCharge(), bid.getInsuranceCharge(), bid.getEmploymentCharge(), bid.getIncomeTax()
-        ,bid.getPresidentEmail(),bid.getEmail(),result,mask);
+        ,bid.getPresidentEmail(),bid.getEmail(),result,mask, isCharge);
     }
 
-    public PayStatement toEntity(String url) {
-        long amount = salary + allowance
-                - nationalCharge - employmentCharge
-                - insuranceCharge - incomeTax;
-        return PayStatement.createPayStatement(url, this.getIssuanceDate(), this.getSeId(), (int) amount);
+    public static BatchOutputData ofFail(BatchInputData bid, ErrorDTO dto) {
+        boolean mask= bid.getEmploymentType() ==10;
+        return new BatchOutputData(bid.getSeId(), 400,
+                LocalDate.now(), dto.getCode()
+                , bid.getToAccountDepositor(), bid.getEmail(), bid.getBirthDate(), bid.getPhoneNumber()
+                , bid.getSalaryAfter(), bid.getAllowance()
+                , bid.getNationalCharge(), bid.getInsuranceCharge(), bid.getEmploymentCharge(), bid.getIncomeTax()
+                ,bid.getPresidentEmail(),bid.getEmail(),false,mask,false);
     }
+
     public Batch ToBatchEntity() {
         return Batch.from(this);
     }

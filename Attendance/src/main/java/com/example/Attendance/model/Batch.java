@@ -78,6 +78,9 @@ public class Batch {
     @Column(name = "is_mask",nullable = false)
     private Boolean isMask;
 
+    @Column(name = "is_charge",nullable = false)
+    private Boolean isCharge;
+
 
     public static Batch from(BatchOutputData outputData) {
         return new Batch(
@@ -100,7 +103,8 @@ public class Batch {
                 outputData.getBankResult(),     // bankResult
                 false,                          // pdfResult
                 false,                           // emailResult
-                outputData.getIsMask()
+                outputData.getIsMask(),
+                outputData.getIsCharge()
         );
     }
 
@@ -123,7 +127,8 @@ public class Batch {
                  Boolean bankResult,             // 17
                  Boolean pdfResult,              // 18
                  Boolean emailResult,
-                 Boolean isMask) {          // 19
+                 Boolean isMask,
+                 Boolean isCharge) {          // 19
         this.seId = seId;
         this.status = status;
         this.issuanceDate = issuanceDate;
@@ -144,5 +149,6 @@ public class Batch {
         this.pdfResult = pdfResult;
         this.emailResult = emailResult;
         this.isMask= isMask;
+        this.isCharge= isCharge;
     }
 }
