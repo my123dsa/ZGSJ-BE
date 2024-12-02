@@ -15,6 +15,9 @@ public interface BatchRepository extends JpaRepository<Batch, Integer> {
 
     List<Batch> findAllByIssuanceDate(LocalDate issuanceDate);
 
+    @Query("select b from Batch b where b.bankResult = true")
+    List<Batch> findAllByLocalDateWithBankResultIsTrue(LocalDate issuanceDate);
+
     @Modifying
     @Query("UPDATE Batch b SET b.emailResult = true WHERE b.id IN :ids")
     void updateEmailResultByIds(@Param("ids") List<Integer> ids);

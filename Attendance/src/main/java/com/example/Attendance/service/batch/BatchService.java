@@ -19,6 +19,10 @@ public class BatchService {
         return batchRepository.findAllByIssuanceDate(date);
     }
 
+    public List<Batch> findAllByLocalDateWithBankResultIsTrue(LocalDate date) {
+        return batchRepository.findAllByLocalDateWithBankResultIsTrue(date);
+    }
+
     @Transactional
     public void updateEmailResultByIds(List<Integer> batchIds){
         batchRepository.updateEmailResultByIds(batchIds);
