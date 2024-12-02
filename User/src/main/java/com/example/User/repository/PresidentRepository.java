@@ -35,5 +35,8 @@ public interface PresidentRepository extends JpaRepository<President, Integer> {
      @Query("SELECT p.name FROM President p WHERE p.id = :id")
      Optional<String> findNameById(@Param("id") Integer id);
 
+     @Modifying
+     @Query("update President p set p.termsAccept= :termsAccept where p.id= :id")
+    int updateTermsAcceptById(@Param("id") Integer id,@Param("termsAccept") Boolean termsAccept);
 }
 

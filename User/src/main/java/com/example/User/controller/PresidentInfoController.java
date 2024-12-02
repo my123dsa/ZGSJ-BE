@@ -2,6 +2,7 @@ package com.example.User.controller;
 
 
 import com.example.User.dto.president.PresidentInfoResponse;
+import com.example.User.dto.president.TermAcceptRequest;
 import com.example.User.dto.presidentupdate.PresidentUpdateRequest;
 import com.example.User.resolver.MasterId;
 import com.example.User.service.PresidentService;
@@ -29,6 +30,14 @@ public class PresidentInfoController {
     public ResponseEntity<PresidentInfoResponse> getPresidentInfo(@MasterId Integer id)
     {
         return ResponseEntity.ok(presidentService.getPresidentInfo(id));
+    }
+
+    @PostMapping("/termaccept")
+    public ResponseEntity<Boolean> updateTermAccept(@MasterId Integer id,@RequestBody TermAcceptRequest termAcceptRequest){
+        log.info("결과");
+        Boolean result = presidentService.updateTermAccept(id,termAcceptRequest.getTermsAccept());
+
+        return ResponseEntity.ok(result);
     }
 }
 
