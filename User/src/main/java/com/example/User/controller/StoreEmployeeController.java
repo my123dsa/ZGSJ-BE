@@ -39,7 +39,7 @@ public class StoreEmployeeController {
     @PutMapping
     public ResponseEntity<String> updateEmployee(
             @RequestParam("seid") Integer seid,
-            @RequestBody StoreEmployeeUpdateRequest request
+            @Valid @RequestBody StoreEmployeeUpdateRequest request
     ) {
         storeemployeeService.updateEmployee(seid, request);
         return ResponseEntity.ok("직원 수정 성공");

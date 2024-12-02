@@ -1,5 +1,6 @@
 package com.example.User.dto.storeemployee;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AccessLevel;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class StoreEmployeeUpdateRequest {
 
+    @Email
     private String email;
     private String name;
     private LocalDate birthDate;
