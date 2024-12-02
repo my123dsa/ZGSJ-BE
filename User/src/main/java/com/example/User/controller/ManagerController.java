@@ -39,13 +39,4 @@ public class ManagerController {
 
         return ResponseEntity.ok("관리자 확인");
     }
-//
-//    // manager 확인
-//    @GetMapping("/check")
-//    public ResponseEntity<String> checkManager(@RequestParam Integer presidentId) {
-//        String email = managerService.getEmailById(presidentId);
-//        managerService.checkmanager(email);
-//
-//        return ResponseEntity.ok("관리자 확인");
-//    }
 }
