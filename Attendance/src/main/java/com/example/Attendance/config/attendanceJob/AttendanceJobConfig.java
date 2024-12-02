@@ -38,9 +38,10 @@ public class AttendanceJobConfig {
     public Job attendanceJob() {
         return new JobBuilder("automaticTransferJob", jobRepository)
                 .listener(attendanceBatchJobListener.attendanceJobListener()) // Listener 등록
-                .start(attendanceStep())
-                .next(statementPdfStep())
-                .next(statementEmailStep())
+                .start(attendanceStep()).on("*").to(statementPdfStep())
+                .from(statementPdfStep()).on("*").to(statementEmailStep())
+                .from(statementEmailStep()).on("*").end()
+                .end()
                 .build();
     }
 
