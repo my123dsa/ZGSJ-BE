@@ -11,6 +11,7 @@ import com.example.Attendance.model.Batch;
 import com.example.Attendance.repository.BatchRepository;
 import com.example.Attendance.service.CommuteService;
 import com.example.Attendance.service.StoreEmployeeService;
+import com.example.Attendance.service.batch.BatchService;
 import com.example.Attendance.service.batch.CalculateService;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class SalaryBatchStep {
     private final SalaryBatchState salaryBatchState;
     private final StoreEmployeeService storeEmployeeService;
     private final CommuteService commuteService;
-    private final BatchRepository batchRepository;
+    private final BatchService batchService;
     private final FeignWithCoreBank feignWithCoreBank;
     private final CalculateService calculateService;
     private final FeignExceptionHandler handler;
@@ -110,7 +111,7 @@ public class SalaryBatchStep {
             List<Batch> batches= chunk.getItems().stream()
                     .map(BatchOutputData::ToBatchEntity)
                     .toList();
-            batchRepository.saveAll(batches);
+            batchService.saveAll(batches);
 
             List<Integer> ids= chunk.getItems().stream()
                     .filter(BatchOutputData::getIsMask)
