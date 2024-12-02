@@ -27,6 +27,9 @@ public class EmailInputData {
 
     private Boolean isMask;
 
+    private Boolean isCharge;
+    private Long salary;
+
     public static EmailInputData from(Batch batch) {
         return new EmailInputData(
                 batch.getSeId(),
@@ -39,7 +42,9 @@ public class EmailInputData {
                 batch.getPdfResult(),
                 batch.getIssuanceDate(),
                 batch.getMessage(),
-                batch.getIsMask()
+                batch.getIsMask(),
+                batch.getIsCharge(),
+                batch.getSalary()
         );
     }
 }
