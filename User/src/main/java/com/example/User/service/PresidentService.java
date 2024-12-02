@@ -122,4 +122,12 @@ public class PresidentService {
         president.setPassword(encodedPassword);
         presidentRepository.save(president);
     }
+
+    @Transactional
+    public Boolean updateTermAccept(Integer id,Boolean termAccept) {
+        int result=presidentRepository.updateTermsAcceptById(id,termAccept);
+        if(result!=1)
+            throw new CustomException(ErrorCode.INVALID_UPDATE_TERM);
+        return true;
+    }
 }

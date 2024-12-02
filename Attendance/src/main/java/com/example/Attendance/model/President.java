@@ -20,4 +20,6 @@ public class President {
     @Column(name = "email", length = 50, nullable = false, unique = true)
     private String email;
 
+    @Column(name = "terms_accept", nullable = false)
+    private Boolean termsAccept;
 }
