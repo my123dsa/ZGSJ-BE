@@ -70,7 +70,7 @@ public class AuthController {
     }
 
     @PostMapping("/regist")
-    ResponseEntity<ResNewAccessToken> regist(@RequestBody ReqRegist reqRegist) {
+    ResponseEntity<ResNewAccessToken> regist(@Valid @RequestBody ReqRegist reqRegist) {
         Integer id = presidentService.regist(reqRegist);
 //        String accessToken = authService.onAuthenticationSuccess(id);
         return ResponseEntity.ok().build();
