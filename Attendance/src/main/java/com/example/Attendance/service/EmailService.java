@@ -69,14 +69,12 @@ public class EmailService {
         mailSend(email, title, content);
     }
 
-    public void sendPdfFail(String email, String name , LocalDate date,String message){
+    public void sendPdfFail(String email, String name , LocalDate date){
         String title = "[집계사장]직원 급여 명세서 발급 실패";
         String content = new StringBuilder()
                 .append("집계사장을 사용해주셔서 감사합니다. 🦀🍔🍟")
                 .append("<br><br> ")
                 .append("급여명세서는 ")
-                .append(message)
-                .append("로 인해 ")
                 .append(name)
                 .append("의 ")
                 .append(date)
