@@ -1,6 +1,7 @@
 package com.example.User.controller;
 
 import com.example.User.dto.manager.ManagerResponse;
+import com.example.User.resolver.MasterId;
 import com.example.User.service.ManagerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,4 +30,22 @@ public class ManagerController {
         managerService.deletePresidentById(id);
         return ResponseEntity.noContent().build();
     }
+
+    // manager 확인
+    @GetMapping("/check")
+    public ResponseEntity<String> checkManager(@MasterId Integer presidentId) {
+        String email = managerService.getEmailById(presidentId);
+        managerService.checkmanager(email);
+
+        return ResponseEntity.ok("관리자 확인");
+    }
+//
+//    // manager 확인
+//    @GetMapping("/check")
+//    public ResponseEntity<String> checkManager(@RequestParam Integer presidentId) {
+//        String email = managerService.getEmailById(presidentId);
+//        managerService.checkmanager(email);
+//
+//        return ResponseEntity.ok("관리자 확인");
+//    }
 }

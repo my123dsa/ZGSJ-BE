@@ -44,6 +44,7 @@ public class SecurityConfig {
         needIdUrls.add("/user/account-check");
         needIdUrls.add("/user/president/validate-password");
         needIdUrls.add("/core/account/check");
+        needIdUrls.add("/user/manager/check");
 
         return new TokenCheckFilter(jwtUtil, permitUrls, needIdUrls, cryptoUtil);
     }

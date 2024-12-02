@@ -11,6 +11,7 @@ public enum ErrorCode {
     NO_STORE(404, "가게가 존재하지 않습니다"),
     WRONG_VALID(400, "유효성 검사와 어긋나는 요청입니다"),
 
+    ADMIN_NOT_FOUND(404,"관리자가 아닙니다."),
     CHECKUP_NOT_FOUND(404, "존재하지 않는 이해도조사 ID 입니다."),
     ROOM_NOT_FOUND(404, "존재하지 않는 방 ID 입니다."),
     ROOM_UUID_NOT_FOUND(404, "존재하지 않는 uuid 입니다."),
