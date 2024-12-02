@@ -10,19 +10,26 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ResourceUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 @Configuration
 public class GCPConfig {
 
-    @Value("${spring.cloud.gcp.storage.credentials.location}")
-    private String keyFileName;
+    @Value("${GCP_JSON}")
+    private String credentialsJson;
+
 
     @Bean
     public Storage storage() {
-        String key = String.format("classpath:%s.json", keyFileName);
-        try (InputStream keyFile = ResourceUtils.getURL(key).openStream();) {
+//        String key = String.format("classpath:%s.json", keyFileName);
+//        try (InputStream keyFile = ResourceUtils.getURL(key).openStream();) {
+
+            try (ByteArrayInputStream keyFile = new ByteArrayInputStream(credentialsJson.getBytes(StandardCharsets.UTF_8))) {
+
+
             return StorageOptions.newBuilder()
                     .setCredentials(GoogleCredentials.fromStream(keyFile))
                     .build()
