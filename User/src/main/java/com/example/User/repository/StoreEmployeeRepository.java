@@ -31,4 +31,8 @@ public interface StoreEmployeeRepository extends JpaRepository<StoreEmployee, In
             "WHERE se.id = :seId")
     @Modifying
     void updateEmployeeReplaceDelete(@Param("seId") Integer seId);
+
+    @Modifying
+    @Query("UPDATE StoreEmployee se SET se.employmentType = :type WHERE se.id IN :ids")
+    int updateEmploymentTypeByIds(@Param("ids") List<Integer> ids, @Param("type") Byte type);
 }

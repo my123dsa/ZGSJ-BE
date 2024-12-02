@@ -10,6 +10,7 @@ import com.example.core_bank.core_bank.global.error.CustomException;
 import com.example.core_bank.core_bank.global.error.ErrorCode;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BankCoreService {
@@ -30,7 +32,11 @@ public class BankCoreService {
 
         // 리스트 정렬해서 받음.
         // 여기 로직 더 효율적이게 변경 되어야함
+        log.info("{} {} {} ",transferRequest.getToAccount(),transferRequest.getToBankCode(),transferRequest.getToAccountDepositor());
+        log.info("{} {} {} ",transferRequest.getFromAccount(),transferRequest.getFromBankCode(),transferRequest.getFromAccountDepositor());
+        log.info("첫째");
         Account fromAccount = findFromAccount(transferRequest);
+        log.info("둘째");
         Account toAccount = findToAccount(transferRequest);
 
         validateBalance(fromAccount, transferRequest.getAmount());

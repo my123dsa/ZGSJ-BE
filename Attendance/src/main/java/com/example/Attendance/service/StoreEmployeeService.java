@@ -1,6 +1,7 @@
 package com.example.Attendance.service;
 
 import com.example.Attendance.dto.EmployeeCommuteRequest;
+import com.example.Attendance.dto.batch.BatchInputData;
 import com.example.Attendance.error.CustomException;
 import com.example.Attendance.error.ErrorCode;
 import com.example.Attendance.model.StoreEmployee;
@@ -9,6 +10,10 @@ import com.example.Attendance.util.Cryptography;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,5 +41,21 @@ public class StoreEmployeeService {
             throw new CustomException(ErrorCode.INVALID_LOCATION);
         }
         return storeEmployee;
+    }
+
+    public List<BatchInputData> findStoreEmployeeByTypeAndPaymentDate(int paymentDay){
+
+        Set<BatchInputData> set =storeEmployeeRepository.findAllByEmploymentType();
+
+        set.addAll(storeEmployeeRepository
+//                            .findAllBatchInputDataByPaymentDate(20)); //테스트용
+                .findAllBatchInputDataByPaymentDate(paymentDay));
+
+        return set.stream().toList();
+    }
+
+    @Transactional
+    public void updateEmployeeType(List<Integer> ids){
+        storeEmployeeRepository.updateStoreEmployeesByIds(ids);
     }
 }
