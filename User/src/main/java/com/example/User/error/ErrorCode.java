@@ -52,7 +52,8 @@ public enum ErrorCode {
     MALFORM_TOKEN(403, "Malformed Token"),
     BADSIGN_TOKEN(403, "BadSignatured Token"),
     EXPIRED_TOKEN(403, "Expired Token"),
-    PASSWORD_WRONG(400, "비밀번호가 다릅니다");
+    PASSWORD_WRONG(400, "비밀번호가 다릅니다"),
+    INVALID_UPDATE_TERM(400,"termAccept 을 업데이트 하던 도중 변경 값이 0 or 2개 이상입니다");
     ;
 
 

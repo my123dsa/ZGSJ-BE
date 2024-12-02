@@ -34,7 +34,6 @@ public class PresidentInfoController {
 
     @PostMapping("/termaccept")
     public ResponseEntity<Boolean> updateTermAccept(@MasterId Integer id,@RequestBody TermAcceptRequest termAcceptRequest){
-        log.info("결과");
         Boolean result = presidentService.updateTermAccept(id,termAcceptRequest.getTermsAccept());
 
         return ResponseEntity.ok(result);

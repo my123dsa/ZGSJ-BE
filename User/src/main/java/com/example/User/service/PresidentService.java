@@ -126,6 +126,8 @@ public class PresidentService {
     @Transactional
     public Boolean updateTermAccept(Integer id,Boolean termAccept) {
         int result=presidentRepository.updateTermsAcceptById(id,termAccept);
-        return result == 1;
+        if(result!=1)
+            throw new CustomException(ErrorCode.INVALID_UPDATE_TERM);
+        return true;
     }
 }
