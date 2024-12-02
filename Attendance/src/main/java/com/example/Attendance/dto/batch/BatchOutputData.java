@@ -56,10 +56,10 @@ public class BatchOutputData {
         ,bid.getPresidentEmail(),bid.getEmail(),result,mask, isCharge);
     }
 
-    public static BatchOutputData ofFail(BatchInputData bid, ErrorDTO dto) {
+    public static BatchOutputData ofFail(BatchInputData bid, String code) {
         boolean mask= bid.getEmploymentType() ==10;
         return new BatchOutputData(bid.getSeId(), 400,
-                LocalDate.now(), dto.getCode()
+                LocalDate.now(), code
                 , bid.getToAccountDepositor(), bid.getEmail(), bid.getBirthDate(), bid.getPhoneNumber()
                 , bid.getSalaryAfter(), bid.getAllowance()
                 , bid.getNationalCharge(), bid.getInsuranceCharge(), bid.getEmploymentCharge(), bid.getIncomeTax()

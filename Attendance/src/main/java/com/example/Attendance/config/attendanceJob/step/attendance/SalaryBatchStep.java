@@ -94,12 +94,12 @@ public class SalaryBatchStep {
                 log.error("금융서버 통신 실패 - president_account={}, employee_account={}, error={}, type={}",
                         item.getFromAccount(), item.getToAccount(), fe.getMessage(), ErrorType.FEIGN_EXCEPTION.name());
                 ErrorDTO dto =  handler.feToErrorDTO(fe);
-                return BatchOutputData.ofFail(item,dto);
+                return BatchOutputData.ofFail(item,dto.getCode());
 
             } catch (Exception e) {
                 log.error("자동이체 처리 실패 - president_account={}, employee_account={}, error={}, type={}",
                         item.getFromAccount(), item.getToAccount(), e.getMessage(), ErrorType.INTERNAL_ERROR.name());
-                throw new CustomException(ErrorCode.SERVER_ERROR);
+                return BatchOutputData.ofFail(item,"서버 오류");
             }
         };
     }
