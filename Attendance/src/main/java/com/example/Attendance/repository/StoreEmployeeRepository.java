@@ -36,7 +36,7 @@ public interface StoreEmployeeRepository extends JpaRepository<StoreEmployee, In
             "FROM StoreEmployee se " +
             "JOIN se.store s " +
             "JOIN s.president p " +
-            "WHERE se.paymentDate = :paymentDate")
+            "WHERE se.paymentDate = :paymentDate and p.termsAccept=true")
     Set<BatchInputData> findAllBatchInputDataByPaymentDate(@Param("paymentDate") Integer paymentDate);
 
     @Query("SELECT new com.example.Attendance.dto.batch.BatchInputData(" +
@@ -45,7 +45,7 @@ public interface StoreEmployeeRepository extends JpaRepository<StoreEmployee, In
             "FROM StoreEmployee se " +
             "JOIN se.store s " +
             "JOIN s.president p " +
-            "WHERE se.employmentType = 10")
+            "WHERE se.employmentType = 10 and p.termsAccept=true")
     Set<BatchInputData> findAllByEmploymentType();
 
     @Modifying
