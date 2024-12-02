@@ -52,7 +52,9 @@ public enum ErrorCode {
     MALFORM_TOKEN(403, "Malformed Token"),
     BADSIGN_TOKEN(403, "BadSignatured Token"),
     EXPIRED_TOKEN(403, "Expired Token"),
-    PASSWORD_WRONG(400, "비밀번호가 다릅니다");
+    PASSWORD_WRONG(400, "비밀번호가 다릅니다"),
+
+    NOT_EXISTS_EMAIL(400, "이메일 전송이 불가능한 메일입니다. 메일 정보를 변경하여 주세요");
     ;
 
 
