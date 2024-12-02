@@ -2,6 +2,7 @@ package com.example.User.dto.login;
 
 import com.example.User.model.President;
 import com.example.User.model.Store;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,8 @@ import java.time.LocalDate;
 public class ReqRegist {
     private String name;
     private String address;
+
+    @Email
     private String email;
 
     @Pattern(regexp = "^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$",
