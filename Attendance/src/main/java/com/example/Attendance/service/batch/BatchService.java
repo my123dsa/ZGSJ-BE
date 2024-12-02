@@ -34,4 +34,9 @@ public class BatchService {
             batchRepository.updatePdfResultAndUrl(data.getId(), data.getUrl());
         }
     }
+
+    @Transactional
+    public void saveAll(List<Batch> batches){
+        batchRepository.saveAll(batches);
+    }
 }

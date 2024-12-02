@@ -7,6 +7,7 @@ import com.example.Attendance.model.PayStatement;
 import com.example.Attendance.repository.PayStatementRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,6 +29,8 @@ public class PayStatementService {
                 () -> new CustomException(ErrorCode.INVALID_PAY_STATEMENT)
         );
     }
+
+    @Transactional
     public void saveAll(List<PayStatement> payStatements){
         payStatementRepository.saveAll(payStatements);
     }
