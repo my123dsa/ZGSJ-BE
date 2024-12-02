@@ -15,8 +15,6 @@ import java.io.ByteArrayOutputStream;
 @Slf4j
 public class PdfService {
 
-    //그대로 사용하지 않고, Extends로 사용.
-
     public byte[] convertHtmlToPdf(String html) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -24,24 +22,21 @@ public class PdfService {
             ITextRenderer renderer = new ITextRenderer();
 
             // 폰트 설정
-            ClassPathResource regular = new ClassPathResource("fonts/NanumGothic-Regular.ttf");
+            ClassPathResource regularFont = new ClassPathResource("fonts/NanumGothic-Regular.ttf");
+
+            // 폰트 등록
             renderer.getFontResolver().addFont(
-                    regular.getFile().getAbsolutePath(),
+                    regularFont.getFile().getAbsolutePath(),
                     BaseFont.IDENTITY_H,
-                    BaseFont.EMBEDDED
+                    BaseFont.NOT_EMBEDDED
             );
 
-            // HTML 설정
             renderer.setDocumentFromString(html);
             renderer.layout();
-
-            // PDF 생성
             renderer.createPDF(baos, true);
             baos.flush();
 
-            // 디버깅을 위한 파일 저장
             byte[] pdfContent = baos.toByteArray();
-
             log.info("PDF 생성 완료: {} bytes", pdfContent.length);
             return pdfContent;
 
