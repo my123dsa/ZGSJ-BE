@@ -38,7 +38,7 @@ public class President {
     private String phoneNumber;
 
     @Column(name = "terms_accept", nullable = false)
-    private Boolean termsAccept;
+    private Boolean termsAccept= false;
 
     @OneToMany(mappedBy = "president", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Store> stores = new ArrayList<>();
