@@ -1,6 +1,7 @@
 package com.example.Attendance.config.attendanceJob.step.email;
 
 import com.example.Attendance.feign.UserFeignService;
+import com.example.Attendance.service.StoreEmployeeService;
 import com.example.Attendance.service.batch.BatchService;
 import com.example.Attendance.dto.batch.email.EmailInputData;
 import com.example.Attendance.dto.batch.email.EmailOutputData;
@@ -30,6 +31,7 @@ public class EmailBatchStep {
     private final BatchService batchService;
     private final EmailService emailService;
     private final UserFeignService feignService;
+    private final StoreEmployeeService storeEmployeeService;
 
 
     @Bean
@@ -57,12 +59,18 @@ public class EmailBatchStep {
         return item -> {
             try {
                 log.info("결과 : {} {} {}",item.getBankResult(),item.getPdfResult(),item.getBatchId());
-                if (item.getPdfResult() && item.getBankResult()){
-                    emailService.sendPayStatement(item.getEmployeeEmail(),item.getUrl());
-                }else if (item.getBankResult()) {
-                    emailService.sendPdfFail(item.getPresidentEmail(), item.getName(), item.getIssuanceDate(), item.getMessage());
-                }else
+                if (item.getBankResult()){
+                    if (!item.getIsCharge())
+                        emailService.sendChargeFail(item.getPresidentEmail(),item.getSalary());
+
+                    if (item.getPdfResult())
+                        emailService.sendPayStatement(item.getEmployeeEmail(),item.getUrl());
+                    else
+                        emailService.sendPdfFail(item.getPresidentEmail(), item.getName(), item.getIssuanceDate(), item.getMessage());
+                } else{
                     emailService.sendBankFail(item.getPresidentEmail(),item.getName(),item.getIssuanceDate(),item.getMessage());
+                }
+
                 return EmailOutputData.of(item.getSeId(),item.getBatchId(),true,item.getIsMask());
             } catch (Exception e) {
                 throw new CustomException(ErrorCode.SERVER_ERROR);
@@ -83,18 +91,6 @@ public class EmailBatchStep {
                     .map(EmailOutputData::getSeId)
                     .toList();
             batchService.updateEmailResultByIds(batchIds);
-            if (!maskIds.isEmpty()) {
-                try {
-                    Boolean maskingResult =feignService.sendMaskingIds(maskIds);
-                    if (!maskingResult){
-                        throw new CustomException(ErrorCode.UPDATE_FAIL);
-                    }
-                }catch (FeignException fe){
-                    throw new CustomException(ErrorCode.Feign_Error);
-                }catch (Exception e){
-                    throw new CustomException(ErrorCode.SERVER_ERROR);
-                }
-            }
         };
     }
 
