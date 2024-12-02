@@ -24,7 +24,6 @@ public enum ErrorCode {
 
     DUPLICATE_STORE_NAME(409, "이미 존재하는 가게 이름입니다."),
 
-    INVALID_EMAIL_FORMAT(431, "이메일 형식 잘못되었습니다."),
     INVALID_PASSWORD_FORMAT(433, "비밀번호 형식이 잘못되었습니다."),
 
     SERVER_ERROR(500, "서버 에러입니다. 서버 팀에 연락주세요!"),
@@ -52,7 +51,9 @@ public enum ErrorCode {
     MALFORM_TOKEN(403, "Malformed Token"),
     BADSIGN_TOKEN(403, "BadSignatured Token"),
     EXPIRED_TOKEN(403, "Expired Token"),
-    PASSWORD_WRONG(400, "비밀번호가 다릅니다");
+    PASSWORD_WRONG(400, "비밀번호가 다릅니다"),
+
+    EMAIL_INVALID_FORMAT(400, "이메일 형식이 잘못되었습니다");
     ;
 
 
