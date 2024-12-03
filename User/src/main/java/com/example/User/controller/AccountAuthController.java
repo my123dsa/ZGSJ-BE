@@ -9,6 +9,7 @@ import com.example.User.resolver.MasterId;
 import com.example.User.service.CoreBankService;
 import com.example.User.service.PresidentService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,13 +34,16 @@ public class AccountAuthController {
 
         return isValid
                 ? ResponseEntity.ok(ResponseDto.of("ok"))
-                : ResponseEntity.badRequest().body(ResponseDto.of("존재하지 않는 계좌입니다"));
+                : ResponseEntity.badRequest().body(ResponseDto.of("일치하지 않는 계좌 정보입니다"));
     }
 
     @PostMapping("/profile")
-    public  ResponseEntity<Boolean> findUserToAuthServer(@RequestBody AuthServerProfileRequest profileRequest){
+    public ResponseEntity<ResponseDto> findUserToAuthServer(@RequestBody AuthServerProfileRequest profileRequest){
         boolean result= coreBankService.verifyProfile(profileRequest);
-        return ResponseEntity.ok(result);
+
+        return result
+                ? ResponseEntity.ok(ResponseDto.of("ok"))
+                : ResponseEntity.badRequest().body(ResponseDto.of("존재하지 않는 사용자 정보입니다"));
     }
 
     @PostMapping("/email/pin")
