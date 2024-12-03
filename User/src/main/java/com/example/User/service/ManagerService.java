@@ -41,4 +41,23 @@ public class ManagerService {
         // President 삭제
         presidentRepository.deleteById(presidentId);
     }
+
+    // 관리자 이메일 확인
+    public void checkmanager(String email) {
+
+        String ADMIN_EMAIL = "zipgyesajang@gmail.com";
+
+        if (!email.equals(ADMIN_EMAIL)) {
+            // 일치하지 않으면 예외 던짐
+            throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
+        }
+    }
+
+    // id로 이메일을 가져오는 메소드
+    public String getEmailById(Integer id) {
+        President president = presidentRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.PRESIDENT_NOT_FOUND));
+        return president.getEmail();
+    }
 }
+
