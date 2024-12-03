@@ -31,6 +31,7 @@ public class CommuteByPresidentRequest {
         this.commuteDate = commuteDate;
     }
 
+
     public Commute toEntity(StoreEmployee employee) {
         // endTime 유무에 따라 다른 생성 메서드 호출
         return endTime == null ?

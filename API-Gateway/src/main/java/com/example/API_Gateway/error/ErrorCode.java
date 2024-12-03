@@ -20,6 +20,7 @@ public enum ErrorCode {
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "Unauthorized"),
     ;
 
+
     private final HttpStatus status;
     private final String message;
 }
