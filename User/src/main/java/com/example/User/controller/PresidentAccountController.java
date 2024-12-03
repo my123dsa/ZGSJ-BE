@@ -5,6 +5,7 @@ import com.example.User.dto.login.ReqIdFindData;
 import com.example.User.dto.login.ReqPwChange;
 import com.example.User.dto.login.ResIdFindData;
 import com.example.User.dto.passwordemail.EmailRequest;
+import com.example.User.dto.response.ResponseDto;
 import com.example.User.model.President;
 import com.example.User.resolver.MasterId;
 import com.example.User.service.EmailService;
@@ -25,15 +26,15 @@ public class PresidentAccountController {
     private final EmailService emailService;
 
     @PostMapping("/check/email")
-    public ResponseEntity<String> sendPinNumberToEmail(@RequestBody EmailOnlyRequest emailOnlyRequest) {
+    public ResponseEntity<ResponseDto> sendPinNumberToEmail(@RequestBody EmailOnlyRequest emailOnlyRequest) {
         log.info("email {}", emailOnlyRequest.getEmail());
 
         // 여기에 이메일 존재 여부 판별 코드를 작성
         presidentService.emialvalidation(emailOnlyRequest.getEmail());
 
         String pinNumber=emailService.sendPinNumberToEmail(emailOnlyRequest.getEmail());
-        log.info("email send {}", pinNumber);
-        return ResponseEntity.ok(pinNumber);
+
+        return ResponseEntity.ok(ResponseDto.of("이메일로 핀 번호 전송이 완료되었습니다"));
     }
 
     @PutMapping("/change-password")

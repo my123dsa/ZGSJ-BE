@@ -9,6 +9,8 @@ import jakarta.mail.SendFailedException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.angus.mail.smtp.SMTPAddressFailedException;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -65,12 +67,12 @@ public class EmailService {
             helper.setSubject(title); // 이메일 주소 설정
             helper.setText(content, true); // 이메일의 내용
             javaMailSender.send(message);
+        } catch (MailSendException sme)
+        {
+            log.error("존재하지 않는 이메일 : {}" ,toMail);
+            throw new CustomException(ErrorCode.NOT_EXISTS_EMAIL);
         } catch (SendFailedException se)
         {
-            if (se.getInvalidAddresses() != null && se.getInvalidAddresses().length > 0) {
-                log.error("잘못된 이메일 주소: {}", Arrays.toString(se.getInvalidAddresses()));
-                throw new CustomException(ErrorCode.NOT_EXISTS_EMAIL);
-            }
             log.error("메일 전송 실패: {}", se.getMessage());
             throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
         } catch (MessagingException e) {
