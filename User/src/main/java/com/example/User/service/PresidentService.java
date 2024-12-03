@@ -12,6 +12,8 @@ import com.example.User.error.ErrorCode;
 import com.example.User.model.President;
 import com.example.User.repository.PresidentRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PresidentService {
     private final PresidentRepository presidentRepository;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -117,10 +120,15 @@ public class PresidentService {
 
     @Transactional
     public void updatePassword(String password, President president) {
-        String encodedPassword = passwordEncoder.encode(password); // 패스워드 암호화
+        try {
+            String encodedPassword = passwordEncoder.encode(password);
+            president.setPassword(encodedPassword);
+            presidentRepository.save(president);
 
-        president.setPassword(encodedPassword);
-        presidentRepository.save(president);
+        } catch (DataAccessException e) {
+            log.error("데이터베이스 저장 실패: {}", e.getMessage());
+            throw new CustomException(ErrorCode.DATABASE_ERROR);
+        }
     }
 
     @Transactional

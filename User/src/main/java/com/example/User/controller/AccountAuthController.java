@@ -4,6 +4,7 @@ import com.example.User.dto.authserver.AuthServerEmailPinNumberRequest;
 import com.example.User.dto.authserver.AuthServerPinNumberRequest;
 import com.example.User.dto.corebank.AccountAndCodeRequest;
 import com.example.User.dto.authserver.AuthServerProfileRequest;
+import com.example.User.dto.response.ResponseDto;
 import com.example.User.resolver.MasterId;
 import com.example.User.service.CoreBankService;
 import com.example.User.service.PresidentService;
@@ -20,7 +21,7 @@ public class AccountAuthController {
     private final PresidentService presidentService;
 
     @PostMapping("/check")
-    public ResponseEntity<Boolean> getAccountBankCodeAndAccountNumber(
+    public ResponseEntity<ResponseDto> getAccountBankCodeAndAccountNumber(
             @MasterId Integer id,
             @RequestBody AccountAndCodeRequest accountAndCodeRequest) {
         // 서비스 호출
@@ -30,25 +31,33 @@ public class AccountAuthController {
                 accountAndCodeRequest.getBankCode()
         );
 
-        // 프론트로 boolean 값 반환
-        return ResponseEntity.ok(isValid);
+        return isValid
+                ? ResponseEntity.ok(ResponseDto.from("ok"))
+                : ResponseEntity.badRequest().body(ResponseDto.from("일치하지 않는 계좌 정보입니다"));
     }
 
     @PostMapping("/profile")
-    public  ResponseEntity<Boolean> findUserToAuthServer(@RequestBody AuthServerProfileRequest profileRequest){
+    public ResponseEntity<ResponseDto> findUserToAuthServer(@RequestBody AuthServerProfileRequest profileRequest){
         boolean result= coreBankService.verifyProfile(profileRequest);
-        return ResponseEntity.ok(result);
+
+        return result
+                ? ResponseEntity.ok(ResponseDto.from("ok"))
+                : ResponseEntity.badRequest().body(ResponseDto.from("존재하지 않는 이메일 정보입니다"));
     }
 
     @PostMapping("/email/pin")
-    public ResponseEntity<Boolean> checkAuthEmailPinNumber(@RequestBody AuthServerEmailPinNumberRequest emailPinNumber){
+    public ResponseEntity<ResponseDto> checkAuthEmailPinNumber(@RequestBody AuthServerEmailPinNumberRequest emailPinNumber){
         boolean result= coreBankService.checkEmailPinNumber(emailPinNumber);
-        return ResponseEntity.ok(result);
+        return result
+                ? ResponseEntity.ok(ResponseDto.from("ok"))
+                : ResponseEntity.badRequest().body(ResponseDto.from("이메일로 전송된 인증번호가 일치하지 않습니다"));
     }
 
     @PostMapping("/pin")
-    public ResponseEntity<Boolean> checkAuthPinNumber(@RequestBody AuthServerPinNumberRequest pinNumber){
+    public ResponseEntity<ResponseDto> checkAuthPinNumber(@RequestBody AuthServerPinNumberRequest pinNumber){
         boolean result= coreBankService.checkPinNumber(pinNumber);
-        return ResponseEntity.ok(result);
+        return result
+                ? ResponseEntity.ok(ResponseDto.from("ok"))
+                : ResponseEntity.badRequest().body(ResponseDto.from("금융인증서 대체 PIN 번호가 일치하지 않습니다"));
     }
 }

@@ -41,7 +41,8 @@ public enum ErrorCode {
     GCP_SETTING_ERROR(500, "구글 클라우드 설정 중 오류가 발생했습니다."),
     GCP_ERROR(500, "구글 클라우드에 저장 중 오류가 발생했습니다."),
     Feign_Error(500,"MSA 통신 에러"),
-    UPDATE_FAIL(500,"type 업데이트 에러");
+    UPDATE_FAIL(500,"type 업데이트 에러"),
+    NOT_EXISTS_EMAIL(400, "존재하지 않는 이메일");
 
     private final int status;
     private final String message;

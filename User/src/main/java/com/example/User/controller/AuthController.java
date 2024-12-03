@@ -4,17 +4,15 @@ import com.example.User.dto.login.ReqLoginData;
 import com.example.User.dto.login.ReqRegist;
 import com.example.User.dto.login.ResNewAccessToken;
 import com.example.User.dto.passwordemail.PassWordValidate;
+import com.example.User.dto.response.ResponseDto;
 import com.example.User.resolver.MasterId;
 import com.example.User.service.AuthService;
 import com.example.User.service.PresidentService;
 import com.example.User.service.RedisTokenService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -77,12 +75,11 @@ public class AuthController {
     }
 
     @PostMapping("/validate-password")
-    ResponseEntity<Boolean> validatePassword(
+    ResponseEntity<ResponseDto> validatePassword(
             @MasterId Integer id,
             @Valid @RequestBody PassWordValidate passWordValidate)
     {
-        return authService.validatePassword(id, passWordValidate.getPassword())
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().build();
+        authService.validatePassword(id, passWordValidate.getPassword());
+        return ResponseEntity.ok(ResponseDto.from("비밀번호 검증 성공"));
     }
 }
