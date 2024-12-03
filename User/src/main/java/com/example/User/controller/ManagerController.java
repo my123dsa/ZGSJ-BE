@@ -27,6 +27,6 @@ public class ManagerController {
     @DeleteMapping("/president/{id}")
     public ResponseEntity<Void> deletePresident(@PathVariable Integer id) {
         managerService.deletePresidentById(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }

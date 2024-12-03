@@ -54,7 +54,8 @@ public enum ErrorCode {
     PASSWORD_WRONG(400, "비밀번호가 다릅니다"),
     EMAIL_INVALID_FORMAT(400, "이메일 형식이 잘못되었습니다"),
     NOT_EXISTS_EMAIL(400, "이메일 전송이 불가능한 메일입니다. 메일 정보를 변경하여 주세요"),
-    INVALID_UPDATE_TERM(400,"termAccept 을 업데이트 하던 도중 변경 값이 0 or 2개 이상입니다");
+    INVALID_UPDATE_TERM(400,"termAccept 을 업데이트 하던 도중 변경 값이 0 or 2개 이상입니다"),
+    DATABASE_ERROR(500, "DB에서 예상하지 못한 문제가 발생했습니다");
     ;
 
 
