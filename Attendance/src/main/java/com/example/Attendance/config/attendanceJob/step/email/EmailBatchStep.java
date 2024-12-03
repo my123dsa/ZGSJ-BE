@@ -31,8 +31,7 @@ public class EmailBatchStep {
     private final BatchService batchService;
     private final EmailService emailService;
 
-    @Bean
-    @StepScope
+    @Bean("emailReader")
     public ItemReader<EmailInputData> emailReader() {
         return () -> {
             try {
@@ -47,8 +46,7 @@ public class EmailBatchStep {
         };
     }
 
-    @Bean
-    @StepScope
+    @Bean("emailProcessor")
     public ItemProcessor<EmailInputData, EmailOutputData> emailProcessor() {
         return item -> {
             try {
@@ -88,8 +86,7 @@ public class EmailBatchStep {
         };
     }
 
-    @Bean
-    @StepScope
+    @Bean("emailWriter")
     public ItemWriter<EmailOutputData> emailWriter() {
         return chunk -> {
             List<Integer> batchIds = chunk.getItems().stream()

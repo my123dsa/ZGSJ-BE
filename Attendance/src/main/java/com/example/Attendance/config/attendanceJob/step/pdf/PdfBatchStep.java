@@ -36,8 +36,7 @@ public class PdfBatchStep {
     private final PayStatementPdfService payStatementPdfService;
 
 
-    @Bean
-    @StepScope
+    @Bean("pdfReader")
     public ItemReader<PdfInputData> pdfReader() {
 
         return () -> {
@@ -55,8 +54,7 @@ public class PdfBatchStep {
         };
     }
 
-    @Bean
-    @StepScope
+    @Bean("pdfProcessor")
     public ItemProcessor<PdfInputData, PdfOutputData> pdfProcessor() {
         return item -> {
             try {
@@ -69,8 +67,7 @@ public class PdfBatchStep {
         };
     }
 
-    @Bean
-    @StepScope
+    @Bean("pdfWriter")
     public ItemWriter<PdfOutputData> pdfWriter() {
         return chunk -> {
             List<PayStatement> payStatements = chunk.getItems().stream()

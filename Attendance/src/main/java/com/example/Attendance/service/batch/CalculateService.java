@@ -94,9 +94,9 @@ public class CalculateService {
             return salary / 5;
 
         int weekTime = (int) Math.floor(commuteSummary.getCommuteDuration() /
-                (double) (commuteSummary.getDayLength() / 7));
+                (((double) commuteSummary.getDayLength()) / 7));
         if (weekTime >= 15)
-            return weekTime * salary / 5;
+            return salary / 5 * weekTime;
         return 0L;
     }
 }

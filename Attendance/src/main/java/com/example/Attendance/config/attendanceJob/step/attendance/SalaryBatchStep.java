@@ -41,10 +41,8 @@ public class SalaryBatchStep {
     private final CalculateService calculateService;
     private final FeignExceptionHandler handler;
 
-    @Bean
+    @Bean("salaryReader")
     public ItemReader<BatchInputData> salaryReader() {
-
-
         return () -> {
             try {
                 if (salaryBatchState.getEmployees() == null) {
@@ -64,7 +62,7 @@ public class SalaryBatchStep {
         };
     }
 
-    @Bean
+    @Bean("salaryProcessor")
     public ItemProcessor<BatchInputData, BatchOutputData> salaryProcessor() {
         return item -> {
             try {
@@ -104,8 +102,8 @@ public class SalaryBatchStep {
         };
     }
 
-    @StepScope
-    @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
+
+    @Bean("salaryWriter")
     public ItemWriter<BatchOutputData> salaryWriter() {
         return chunk -> {
             List<Batch> batches= chunk.getItems().stream()
