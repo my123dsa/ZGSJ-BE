@@ -26,15 +26,15 @@ public class PresidentAccountController {
     private final EmailService emailService;
 
     @PostMapping("/check/email")
-    public ResponseEntity<ResponseDto> sendPinNumberToEmail(@RequestBody EmailOnlyRequest emailOnlyRequest) {
+    public ResponseEntity<String> sendPinNumberToEmail(@RequestBody EmailOnlyRequest emailOnlyRequest) {
         log.info("email {}", emailOnlyRequest.getEmail());
 
         // 여기에 이메일 존재 여부 판별 코드를 작성
         presidentService.emialvalidation(emailOnlyRequest.getEmail());
 
         String pinNumber=emailService.sendPinNumberToEmail(emailOnlyRequest.getEmail());
-
-        return ResponseEntity.ok(ResponseDto.from("이메일로 핀 번호 전송이 완료되었습니다"));
+        log.info("email send {}", pinNumber);
+        return ResponseEntity.ok(pinNumber);
     }
 
     @PutMapping("/change-password")
