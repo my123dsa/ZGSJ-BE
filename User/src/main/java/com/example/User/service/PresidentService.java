@@ -1,6 +1,7 @@
 package com.example.User.service;
 
 
+import com.example.User.dto.authserver.AuthServerPinNumberRequest;
 import com.example.User.dto.login.ReqIdFindData;
 import com.example.User.dto.login.ReqLoginData;
 import com.example.User.dto.login.ReqPwChange;
@@ -137,5 +138,11 @@ public class PresidentService {
         if(result!=1)
             throw new CustomException(ErrorCode.INVALID_UPDATE_TERM);
         return true;
+    }
+
+    public AuthServerPinNumberRequest findByIdToPinNumberRequest(Integer id,String pinNumber){
+        String email =presidentRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND)).getEmail();
+        return AuthServerPinNumberRequest.of(pinNumber,email);
     }
 }
