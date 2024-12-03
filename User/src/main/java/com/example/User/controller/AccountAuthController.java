@@ -47,9 +47,11 @@ public class AccountAuthController {
     }
 
     @PostMapping("/email/pin")
-    public ResponseEntity<Boolean> checkAuthEmailPinNumber(@RequestBody AuthServerEmailPinNumberRequest emailPinNumber){
+    public ResponseEntity<ResponseDto> checkAuthEmailPinNumber(@RequestBody AuthServerEmailPinNumberRequest emailPinNumber){
         boolean result= coreBankService.checkEmailPinNumber(emailPinNumber);
-        return ResponseEntity.ok(result);
+        return result
+                ? ResponseEntity.ok(ResponseDto.of("ok"))
+                : ResponseEntity.badRequest().body(ResponseDto.of("이메일로 전송된 인증번호가 일치하지 않습니다"));
     }
 
     @PostMapping("/pin")
