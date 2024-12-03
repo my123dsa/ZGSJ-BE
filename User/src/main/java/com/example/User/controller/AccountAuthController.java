@@ -4,6 +4,7 @@ import com.example.User.dto.authserver.AuthServerEmailPinNumberRequest;
 import com.example.User.dto.authserver.AuthServerPinNumberRequest;
 import com.example.User.dto.corebank.AccountAndCodeRequest;
 import com.example.User.dto.authserver.AuthServerProfileRequest;
+import com.example.User.dto.response.ResponseDto;
 import com.example.User.resolver.MasterId;
 import com.example.User.service.CoreBankService;
 import com.example.User.service.PresidentService;
@@ -20,7 +21,7 @@ public class AccountAuthController {
     private final PresidentService presidentService;
 
     @PostMapping("/check")
-    public ResponseEntity<Boolean> getAccountBankCodeAndAccountNumber(
+    public ResponseEntity<ResponseDto> getAccountBankCodeAndAccountNumber(
             @MasterId Integer id,
             @RequestBody AccountAndCodeRequest accountAndCodeRequest) {
         // 서비스 호출
@@ -30,8 +31,9 @@ public class AccountAuthController {
                 accountAndCodeRequest.getBankCode()
         );
 
-        // 프론트로 boolean 값 반환
-        return ResponseEntity.ok(isValid);
+        return isValid
+                ? ResponseEntity.ok(ResponseDto.of("ok"))
+                : ResponseEntity.badRequest().body(ResponseDto.of("존재하지 않는 계좌입니다"));
     }
 
     @PostMapping("/profile")
