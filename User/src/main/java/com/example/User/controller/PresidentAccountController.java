@@ -34,7 +34,7 @@ public class PresidentAccountController {
 
         String pinNumber=emailService.sendPinNumberToEmail(emailOnlyRequest.getEmail());
 
-        return ResponseEntity.ok(ResponseDto.of("이메일로 핀 번호 전송이 완료되었습니다"));
+        return ResponseEntity.ok(ResponseDto.from("이메일로 핀 번호 전송이 완료되었습니다"));
     }
 
     @PutMapping("/change-password")

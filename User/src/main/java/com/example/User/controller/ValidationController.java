@@ -1,7 +1,6 @@
 package com.example.User.controller;
 
 import com.example.User.dto.businessnumber.BusinessNumberRequest;
-import com.example.User.dto.businessnumber.BusinessNumberResponse;
 import com.example.User.dto.response.ResponseDto;
 import com.example.User.service.ValidationService;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +19,9 @@ public class ValidationController {
     public ResponseEntity<ResponseDto> validateBusinessNumber(@RequestBody BusinessNumberRequest businessNumberRequest) {
         String validationResult = validationService.validateBusinessNumber(businessNumberRequest);
         if ("ok".equals(validationResult)) {
-            return ResponseEntity.ok(ResponseDto.of(validationResult));
+            return ResponseEntity.ok(ResponseDto.from(validationResult));
         }
-        return ResponseEntity.badRequest().body(ResponseDto.of(validationResult));
+        return ResponseEntity.badRequest().body(ResponseDto.from(validationResult));
     }
 
 }

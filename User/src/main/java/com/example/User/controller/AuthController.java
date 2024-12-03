@@ -9,13 +9,10 @@ import com.example.User.resolver.MasterId;
 import com.example.User.service.AuthService;
 import com.example.User.service.PresidentService;
 import com.example.User.service.RedisTokenService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -83,6 +80,6 @@ public class AuthController {
             @Valid @RequestBody PassWordValidate passWordValidate)
     {
         authService.validatePassword(id, passWordValidate.getPassword());
-        return ResponseEntity.ok(ResponseDto.of("비밀번호 검증 성공"));
+        return ResponseEntity.ok(ResponseDto.from("비밀번호 검증 성공"));
     }
 }

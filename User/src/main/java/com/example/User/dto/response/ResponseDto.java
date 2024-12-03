@@ -9,7 +9,7 @@ public class ResponseDto {
 
     private String message;
 
-    public static ResponseDto of(String message)
+    public static ResponseDto from(String message)
     {
         return new ResponseDto(message);
     }

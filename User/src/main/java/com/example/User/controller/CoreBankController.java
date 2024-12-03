@@ -35,8 +35,8 @@ public class CoreBankController {
         );
 
         return isValid ?
-                ResponseEntity.ok(ResponseDto.of("계좌 확인이 완료되었습니다."))
-                : ResponseEntity.badRequest().body(ResponseDto.of("일치하지 않는 계좌 정보입니다."));
+                ResponseEntity.ok(ResponseDto.from("계좌 확인이 완료되었습니다."))
+                : ResponseEntity.badRequest().body(ResponseDto.from("일치하지 않는 계좌 정보입니다."));
     }
 
     //직원계좌확인
