@@ -4,6 +4,7 @@ import com.example.User.dto.login.ReqLoginData;
 import com.example.User.dto.login.ReqRegist;
 import com.example.User.dto.login.ResNewAccessToken;
 import com.example.User.dto.passwordemail.PassWordValidate;
+import com.example.User.dto.response.ResponseDto;
 import com.example.User.resolver.MasterId;
 import com.example.User.service.AuthService;
 import com.example.User.service.PresidentService;
@@ -77,12 +78,11 @@ public class AuthController {
     }
 
     @PostMapping("/validate-password")
-    ResponseEntity<Boolean> validatePassword(
+    ResponseEntity<ResponseDto> validatePassword(
             @MasterId Integer id,
             @Valid @RequestBody PassWordValidate passWordValidate)
     {
-        return authService.validatePassword(id, passWordValidate.getPassword())
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().build();
+        authService.validatePassword(id, passWordValidate.getPassword());
+        return ResponseEntity.ok(ResponseDto.of("비밀번호 검증 성공"));
     }
 }
