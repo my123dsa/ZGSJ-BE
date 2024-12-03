@@ -43,7 +43,7 @@ public class AccountAuthController {
 
         return result
                 ? ResponseEntity.ok(ResponseDto.of("ok"))
-                : ResponseEntity.badRequest().body(ResponseDto.of("존재하지 않는 사용자 정보입니다"));
+                : ResponseEntity.badRequest().body(ResponseDto.of("존재하지 않는 이메일 정보입니다"));
     }
 
     @PostMapping("/email/pin")
