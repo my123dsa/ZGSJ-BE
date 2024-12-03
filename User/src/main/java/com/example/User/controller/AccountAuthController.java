@@ -55,8 +55,10 @@ public class AccountAuthController {
     }
 
     @PostMapping("/pin")
-    public ResponseEntity<Boolean> checkAuthPinNumber(@RequestBody AuthServerPinNumberRequest pinNumber){
+    public ResponseEntity<ResponseDto> checkAuthPinNumber(@RequestBody AuthServerPinNumberRequest pinNumber){
         boolean result= coreBankService.checkPinNumber(pinNumber);
-        return ResponseEntity.ok(result);
+        return result
+                ? ResponseEntity.ok(ResponseDto.of("ok"))
+                : ResponseEntity.badRequest().body(ResponseDto.of("금융인증서 대체 PIN 번호가 일치하지 않습니다"));
     }
 }
