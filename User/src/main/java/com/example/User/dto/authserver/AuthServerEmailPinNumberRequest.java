@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 public class AuthServerEmailPinNumberRequest {
     private String emailPinNumber;
     private String email;
+
 }

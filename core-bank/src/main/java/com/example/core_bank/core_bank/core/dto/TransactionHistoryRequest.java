@@ -9,4 +9,5 @@ import lombok.*;
 public class TransactionHistoryRequest {
     private String account;
     private String bankCode;
+
 }

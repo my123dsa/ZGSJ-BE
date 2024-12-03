@@ -82,7 +82,6 @@ public class FinanceController {
                 transactionHistoryResponseList, taxtype
         );
 
-        //전달.
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
