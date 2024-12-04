@@ -38,10 +38,12 @@ public class PresidentAccountController {
     }
 
     @PutMapping("/change-password")
-    public ResponseEntity<Void> changePassword(@MasterId Integer id,
+    public ResponseEntity<ResponseDto> changePassword(@MasterId Integer id,
                                                @Valid @RequestBody ReqPwChange reqpwChange) {
-        presidentService.changePassword(id, reqpwChange);
-        return ResponseEntity.ok().build();
+        boolean result = presidentService.changePassword(id, reqpwChange);
+        return result ?
+                ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().body(ResponseDto.from("이전과 일치한 비밀번호입니다."));
     }
 
     @DeleteMapping("/secession")

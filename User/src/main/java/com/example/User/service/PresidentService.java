@@ -88,7 +88,13 @@ public class PresidentService {
     }
 
     @Transactional
-    public void changePassword(Integer id,ReqPwChange reqpwChange) {
+    public boolean changePassword(Integer id,ReqPwChange reqpwChange) {
+
+        if (reqpwChange.getBeforePassword().equals(reqpwChange.getNewPassword()))
+        {
+            return false;
+        }
+
         // 1. 사장님 조회
         President president = presidentRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -100,6 +106,8 @@ public class PresidentService {
         // 4. 새 비밀번호 인코딩 후 저장
         president.setPassword(passwordEncoder.encode(reqpwChange.getNewPassword()));
         presidentRepository.save(president);
+
+        return true;
     }
 
     public PresidentInfoResponse getPresidentInfo(Integer presidentId)
