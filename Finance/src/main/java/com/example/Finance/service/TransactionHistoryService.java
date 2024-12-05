@@ -74,10 +74,10 @@ public class TransactionHistoryService {
         try {
             return coreBankFeign.getTransactionHistoryList(transactionHistoryRequest, year, month);
         } catch (FeignException e) {
-            log.error("코어뱅킹 서비스 거래내역 조회 중 오류 발생 - year: {}, month: {}", year, month, e);
+            log.error("코어뱅킹 서비스 통신 중 오류 발생 - year: {}, month: {}", year, month, e);
             throw new CustomException(ErrorCode.BANKING_FEIGN_ERROR);
         } catch (Exception e) {
-            log.error("거래내역 조회 중 예상치 못한 오류 발생 - year: {}, month: {}", year, month, e);
+            log.error("통신 중 예상치 못한 오류 발생 - year: {}, month: {}", year, month, e);
             throw new CustomException(ErrorCode.SERVER_ERROR);
         }
     }
@@ -92,7 +92,7 @@ public class TransactionHistoryService {
             log.error("코어뱅킹 서비스 통신 중 오류 발생 - year: {}, month: {}", year, month, e);
             throw new CustomException(ErrorCode.BANKING_FEIGN_ERROR);
         } catch (Exception e) {
-            log.error("거래상대방 조회 중 예상치 못한 오류 발생 - year: {}, month: {}", year, month, e);
+            log.error("통신 중 예상치 못한 오류 발생 - year: {}, month: {}", year, month, e);
             throw new CustomException(ErrorCode.SERVER_ERROR);
         }
     }
@@ -103,10 +103,10 @@ public class TransactionHistoryService {
         try {
             return coreBankFeign.getTransactionHistoryYearSalesList(transactionHistoryRequest, year);
         } catch (FeignException e) {
-            log.error("코어뱅킹 서비스 연간 거래내역 조회 중 오류 발생 - year: {}", year, e);
+            log.error("코어뱅킹 서비스 통신 중 오류 발생 - year: {}", year, e);
             throw new CustomException(ErrorCode.BANKING_FEIGN_ERROR);
         } catch (Exception e) {
-            log.error("연간 거래내역 조회 중 예상치 못한 오류 발생 - year: {}", year, e);
+            log.error("통신 중 예상치 못한 오류 발생 - year: {}", year, e);
             throw new CustomException(ErrorCode.SERVER_ERROR);
         }
     }

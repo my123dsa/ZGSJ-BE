@@ -22,6 +22,7 @@ public class UserInteractService {
             return userFeign.getStoreAccountInfo(storeId);
         } catch (FeignException fe)
         {
+            log.error("User 서비스와 통신 중 에러 발생 : {}", fe);
             throw new CustomException(ErrorCode.USER_FEIGN_ERROR);
         } catch (Exception e)
         {
