@@ -26,7 +26,7 @@ public class EmailService {
     private final JavaMailSender javaMailSender;
     private final CryptoUtil cryptoUtil;
     public String sendPinNumberToEmail(String email){
-        String title ="[집계사장]직원 PinNumber";
+        String title ="[집계사장]Email 확인 용 PinNumber";
         String pinNumber=cryptoUtil.makeRandomInteger();
         String content =
                 "집계사장을 사용해주셔서 감사합니다. 🦀🍔🍟" +
