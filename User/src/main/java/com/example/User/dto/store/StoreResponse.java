@@ -14,6 +14,9 @@ public class StoreResponse {
     private String bankCode;
     private String location;
 
+    private Double latitude;
+    private Double longitude;
+
     public static StoreResponse from(Store store) {
         return new StoreResponse(
                 store.getId(),
@@ -21,7 +24,9 @@ public class StoreResponse {
                 store.getBusinessNumber(),
                 store.getAccountNumber(),
                 store.getBankCode(),
-                store.getLocation()
+                store.getLocation(),
+                store.getLatitude(),
+                store.getLongitude()
         );
     }
 }
