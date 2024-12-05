@@ -59,7 +59,7 @@ public class StoreEmployeeService {
 
     public String getEmail(Integer seId){
         StoreEmployee storeEmployee= storeEmployeeRepository.findById(seId)
-                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_EMPLOYEE));
+                .orElseThrow(() -> new CustomException(ErrorCode.STOREEMPLOYEE_NOT_FOUND));
         return storeEmployee.getEmail();
     }
 
