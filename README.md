@@ -38,18 +38,28 @@
 
 ## 🍔 멤버
 <table>
-  <tr>
-    <td height="140px" align="center"> <a href="https://github.com/jihyuk0414"> <img src="https://avatars.githubusercontent.com/u/123541776?v=4" width="140px" />
-      <br /> 임지혁</a></td>
-    <td height="140px" align="center"> <a href="https://github.com/hyeri1126"> <img src="https://avatars.githubusercontent.com/u/114209093?v=4" width="140px" />
-      <br /> 류혜리</a></td>
-    <td height="140px" align="center"> <a href="https://github.com/ksp0814"> <img src="https://avatars.githubusercontent.com/u/122997638?v=4" width="140px" />
-      <br /> 강세필</a></td>
-    <td height="140px" align="center"> <a href="https://github.com/gusdk19"> <img src="https://avatars.githubusercontent.com/u/128590006?v=4" width="140px" />
-      <br /> 이현아</a></td>
-    <td height="140px" align="center"> <a href="https://github.com/my123dsa"> <img src="https://avatars.githubusercontent.com/u/174989195?v=4" width="140px" />
-      <br /> 박준현</a></td>
-    <td height="140px" align="center"> <a href="https://github.com/apple6346654"> <img src="https://avatars.githubusercontent.com/u/174989500?v=4" width="140px" />
-      <br /> 정성윤</a></td>
-  </tr>
+ <tr>
+   <td height="140px" align="center"> <a href="https://github.com/jihyuk0414"> <img src="https://avatars.githubusercontent.com/u/123541776?v=4" width="140px" />
+     <br /> 임지혁</a></td>
+   <td height="140px" align="center"> <a href="https://github.com/hyeri1126"> <img src="https://avatars.githubusercontent.com/u/114209093?v=4" width="140px" />
+     <br /> 류혜리</a></td>
+   <td height="140px" align="center"> <a href="https://github.com/ksp0814"> <img src="https://avatars.githubusercontent.com/u/122997638?v=4" width="140px" />
+     <br /> 강세필</a></td>
+   <td height="140px" align="center"> <a href="https://github.com/gusdk19"> <img src="https://avatars.githubusercontent.com/u/128590006?v=4" width="140px" />
+     <br /> 이현아</a></td>
+   <td height="140px" align="center"> <a href="https://github.com/my123dsa"> <img src="https://avatars.githubusercontent.com/u/174989195?v=4" width="140px" />
+     <br /> 박준현</a></td>
+   <td height="140px" align="center"> <a href="https://github.com/apple6346654"> <img src="https://avatars.githubusercontent.com/u/174989500?v=4" width="140px" />
+     <br /> 정성윤</a></td>
+ </tr>
+ <tr>
+   <td align="center">Backend</td>
+   <td align="center">Backend</td>
+   <td align="center">Frontend</td>
+   <td align="center">Frontend</td>
+   <td align="center">Frontend</td>
+   <td align="center">Frontend</td>
+ </tr>
 </table>
+<br>
+<br>
