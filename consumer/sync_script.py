@@ -19,7 +19,7 @@ def connect_to_database():
           host="host.docker.internal",
           port=3306,
           database="attendance", 
-          user="root",
+          user="user",
           password="1234"
       )
       logger.info("Successfully connected to MySQL database")
