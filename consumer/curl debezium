@@ -20,7 +20,8 @@ curl -X POST -H "Content-Type: application/json" localhost:8083/connectors -d '{
         "schema.history.internal.kafka.topic": "schema-changes.member.president",
         "include.schema.changes": "true",
         "database.connectionTimeZone": "Asia/Seoul",
-        "database.serverTimezone": "Asia/Seoul"
+        "database.serverTimezone": "Asia/Seoul",
+        "database.allowPublicKeyRetrieval": "true"
     }
 }'
 
@@ -41,7 +42,8 @@ curl -X POST -H "Content-Type: application/json" localhost:8083/connectors -d '{
         "schema.history.internal.kafka.topic": "schema-changes.member.store",
         "include.schema.changes": "true",
         "database.connectionTimeZone": "Asia/Seoul",
-        "database.serverTimezone": "Asia/Seoul"
+        "database.serverTimezone": "Asia/Seoul",
+        "database.allowPublicKeyRetrieval": "true"
     }
 }'
 
@@ -62,6 +64,7 @@ curl -X POST -H "Content-Type: application/json" localhost:8083/connectors -d '{
         "schema.history.internal.kafka.topic": "schema-changes.member.store_employee",
         "include.schema.changes": "true",
         "database.connectionTimeZone": "Asia/Seoul",
-        "database.serverTimezone": "Asia/Seoul"
+        "database.serverTimezone": "Asia/Seoul",
+        "database.allowPublicKeyRetrieval": "true"
     }
 }'
