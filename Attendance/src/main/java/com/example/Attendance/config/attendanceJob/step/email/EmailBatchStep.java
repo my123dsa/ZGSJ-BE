@@ -49,6 +49,8 @@ public class EmailBatchStep {
     @Bean("emailProcessor")
     public ItemProcessor<EmailInputData, EmailOutputData> emailProcessor() {
         return item -> {
+            // 메일을 보내는데 3가지 경우로 나뉨
+            // 1.임금 이체, 2. 수수료 이체 , 3. pdf 생성 여부
             try {
                 log.info("결과 : {} {} {}",item.getBankResult(),item.getPdfResult(),item.getBatchId());
                 if (item.getBankResult()){
@@ -93,6 +95,7 @@ public class EmailBatchStep {
                     .filter(EmailOutputData::getResult)
                     .map(EmailOutputData::getBatchId)
                     .toList();
+            // 안정성을 위해 batch라는 우리가 만든 객체에 이메일 전송 결과 업데이트
             batchService.updateEmailResultByIds(batchIds);
         };
     }

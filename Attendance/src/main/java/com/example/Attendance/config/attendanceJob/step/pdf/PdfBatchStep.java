@@ -58,7 +58,9 @@ public class PdfBatchStep {
     public ItemProcessor<PdfInputData, PdfOutputData> pdfProcessor() {
         return item -> {
             try {
+                //각 data를 바탕으로 pdf생성
                 byte[] pdf = payStatementPdfService.generateIncomeStatementPdf(item);
+                //gcp에 업로드
                 String url = gCPService.uploadObject(pdf);
                 return PdfOutputData.of(item, url,true);
             } catch (Exception e) {

@@ -20,6 +20,8 @@ public class AttendanceBatchJobListener {
     private final EmailBatchState emailBatchState;
     private final SalaryBatchState salaryBatchState;
 
+    // job이 끝났을 때 state값들을 리셋시켜 이후 배치에 영향을 안 가지게 해줌
+    // 원래는 이거 없어도 되는 걸로 아는데, 실행할 때마다 초기화가 안되서 최종적으로 집어넣음
     @Bean
     public JobExecutionListener attendanceJobListener() {
         return new JobExecutionListener() {

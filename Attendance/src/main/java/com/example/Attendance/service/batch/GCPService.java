@@ -23,7 +23,6 @@ public class GCPService {
         BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, uuid.toString())
                 .setContentType("application/pdf")
                 .build();
-
         storage.create(blobInfo, pdfContent);
 
         return String.format("https://storage.cloud.google.com/%s/%s", bucketName, uuid); //pdf url

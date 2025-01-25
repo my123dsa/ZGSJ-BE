@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+//email 부분의 상태 값 모음
+//이부분 관성적으로 만들었는데 뺄 수 있을 것 같은 느낌?
 
 @Component
 @JobScope   // StepScope 대신 JobScope 사용

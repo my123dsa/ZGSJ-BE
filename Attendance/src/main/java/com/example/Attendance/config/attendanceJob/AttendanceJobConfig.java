@@ -33,9 +33,13 @@ public class AttendanceJobConfig {
     private final PlatformTransactionManager transactionManager;
     private final AttendanceBatchJobListener attendanceBatchJobListener;
 
+    // 먼저 1개의 job과 3개의 스텝을 작성
+    // 사실 3개의 job을 해야하는데 시간이 부족해 교체하지 못했음... <- 수정한다면 요기부터 일듯
 
     @Bean
     public Job attendanceJob() {
+        // job에 해당하는  listener와 step을 작성해주는데 각 스텝의 경우는 1개의 스텝이 오류로 종료되어도 다음이 진행되어야하기 때문에
+        // start, on, to, from등의 메소드를 사용함
         return new JobBuilder("automaticTransferJob", jobRepository)
                 .listener(attendanceBatchJobListener.attendanceJobListener()) // Listener 등록
                 .start(attendanceStep()).on("*").to(statementPdfStep())
@@ -45,6 +49,8 @@ public class AttendanceJobConfig {
                 .build();
     }
 
+    // 기본적으로 스텝은 읽기, 처리, 쓰기가 존재
+    // 읽기에서 대량으로 처리한 후-> 처리에서는 1개씩 -> 쓰기에서는 처리가 n(chunkSize)개 완료시 한번에 db에 적용함
     @Bean
     public Step attendanceStep() {
         return new StepBuilder("automaticTransferStep", jobRepository)

@@ -24,9 +24,12 @@ public class GCPConfig {
 
     @Bean
     public Storage storage() {
+
 //        String key = String.format("classpath:%s.json", keyFileName);
 //        try (InputStream keyFile = ResourceUtils.getURL(key).openStream();) {
 
+        // GCP를 사용하려면 key가 필요한데 기본적으로 key는 json파일로 줘서 위와 같이 사용해야하는데
+        // 우리는 ci/cd자동화 때문에 String으로 하는게 필요했음 -> 이에 따라 아래의 코드를 이용해 키스트림으로 뽑아내 사용할 수 있었다~
             try (ByteArrayInputStream keyFile = new ByteArrayInputStream(credentialsJson.getBytes(StandardCharsets.UTF_8))) {
 
 
