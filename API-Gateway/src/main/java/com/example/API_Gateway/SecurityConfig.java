@@ -2,6 +2,7 @@ package com.example.API_Gateway;
 
 import com.example.API_Gateway.filter.TokenCheckFilter;
 import com.example.API_Gateway.util.CryptoUtil;
+import com.example.API_Gateway.util.JWEUtil;
 import com.example.API_Gateway.util.JWTUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +22,7 @@ import java.util.List;
 public class SecurityConfig {
 
     @Bean
-    public TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil,CryptoUtil cryptoUtil) {
+    public TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil, CryptoUtil cryptoUtil, JWEUtil jweUtil) {
         List<String> permitUrls = new ArrayList<>();
         permitUrls.add("/president/login");
         permitUrls.add("/president/regist");
@@ -48,7 +49,7 @@ public class SecurityConfig {
         needIdUrls.add("/core/account/certificate/pin");
         needIdUrls.add("/user/manager/check");
 
-        return new TokenCheckFilter(jwtUtil, permitUrls, needIdUrls, cryptoUtil);
+        return new TokenCheckFilter(jwtUtil, permitUrls, needIdUrls, cryptoUtil,jweUtil);
     }
 
     @Bean
@@ -61,7 +62,6 @@ public class SecurityConfig {
                 .httpBasic(basic-> basic.disable())
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));
-
         return http.build();
     }
 
