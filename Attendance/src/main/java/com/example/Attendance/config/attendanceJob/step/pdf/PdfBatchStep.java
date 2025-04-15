@@ -35,7 +35,6 @@ public class PdfBatchStep {
     private final GCPService gCPService;
     private final PayStatementPdfService payStatementPdfService;
 
-
     @Bean("pdfReader")
     public ItemReader<PdfInputData> pdfReader() {
 

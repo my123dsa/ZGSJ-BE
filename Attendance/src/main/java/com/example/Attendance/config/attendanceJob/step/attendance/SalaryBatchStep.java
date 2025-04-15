@@ -114,6 +114,7 @@ public class SalaryBatchStep {
             List<Integer> ids= chunk.getItems().stream()
                     .filter(BatchOutputData::getIsMask)
                     .map(BatchOutputData::getSeId).toList();
+
             storeEmployeeService.updateEmployeeType(ids);
             log.info("급여 이체 결과 {} 건 저장 완료", chunk.size());
         };
