@@ -5,32 +5,28 @@ import com.example.API_Gateway.error.CustomException;
 import com.example.API_Gateway.error.ErrorCode;
 import com.example.API_Gateway.util.JWEUtil;
 import com.example.API_Gateway.util.JWTUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 
+@Component
 @Slf4j
+@RequiredArgsConstructor
 public class TokenCheckFilter implements GlobalFilter, Ordered {
-
     private final JWTUtil jwtUtil;
     private final List<String> permitUrl;
     private final List<String> needIdUrl;
     private final JWEUtil jweUtil;
-
-    public TokenCheckFilter(JWTUtil jwtUtil, List<String> permitUrl, List<String> needIdUrl, JWEUtil jweUtil) {
-        this.jwtUtil = jwtUtil;
-        this.permitUrl = permitUrl;
-        this.needIdUrl = needIdUrl;
-        this.jweUtil = jweUtil;
-    }
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
