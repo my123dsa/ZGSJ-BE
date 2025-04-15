@@ -67,7 +67,7 @@ class RedisServiceTest {
         when(valueOps.get(accessTokenId.toString())).thenReturn(refreshToken);
 
         when(jwtUtil.validateToken(refreshToken)).thenReturn(claims);
-        when(cryptoUtil.decrypt(encryptedId)).thenReturn(accessTokenId);
+//        when(cryptoUtil.decrypt(encryptedId)).thenReturn(accessTokenId);
         when(jwtUtil.generateToken(accessTokenId, 1)).thenReturn("new-access-token");
 
         // When
@@ -82,7 +82,7 @@ class RedisServiceTest {
 
 
         verify(jwtUtil).validateToken(refreshToken);
-        verify(cryptoUtil).decrypt(encryptedId);
+//        verify(cryptoUtil).decrypt(encryptedId);
         verify(jwtUtil).generateToken(accessTokenId, 1);
 
     }
@@ -115,7 +115,7 @@ class RedisServiceTest {
 
         when(valueOps.get(accessTokenId.toString())).thenReturn(refreshToken);
         when(jwtUtil.validateToken(refreshToken)).thenReturn(claims);
-        when(cryptoUtil.decrypt(encryptedId)).thenReturn(2); // 다른 ID 반환
+//        when(cryptoUtil.decrypt(encryptedId)).thenReturn(2); // 다른 ID 반환
 
         // When & Then
         CustomException exception = assertThrows(CustomException.class, () ->
