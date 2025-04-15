@@ -39,7 +39,7 @@ class ValidationControllerTest {
         BusinessNumberResponse response = BusinessNumberResponse.of(true,false,"등록된 사업자번호입니다.");
 
         when(validationService.validateBusinessNumber(any(BusinessNumberRequest.class)))
-                .thenReturn(response);
+                .thenReturn(String.valueOf(response));
 
         mockMvc.perform(post("/businesscheck")    // post() 메서드 추가
                         .contentType(MediaType.APPLICATION_JSON)
@@ -55,7 +55,7 @@ class ValidationControllerTest {
                 BusinessNumberResponse.of(false,true,"오류발생");
 
         when(validationService.validateBusinessNumber(any(BusinessNumberRequest.class)))
-                .thenReturn(response);
+                .thenReturn(String.valueOf(response));
 
         MvcResult result = mockMvc.perform(post("/businesscheck")
                         .contentType(MediaType.APPLICATION_JSON)
