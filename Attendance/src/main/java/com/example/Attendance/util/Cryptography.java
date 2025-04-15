@@ -6,6 +6,7 @@ import com.example.Attendance.error.CustomException;
 import com.example.Attendance.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
@@ -18,16 +19,15 @@ import java.util.Map;
 
 @Component
 @Slf4j
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class Cryptography {
 
-    private static final String ALGORITHM = "AES";
-    private static final String FIXED_KEY = "myFixedSecretKey";
+    private  final String ALGORITHM;
     private final SecretKey secretKey;
 
-    public Cryptography() {
-        byte[] keyBytes = FIXED_KEY.getBytes(); // 문자열을 바이트 배열로 변환
-        this.secretKey = new SecretKeySpec(keyBytes, ALGORITHM);
+    public Cryptography(@Value("${aes.key}")String AESKEY) {
+        this.ALGORITHM = "AES";
+        this.secretKey = new SecretKeySpec(AESKEY.getBytes(), ALGORITHM);
     }
 
     public String decrypt(String encryptedEmail) {
