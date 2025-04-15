@@ -26,11 +26,11 @@ public class RedisTokenService {
     private final CryptoUtil cryptoUtil;
     private final JWEUtil jweUtil;
 
-    public RedisTokenService(StringRedisTemplate  redisTemplate, JWTUtil jwtUtil,CryptoUtil cryptoUtil, JWEUtil jweUtil) {
+    public RedisTokenService(StringRedisTemplate redisTemplate, JWTUtil jwtUtil, CryptoUtil cryptoUtil, JWEUtil jweUtil) {
         this.redisTemplate = redisTemplate;
         this.valueOps = redisTemplate.opsForValue();
         this.jwtUtil = jwtUtil;
-        this.cryptoUtil =cryptoUtil;
+        this.cryptoUtil = cryptoUtil;
         this.jweUtil = jweUtil;
     }
 
@@ -48,27 +48,27 @@ public class RedisTokenService {
     @Transactional
     public String checkRefreshToken(Integer accessTokenId) {
 
-        String refreshToken =valueOps.get(accessTokenId.toString());
+        String refreshToken = valueOps.get(accessTokenId.toString());
         if (refreshToken == null)
             throw new CustomException(ErrorCode.EMPTY_REFRESH_TOKEN);
 
-        Map<String, Object> claims= jwtUtil.validateToken(refreshToken);
-        String encrypt= (String)claims.get("payload");
+        Map<String, Object> claims = jwtUtil.validateToken(refreshToken);
+        String encrypt = (String) claims.get("payload");
         Integer exp = (Integer) claims.get("exp");
-        log.info("encrypt :{} exp :{}",encrypt,exp);
+        log.info("encrypt :{} exp :{}", encrypt, exp);
 
 //        Integer id = cryptoUtil.decrypt(encrypt);
-        Integer id = jweUtil.getIdFromDecrpytJWE(encrypt);
+        Integer id = jweUtil.getIdFromDecryptJWE(encrypt);
 
-        if(!Objects.equals(id, accessTokenId))
+        if (!Objects.equals(id, accessTokenId))
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
 
-        checkAndRenewRefreshToken(id,exp);
+        checkAndRenewRefreshToken(id, exp);
         return jwtUtil.generateToken(id, 1);
     }
 
     @Transactional
-    public void checkAndRenewRefreshToken(Integer id,Integer exp){
+    public void checkAndRenewRefreshToken(Integer id, Integer exp) {
         Date expTime = new Date(Instant.ofEpochMilli(exp).toEpochMilli() * 1000);
         Date current = new Date(System.currentTimeMillis());
         long gapTime = (expTime.getTime() - current.getTime());

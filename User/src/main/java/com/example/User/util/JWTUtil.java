@@ -7,13 +7,12 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
@@ -23,15 +22,11 @@ import java.util.Map;
 @Component
 @Slf4j
 public class JWTUtil {
-    //    @Value("${org.zerock.jwt.secret}")
-    private final Key key;
-    private final CryptoUtil cryptoUtil;
+    private final SecretKey key;
     private final JWEUtil jweUtil;
 
-    public JWTUtil(CryptoUtil cryptoUtil,JWEUtil jweUtil) {
-        this.cryptoUtil = cryptoUtil;
-        String settingKey="dGhpc19pc19hX3ZlcnlfbG9uZ19hbmRfc2VjdXJlX2tleV9mb3JfaHMyNTZfYWxnb3JpdGhtX2F0X2xlYXN0XzMyX2J5dGVz";
-        key = Keys.hmacShaKeyFor(settingKey.getBytes(StandardCharsets.UTF_8));
+    public JWTUtil(@Qualifier("jwsSecretKey") SecretKey key, JWEUtil jweUtil) {
+        this.key = key;
         this.jweUtil = jweUtil;
     }
 
@@ -42,8 +37,8 @@ public class JWTUtil {
         headers.put("alg", "HS512");
 
 //        Map<String, Object> encrypted = cryptoUtil.encrypt(id);
-        String jwe = jweUtil.encryptJWT(id);
-        Map<String, String> claims = Map.of("payload",jwe);
+        String jwe = jweUtil.encryptPayload(id);
+        Map<String, String> claims = Map.of("payload", jwe);
         int time = 60 * 24 * days; //테스트는 분단위로 나중에 60*24 (일)단위변경
 
         ZonedDateTime nowUtc = ZonedDateTime.now(ZoneId.of("UTC"));
