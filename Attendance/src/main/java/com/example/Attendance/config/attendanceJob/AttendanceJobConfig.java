@@ -35,11 +35,11 @@ public class AttendanceJobConfig {
 
 
     @Bean
-    public Job attendanceJob() {
+    public Job automaticTransferJob() {
         return new JobBuilder("automaticTransferJob", jobRepository)
                 .listener(attendanceBatchJobListener.attendanceJobListener()) // Listener 등록
-                .start(attendanceStep()).on("*").to(statementPdfStep())
-                .from(statementPdfStep()).on("*").to(statementEmailStep())
+                .start(attendanceStep()).on("*").to(transferPdfStep())
+                .from(transferPdfStep()).on("*").to(statementEmailStep())
                 .from(statementEmailStep()).on("*").end()
                 .end()
                 .build();
@@ -56,7 +56,7 @@ public class AttendanceJobConfig {
     }
 
     @Bean
-    public Step statementPdfStep() {
+    public Step transferPdfStep() {
         return new StepBuilder("statementPdfStep", jobRepository)
                 .<PdfInputData, PdfOutputData>chunk(3, transactionManager)
                 .reader(pdfBatchStep.pdfReader())       // 데이터 읽기

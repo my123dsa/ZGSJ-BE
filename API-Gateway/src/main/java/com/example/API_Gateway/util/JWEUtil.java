@@ -25,7 +25,8 @@ public class JWEUtil {
     public Integer getIdFromDecryptJWE(String jwt) {
         Map<String, Object> claims = decryptWithNimbus(jwt);
         Object payload = claims.get("payload");
-
+//        System.out.println(" jwe : "+jwt);
+//        System.out.println(" claims: "+claims);
         if (!(payload instanceof Number)) {
             throw new CustomException(ErrorCode.INVALID_DECRYPTION);
         }
