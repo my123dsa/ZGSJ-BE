@@ -3,6 +3,7 @@ package com.example.User.service;
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
 import com.example.User.util.CryptoUtil;
+import com.example.User.util.JWEUtil;
 import com.example.User.util.JWTUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -23,12 +24,14 @@ public class RedisTokenService {
     private final JWTUtil jwtUtil;
     private final ValueOperations<String, String> valueOps;
     private final CryptoUtil cryptoUtil;
+    private final JWEUtil jweUtil;
 
-    public RedisTokenService(StringRedisTemplate  redisTemplate, JWTUtil jwtUtil,CryptoUtil cryptoUtil) {
+    public RedisTokenService(StringRedisTemplate  redisTemplate, JWTUtil jwtUtil,CryptoUtil cryptoUtil, JWEUtil jweUtil) {
         this.redisTemplate = redisTemplate;
         this.valueOps = redisTemplate.opsForValue();
         this.jwtUtil = jwtUtil;
         this.cryptoUtil =cryptoUtil;
+        this.jweUtil = jweUtil;
     }
 
     @Transactional
@@ -54,7 +57,8 @@ public class RedisTokenService {
         Integer exp = (Integer) claims.get("exp");
         log.info("encrypt :{} exp :{}",encrypt,exp);
 
-        Integer id = cryptoUtil.decrypt(encrypt);
+//        Integer id = cryptoUtil.decrypt(encrypt);
+        Integer id = jweUtil.getIdFromDecrpytJWE(encrypt);
 
         if(!Objects.equals(id, accessTokenId))
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);

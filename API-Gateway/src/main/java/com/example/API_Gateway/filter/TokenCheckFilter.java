@@ -4,6 +4,7 @@ package com.example.API_Gateway.filter;
 import com.example.API_Gateway.error.CustomException;
 import com.example.API_Gateway.error.ErrorCode;
 import com.example.API_Gateway.util.CryptoUtil;
+import com.example.API_Gateway.util.JWEUtil;
 import com.example.API_Gateway.util.JWTUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -26,12 +27,14 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
     private final CryptoUtil cryptoUtil;
     private  final List<String> permitUrl;
     private  final List<String> needIdUrl;
+    private final JWEUtil jweUtil;
 
-    public TokenCheckFilter(JWTUtil jwtUtil, List<String> permitUrl, List<String> needIdUrl,CryptoUtil cryptoUtil) {
+    public TokenCheckFilter(JWTUtil jwtUtil, List<String> permitUrl, List<String> needIdUrl,CryptoUtil cryptoUtil,JWEUtil jweUtil) {
         this.jwtUtil = jwtUtil;
         this.permitUrl = permitUrl;
         this.needIdUrl = needIdUrl;
         this.cryptoUtil = cryptoUtil;
+        this.jweUtil = jweUtil;
     }
 
     @Override
@@ -59,7 +62,9 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
         }
 
         // 숫자인지 한번 확인 필요할 수도 //필요한 것만 복호화 시키기
-        Integer id = cryptoUtil.decrypt((String) payload.get("payload"));
+//        Integer id = cryptoUtil.decrypt((String) payload.get("payload"));
+        System.out.println("여기까지");
+        Integer id = jweUtil.getIdFromDecrpytJWE((String) payload.get("payload"));
         log.info("id: {}", id);
 
         ServerHttpRequest mutatedRequest = request.mutate()
