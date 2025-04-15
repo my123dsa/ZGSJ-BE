@@ -12,8 +12,8 @@ import java.util.List;
 
 
 @Component
-@JobScope   // StepScope 대신 JobScope 사용
-@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)  // Job 스코프로 생성
+@JobScope   // StepScope 대신 JobScope 사용 // job생성시 빈 등록
+//@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)  // Job 스코프로 생성
 @Getter
 public class PdfBatchState {
 

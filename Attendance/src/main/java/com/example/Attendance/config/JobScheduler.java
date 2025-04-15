@@ -22,7 +22,7 @@ import java.time.format.DateTimeFormatter;
 public class JobScheduler {
 
     private final JobLauncher jobLauncher;
-    private final Job attendanceJob;
+    private final Job attendanceJob; //job이 하나라 자동으로 해당 job주입
 
     @Scheduled(cron = "0 * * * * *")  // 매일 새벽 4시 실행
 //@Scheduled(cron = "0 0 4 * * *")
