@@ -4,6 +4,7 @@ package com.example.User.service;
 import com.example.User.error.CustomException;
 import com.example.User.error.ErrorCode;
 import com.example.User.util.CryptoUtil;
+import com.example.User.util.JWEUtil;
 import com.example.User.util.JWTUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,6 +37,8 @@ class RedisServiceTest {
 
     @Mock
     private JWTUtil jwtUtil;
+    @Mock
+    private JWEUtil jweUtil;
 
     @InjectMocks
     private RedisTokenService redisTokenService;
@@ -45,7 +48,7 @@ class RedisServiceTest {
         when(redisTemplate.opsForValue()).thenReturn(valueOps);
 
         // RedisTokenService를 직접 생성해서 valueOps 설정
-        redisTokenService = new RedisTokenService(redisTemplate, jwtUtil,cryptoUtil);
+        redisTokenService = new RedisTokenService(redisTemplate, jwtUtil,cryptoUtil,jweUtil);
     }
 
     @Test
