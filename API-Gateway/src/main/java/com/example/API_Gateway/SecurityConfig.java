@@ -4,6 +4,8 @@ import com.example.API_Gateway.filter.TokenCheckFilter;
 import com.example.API_Gateway.util.CryptoUtil;
 import com.example.API_Gateway.util.JWEUtil;
 import com.example.API_Gateway.util.JWTUtil;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
@@ -13,6 +15,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,8 +25,14 @@ import java.util.List;
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
+    @Value("${jwt.jwe.key}")
+    private String jweKeyString;
+
+    @Value("${jwt.jws.key}")
+    private String jwsKeyString;
+
     @Bean
-    public TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil, CryptoUtil cryptoUtil, JWEUtil jweUtil) {
+    public TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil, JWEUtil jweUtil) {
         List<String> permitUrls = new ArrayList<>();
         permitUrls.add("/president/login");
         permitUrls.add("/president/regist");
@@ -49,7 +59,7 @@ public class SecurityConfig {
         needIdUrls.add("/core/account/certificate/pin");
         needIdUrls.add("/user/manager/check");
 
-        return new TokenCheckFilter(jwtUtil, permitUrls, needIdUrls, cryptoUtil,jweUtil);
+        return new TokenCheckFilter(jwtUtil, permitUrls, needIdUrls, jweUtil);
     }
 
     @Bean
@@ -58,8 +68,8 @@ public class SecurityConfig {
                 .authorizeExchange(exchanges -> exchanges
                         .anyExchange().permitAll()
                 )
-                .formLogin( form-> form.disable())
-                .httpBasic(basic-> basic.disable())
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable())
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));
         return http.build();
@@ -78,5 +88,16 @@ public class SecurityConfig {
                 new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+
+    @Bean
+    public SecretKey jweSecretKey() {
+        byte[] salt = "your-predefined-secret-key".getBytes(StandardCharsets.UTF_8);
+        return CryptoUtil.generateKeyFromPassword(jweKeyString, salt);
+    }
+
+    @Bean
+    public SecretKey jwsSecretKey() {
+        return Keys.hmacShaKeyFor(jwsKeyString.getBytes(StandardCharsets.UTF_8));
     }
 }
