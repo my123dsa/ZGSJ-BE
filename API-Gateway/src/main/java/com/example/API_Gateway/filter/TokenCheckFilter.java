@@ -15,8 +15,6 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 
 @Slf4j
@@ -46,36 +44,58 @@ public class TokenCheckFilter implements GlobalFilter, Ordered {
             return chain.filter(exchange);
         }
 
-        String tokenStr = Optional.ofNullable(headers.get(HttpHeaders.AUTHORIZATION))
-                .flatMap(authHeaders -> authHeaders.stream().findFirst())
-                .orElseThrow(() -> new CustomException(ErrorCode.UNAUTHORIZED))
-                .replace("Bearer ", "");
+        return Mono.justOrEmpty(headers.getFirst(HttpHeaders.AUTHORIZATION))
+                .switchIfEmpty(Mono.error(new CustomException(ErrorCode.UNAUTHORIZED)))
+                .map(token -> token.replace("Bearer ", ""))
+                .map(token -> jwtUtil.validateToken(token, path)) // token -> payload map
+                .flatMap(payload -> {
+                    if (!needIdUrl.stream().anyMatch(path::contains)) {
+                        log.info("id 필요 리스트 통과");
+                        return chain.filter(exchange);
+                    }
 
-        Map<String, Object> payload = jwtUtil.validateToken(tokenStr, path);
+                    Integer id = jweUtil.getIdFromDecryptJWE((String) payload.get("payload"));
+                    log.info("id: {}", id);
 
-        if (!needIdUrl.stream().anyMatch(path::contains)) {
-            log.info("id 필요 리스트 통과");
-            return chain.filter(exchange);
-        }
+                    ServerHttpRequest mutatedRequest = request.mutate()
+                            .header("id", id.toString())
+                            .build();
 
-        // 숫자인지 한번 확인 필요할 수도 //필요한 것만 복호화 시키기
-//        Integer id = cryptoUtil.decrypt((String) payload.get("payload"));
-        System.out.println("여기까지");
-        Integer id = jweUtil.getIdFromDecryptJWE((String) payload.get("payload"));
-        log.info("id: {}", id);
-
-        ServerHttpRequest mutatedRequest = request.mutate()
-                .header("id", id.toString())
-                .build();
-        return chain.filter(exchange.mutate().request(mutatedRequest).build());
+                    return chain.filter(exchange.mutate().request(mutatedRequest).build());
+                });
     }
 
     @Override
     public int getOrder() {
         return -1;
     }
+}
+//
+//        Mono<String> tokenMono = Mono.justOrEmpty(headers.getFirst(HttpHeaders.AUTHORIZATION))
+//                .switchIfEmpty(Mono.error(new CustomException(ErrorCode.UNAUTHORIZED)))
+//                .map(token -> token.replace("Bearer ", ""));
+//
+//        Map<String, Object> payload = jwtUtil.validateToken(tokenStr, path);
+//
+//        if (!needIdUrl.stream().anyMatch(path::contains)) {
+//            log.info("id 필요 리스트 통과");
+//            return chain.filter(exchange);
+//        }
+//
+//        // 숫자인지 한번 확인 필요할 수도 //필요한 것만 복호화 시키기
+////        Integer id = cryptoUtil.decrypt((String) payload.get("payload"));
+//        System.out.println("여기까지");
+//        Integer id = jweUtil.getIdFromDecryptJWE((String) payload.get("payload"));
+//        log.info("id: {}", id);
+//
+//        ServerHttpRequest mutatedRequest = request.mutate()
+//                .header("id", id.toString())
+//                .build();
+//        return chain.filter(exchange.mutate().request(mutatedRequest).build());
+//    }
+
+
 //    private Mono<Void> onError(ServerWebExchange exchange, HttpStatus status) {
 //        exchange.getResponse().setStatusCode(status);
 //        return exchange.getResponse().setComplete();
 //    }
-}
