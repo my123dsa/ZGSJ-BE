@@ -1,4 +1,4 @@
-package com.example.API_Gateway;
+package com.example.API_Gateway.config;
 
 import com.example.API_Gateway.filter.TokenCheckFilter;
 import com.example.API_Gateway.util.CryptoUtil;
