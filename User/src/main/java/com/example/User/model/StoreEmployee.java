@@ -18,7 +18,7 @@ import java.time.LocalDate;
 )
 @Getter
 @NoArgsConstructor
-public class StoreEmployee {
+public class StoreEmployee extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
