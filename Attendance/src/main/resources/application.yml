@@ -35,3 +35,5 @@ spring:
       table-prefix: BATCH_
     job:
       enabled: false
+aes:
+  key: ${AES_KEY}
