@@ -45,7 +45,8 @@ public class BatchCheckRunner {
             JobExecution lastExecution = jobRepository
                     .getLastJobExecution("automaticTransferJob", params);
 
-            if (lastExecution == null) {
+//            if (lastExecution == null) {
+            if (lastExecution != null && !lastExecution.getStatus().isUnsuccessful()) { // 실패 job도 실행
                 log.info("오늘 배치 미실행. 배치 실행");
                 jobLauncher.run(attendanceJob, params);
             }

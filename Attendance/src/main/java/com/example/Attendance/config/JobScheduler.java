@@ -11,7 +11,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 
@@ -22,7 +24,7 @@ import java.time.format.DateTimeFormatter;
 public class JobScheduler {
 
     private final JobLauncher jobLauncher;
-    private final Job attendanceJob;
+    private final Job attendanceJob; //job이 하나라 자동으로 해당 job주입
 
 //    @Scheduled(cron = "0 * * * * *")  // 매일 새벽 4시 실행
 @Scheduled(cron = "0 0 4 * * *")
@@ -44,6 +46,20 @@ public class JobScheduler {
                     execution.getStatus(),
                     execution.getStartTime(),
                     execution.getEndTime());
+            LocalDateTime start = execution.getStartTime();
+            LocalDateTime end = execution.getEndTime();
+            Duration duration = Duration.between(start, end);
+            log.info("\n");
+
+            for (StepExecution stepExecution : execution.getStepExecutions()) {
+                log.info("Step 이름: {}", stepExecution.getStepName());
+                log.info("  읽은 아이템 수 (readCount): {}", stepExecution.getReadCount());
+                log.info("  처리된 아이템 수 (processSkipCount): {}", stepExecution.getProcessSkipCount());
+                log.info("  쓰기된 아이템 수 (writeCount): {}", stepExecution.getWriteCount());
+                log.info("  커밋 횟수 (commitCount): {}", stepExecution.getCommitCount());
+                log.info("  롤백 횟수 (rollbackCount): {}", stepExecution.getRollbackCount());
+            }
+            log.info("총 실행 시간: {}ms)", duration.toMillis());
 
             if (execution.getStatus() == BatchStatus.FAILED) {
                 log.error("Job 실행 실패 - Exit Description: {}",

@@ -12,7 +12,7 @@ import java.util.List;
 @Table(name = "president")
 @Getter
 @NoArgsConstructor
-public class President {
+public class President extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

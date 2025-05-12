@@ -9,6 +9,7 @@ import com.example.Attendance.dto.batch.email.EmailInputData;
 import com.example.Attendance.dto.batch.email.EmailOutputData;
 import com.example.Attendance.dto.batch.pdf.PdfInputData;
 import com.example.Attendance.dto.batch.pdf.PdfOutputData;
+import com.example.Attendance.error.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -18,6 +19,8 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Slf4j
@@ -31,15 +34,13 @@ public class AttendanceJobConfig {
 
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
-    private final AttendanceBatchJobListener attendanceBatchJobListener;
 
 
     @Bean
-    public Job attendanceJob() {
+    public Job automaticTransferJob() {
         return new JobBuilder("automaticTransferJob", jobRepository)
-                .listener(attendanceBatchJobListener.attendanceJobListener()) // Listener 등록
-                .start(attendanceStep()).on("*").to(statementPdfStep())
-                .from(statementPdfStep()).on("*").to(statementEmailStep())
+                .start(attendanceStep()).on("*").to(transferPdfStep())
+                .from(transferPdfStep()).on("*").to(statementEmailStep())
                 .from(statementEmailStep()).on("*").end()
                 .end()
                 .build();
@@ -48,7 +49,7 @@ public class AttendanceJobConfig {
     @Bean
     public Step attendanceStep() {
         return new StepBuilder("automaticTransferStep", jobRepository)
-                .<BatchInputData, BatchOutputData>chunk(3, transactionManager)
+                .<BatchInputData, BatchOutputData>chunk(5, transactionManager)
                 .reader(salaryBatchStep.salaryReader())       // 데이터 읽기
                 .processor(salaryBatchStep.salaryProcessor()) // 데이터 처리
                 .writer(salaryBatchStep.salaryWriter())       // 데이터 쓰기
@@ -56,22 +57,38 @@ public class AttendanceJobConfig {
     }
 
     @Bean
-    public Step statementPdfStep() {
+    public Step transferPdfStep() {
         return new StepBuilder("statementPdfStep", jobRepository)
-                .<PdfInputData, PdfOutputData>chunk(3, transactionManager)
+                .<PdfInputData, PdfOutputData>chunk(5, transactionManager)
                 .reader(pdfBatchStep.pdfReader())       // 데이터 읽기
                 .processor(pdfBatchStep.pdfProcessor()) // 데이터 처리
                 .writer(pdfBatchStep.pdfWriter())       // 데이터 쓰기
+                .faultTolerant()
+                .retry(CustomException.class)
+                .retryLimit(3)
+                .taskExecutor(simpleAsyncTaskExecutor()) // 멀티스레드
                 .build();
     }
+
 
     @Bean
     public Step statementEmailStep() {
         return new StepBuilder("statementEmailStep", jobRepository)
-                .<EmailInputData, EmailOutputData>chunk(3, transactionManager)
+                .<EmailInputData, EmailOutputData>chunk(5, transactionManager)
                 .reader(emailBatchStep.emailReader())       // 데이터 읽기
                 .processor(emailBatchStep.emailProcessor()) // 데이터 처리
                 .writer(emailBatchStep.emailWriter())       // 데이터 쓰기
+                .faultTolerant()
+                .retry(CustomException.class)
+                .retryLimit(3)
+                .taskExecutor(simpleAsyncTaskExecutor()) // 멀티스레드
                 .build();
+    }
+
+    @Bean
+    public TaskExecutor simpleAsyncTaskExecutor() {
+        SimpleAsyncTaskExecutor executor = new SimpleAsyncTaskExecutor();
+        executor.setConcurrencyLimit(5); // ✅ throttleLimit 역할
+        return executor;
     }
 }

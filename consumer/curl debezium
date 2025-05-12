@@ -1,6 +1,6 @@
-curl -X DELETE localhost:8083/connectors/member-president-connector
-curl -X DELETE localhost:8083/connectors/member-store-connector
-curl -X DELETE localhost:8083/connectors/member-store-employee-connector
+# curl -X DELETE localhost:8083/connectors/member-president-connector
+# curl -X DELETE localhost:8083/connectors/member-store-connector
+# curl -X DELETE localhost:8083/connectors/member-store-employee-connector
 
 # President 커넥터 생성
 curl -X POST -H "Content-Type: application/json" localhost:8083/connectors -d '{
@@ -10,7 +10,7 @@ curl -X POST -H "Content-Type: application/json" localhost:8083/connectors -d '{
         "tasks.max": "1",
         "database.hostname": "host.docker.internal",
         "database.port": "3306",
-        "database.user": "user",
+        "database.user": "root",
         "database.password": "1234",
         "topic.prefix": "mysql-president",
         "database.server.id": "184054",
@@ -22,6 +22,11 @@ curl -X POST -H "Content-Type: application/json" localhost:8083/connectors -d '{
         "database.connectionTimeZone": "Asia/Seoul",
         "database.serverTimezone": "Asia/Seoul",
         "database.allowPublicKeyRetrieval": "true"
+        "database.serverTimezone": "Asia/Seoul",
+
+        "errors.retry.timeout": 300000,
+        "errors.retry.delay.max.ms": 5000,
+        "errors.max.retries": 10
     }
 }'
 
@@ -32,7 +37,7 @@ curl -X POST -H "Content-Type: application/json" localhost:8083/connectors -d '{
         "tasks.max": "1",
         "database.hostname": "host.docker.internal",
         "database.port": "3306",
-        "database.user": "user",
+        "database.user": "root",
         "database.password": "1234",
         "topic.prefix": "mysql-store",
         "database.server.id": "184055",
@@ -44,6 +49,11 @@ curl -X POST -H "Content-Type: application/json" localhost:8083/connectors -d '{
         "database.connectionTimeZone": "Asia/Seoul",
         "database.serverTimezone": "Asia/Seoul",
         "database.allowPublicKeyRetrieval": "true"
+        "database.serverTimezone": "Asia/Seoul",
+
+        "errors.retry.timeout": 300000,
+        "errors.retry.delay.max.ms": 5000,
+        "errors.max.retries": 10
     }
 }'
 
@@ -54,7 +64,7 @@ curl -X POST -H "Content-Type: application/json" localhost:8083/connectors -d '{
         "tasks.max": "1",
         "database.hostname": "host.docker.internal",
         "database.port": "3306",
-        "database.user": "user",
+        "database.user": "root",
         "database.password": "1234",
         "topic.prefix": "mysql-store-employee",
         "database.server.id": "184056",
@@ -66,5 +76,10 @@ curl -X POST -H "Content-Type: application/json" localhost:8083/connectors -d '{
         "database.connectionTimeZone": "Asia/Seoul",
         "database.serverTimezone": "Asia/Seoul",
         "database.allowPublicKeyRetrieval": "true"
+        "database.serverTimezone": "Asia/Seoul",
+
+        "errors.retry.timeout": 300000,
+        "errors.retry.delay.max.ms": 5000,
+        "errors.max.retries": 10
     }
 }'

@@ -1,26 +1,23 @@
 package com.example.Attendance.config.attendanceJob.step.pdf;
 
-import com.example.Attendance.service.PayStatementService;
-import com.example.Attendance.service.batch.BatchService;
 import com.example.Attendance.dto.batch.pdf.PdfInputData;
 import com.example.Attendance.dto.batch.pdf.PdfOutputData;
 import com.example.Attendance.dto.batch.pdf.PdfSaveData;
 import com.example.Attendance.error.CustomException;
 import com.example.Attendance.error.ErrorCode;
 import com.example.Attendance.model.PayStatement;
-import com.example.Attendance.repository.PayStatementRepository;
+import com.example.Attendance.service.PayStatementService;
+import com.example.Attendance.service.batch.BatchService;
 import com.example.Attendance.service.batch.GCPService;
 import com.example.Attendance.service.batch.PayStatementPdfService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -30,28 +27,14 @@ import java.util.List;
 public class PdfBatchStep {
 
     private final BatchService batchService;
-    private final PdfBatchState pdfBatchState;
     private final PayStatementService payStatementService;
     private final GCPService gCPService;
     private final PayStatementPdfService payStatementPdfService;
-
+    private final PdfBatchReader pdfBatchReader;
 
     @Bean("pdfReader")
     public ItemReader<PdfInputData> pdfReader() {
-
-        return () -> {
-            try {
-                if (pdfBatchState.getBatches()==null ) {
-                    pdfBatchState.findAllByLocalDate(
-                            batchService.findAllByLocalDateWithBankResultIsTrue(LocalDate.now()));
-                }
-
-                return pdfBatchState.findBatchInputData();
-            } catch (Exception e) {
-                log.error("데이터 읽기 실패: {}", e.getMessage(), e);
-                throw new CustomException(ErrorCode.API_SERVER_ERROR);
-            }
-        };
+        return pdfBatchReader;
     }
 
     @Bean("pdfProcessor")

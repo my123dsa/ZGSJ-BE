@@ -49,3 +49,9 @@ logging:
     reactor.netty.http.client: DEBUG
     org.springframework.cloud.gateway.filter.LoadBalancerClientFilter: TRACE
     org.springframework.cloud.gateway.handler.RoutePredicateHandlerMapping: TRACE
+
+jwt:
+  jwe:
+    key: ${JWE_KEY}
+  jws:
+    key: ${JWS_KEY}
