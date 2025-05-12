@@ -7,29 +7,24 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Map;
 
 @Component
 @Slf4j
-@RequiredArgsConstructor
 public class JWTUtil {
-    //    @Value("${org.zerock.jwt.secret}")
-    private final Key key;
+    private final SecretKey key;
 
-    public JWTUtil() {
-        String settingKey="dGhpc19pc19hX3ZlcnlfbG9uZ19hbmRfc2VjdXJlX2tleV9mb3JfaHMyNTZfYWxnb3JpdGhtX2F0X2xlYXN0XzMyX2J5dGVz";
-        key = Keys.hmacShaKeyFor(settingKey.getBytes(StandardCharsets.UTF_8));
+    public JWTUtil(@Qualifier("jwsSecretKey") SecretKey key) {
+        this.key = key;
     }
 
-    public Map<String, Object> validateToken(String token,String path) throws JwtException {
+    public Map<String, Object> validateToken(String token, String path) throws JwtException {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(key)

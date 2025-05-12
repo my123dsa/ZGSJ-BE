@@ -29,7 +29,7 @@ public class BatchConfig {
         factory.setIsolationLevelForCreate("ISOLATION_SERIALIZABLE");
         factory.setTablePrefix("BATCH_");
         factory.setMaxVarCharLength(1000);
-        factory.afterPropertiesSet();
+        factory.afterPropertiesSet();//객체 설정대로 초기화 잘 되었는지 확인하는 역할
         return factory.getObject();
     }
 
