@@ -7,6 +7,7 @@ import jakarta.validation.constraints.PastOrPresent;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ public class CommuteByPresidentRequest {
 
     @NotNull(message = "출근일자는 필수입니다")
     @PastOrPresent(message = "미래 날짜는 입력할 수 없습니다")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate commuteDate;
 
     private CommuteByPresidentRequest(LocalDateTime startTime, LocalDateTime endTime, LocalDate commuteDate) {

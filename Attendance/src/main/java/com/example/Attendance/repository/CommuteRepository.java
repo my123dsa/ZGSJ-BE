@@ -17,11 +17,11 @@ public interface CommuteRepository extends JpaRepository<Commute, Integer> {
 
     @Modifying
     @Query("UPDATE Commute c " + "SET c.startTime = :startTime, " + "c.endTime = :endTime, " +
-            "c.commuteDate = :commuteDate, " + "c.commuteDuration = :commuteDuration " + "WHERE c.id = :commuteId")
+            "c.commuteDate = DATE(:commuteDate), " + "c.commuteDuration = :commuteDuration " + "WHERE c.id = :commuteId")
     void updateCommute(
-            @Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime, @Param("commuteDate"
-    ) LocalDate commuteDate,
-            @Param("commuteDuration") Long commuteDuration, @Param("commuteId") Integer commuteId);
+            @Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime,
+            @Param("commuteDate") LocalDate commuteDate, @Param("commuteDuration") Long commuteDuration,
+            @Param("commuteId") Integer commuteId);
 
     @Query("SELECT c FROM Commute c " +
             "JOIN FETCH c.storeEmployee se " +
@@ -42,7 +42,8 @@ public interface CommuteRepository extends JpaRepository<Commute, Integer> {
             "DATEDIFF" +
             "(max(c.commuteDate), min(c.commuteDate)) + 1) " +
             "FROM Commute c " +
-            "WHERE c.commuteDate BETWEEN :startDate AND :endDate AND c.storeEmployee.id IN :employeeIds " +
+            "WHERE DATE(c.commuteDate) BETWEEN DATE(:startDate) AND DATE(:endDate) " +
+            "AND c.storeEmployee.id IN :employeeIds " +
             "GROUP BY c.storeEmployee.id "
     )
     List<CommuteSummary> findAllByCommuteDateBetween(
@@ -54,7 +55,7 @@ public interface CommuteRepository extends JpaRepository<Commute, Integer> {
     @Query("SELECT c FROM Commute c " +
             "JOIN FETCH c.storeEmployee se " +
             "WHERE se.store.id = :storeId " +
-            "AND c.commuteDate = :commuteDate")
+            "AND DATE(c.commuteDate) = DATE(:commuteDate)")
     List<Commute> findByStoreIdAndCommuteDate(
             @Param("storeId") Integer storeId,
             @Param("commuteDate") LocalDate commuteDate

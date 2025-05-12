@@ -38,7 +38,8 @@ public class Commute {
     private StoreEmployee storeEmployee;
 
     private Commute(LocalDate commuteDate, LocalDateTime startTime, StoreEmployee storeEmployee) {
-        this.commuteDate = commuteDate;
+        this.commuteDate = startTime.toLocalDate();
+
         this.commuteDuration = 0L;
         this.startTime = startTime;
         this.storeEmployee = storeEmployee;

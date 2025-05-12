@@ -33,6 +33,9 @@ public class CommuteService {
     public boolean goToWork(StoreEmployee storeEmployee){
         Optional<Commute> lastCommute= commuteRepository.findTopByStoreEmployeeIdOrderByStartTimeDesc(storeEmployee.getId());
         LocalDateTime now= LocalDateTime.now();
+
+        log.info("현재 시간", now);
+
         Commute commute= Commute.createCommuteCheckIn(now.toLocalDate(),now,storeEmployee);
         if(lastCommute.isPresent() &&lastCommute.get().getEndTime()==null){
             commuteRepository.save(commute);
@@ -47,6 +50,9 @@ public class CommuteService {
         Commute commute= commuteRepository
                 .findTopByStoreEmployeeIdOrderByStartTimeDesc(storeEmployee.getId())
                 .orElseThrow(()-> new CustomException(ErrorCode.INVALID_COMMUTE));
+
+        log.info("퇴근 시간", LocalDateTime.now());
+
         if(commute.getEndTime()!=null){
             throw new CustomException(ErrorCode.MISSING_GO_TO_WORK_RECODE);
         }
