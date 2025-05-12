@@ -18,6 +18,8 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Slf4j
@@ -62,8 +64,10 @@ public class AttendanceJobConfig {
                 .reader(pdfBatchStep.pdfReader())       // 데이터 읽기
                 .processor(pdfBatchStep.pdfProcessor()) // 데이터 처리
                 .writer(pdfBatchStep.pdfWriter())       // 데이터 쓰기
+                .taskExecutor(simpleAsyncTaskExecutor()) // 멀티스레드
                 .build();
     }
+
 
     @Bean
     public Step statementEmailStep() {
@@ -72,6 +76,13 @@ public class AttendanceJobConfig {
                 .reader(emailBatchStep.emailReader())       // 데이터 읽기
                 .processor(emailBatchStep.emailProcessor()) // 데이터 처리
                 .writer(emailBatchStep.emailWriter())       // 데이터 쓰기
+                .taskExecutor(simpleAsyncTaskExecutor()) // 멀티스레드
                 .build();
+    }
+    @Bean
+    public TaskExecutor simpleAsyncTaskExecutor() {
+        SimpleAsyncTaskExecutor executor = new SimpleAsyncTaskExecutor();
+        executor.setConcurrencyLimit(3); // ✅ throttleLimit 역할
+        return executor;
     }
 }
