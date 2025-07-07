@@ -17,10 +17,10 @@ logger = logging.getLogger(__name__)
 def connect_to_database():
   try:
       connection = mysql.connector.connect(
-          host="host.docker.internal",
+          host="mysql",
           port=3306,
-          database="attendance", 
-          user="user",
+          database="attendance",
+          user="root",
           password="1234"
       )
       logger.info("Successfully connected to MySQL database")
@@ -31,7 +31,7 @@ def connect_to_database():
 
 def create_producer():
     producer = Producer({
-        'bootstrap.servers': 'kafka:29092',
+        'bootstrap.servers': 'kafka-service:9092',
         'acks': 'all'  # 모든 브로커가 메시지를 받은 후 전송 완료로 처리
     })
     return producer
@@ -281,7 +281,7 @@ def process_messages_before(topic, handler_func):
 
           consumer = KafkaConsumer(
               topic,
-              bootstrap_servers=['kafka:29092'],
+              bootstrap_servers=['kafka-service:9092'],
               auto_offset_reset='earliest',
 #               enable_auto_commit=True,
               enable_auto_commit=False, # 자동 커밋 비활성화
@@ -332,7 +332,7 @@ def main():
 
    try:
        temp_consumer = KafkaConsumer(
-           bootstrap_servers=['kafka:29092']
+           bootstrap_servers=['kafka-service:9092']
        )
        existing_topics = temp_consumer.topics()
        logger.info(f"Available topics: {existing_topics}")
@@ -408,7 +408,7 @@ def process_messages(topic, handler_func):
 
             consumer = KafkaConsumer(
                 topic,
-                bootstrap_servers=['kafka:29092'],
+                bootstrap_servers=['kafka-service:9092'],
                 auto_offset_reset='earliest',
                 enable_auto_commit=False,
                 group_id=f'{topic.replace(".", "_")}_sync_group',
@@ -478,7 +478,7 @@ def process_dlq_messages(dlq_topic, handler_func):
 
             consumer = KafkaConsumer(
                 dlq_topic,
-                bootstrap_servers=['kafka:29092'],
+                bootstrap_servers=['kafka-service:9092'],
                 auto_offset_reset='earliest',
                 enable_auto_commit=False,
                 group_id=f"{dlq_topic.replace('.', '_')}_dlq_consumer"

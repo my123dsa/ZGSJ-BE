@@ -1,6 +1,6 @@
-# curl -X DELETE localhost:8083/connectors/member-president-connector
-# curl -X DELETE localhost:8083/connectors/member-store-connector
-# curl -X DELETE localhost:8083/connectors/member-store-employee-connector
+ curl -X DELETE localhost:8083/connectors/member-president-connector
+ curl -X DELETE localhost:8083/connectors/member-store-connector
+ curl -X DELETE localhost:8083/connectors/member-store-employee-connector
 
 # President 커넥터 생성
 curl -X POST -H "Content-Type: application/json" localhost:8083/connectors -d '{
@@ -8,15 +8,15 @@ curl -X POST -H "Content-Type: application/json" localhost:8083/connectors -d '{
     "config": {
         "connector.class": "io.debezium.connector.mysql.MySqlConnector",
         "tasks.max": "1",
-        "database.hostname": "host.docker.internal",
+        "database.hostname": "mysql",
         "database.port": "3306",
-        "database.user": "user",
+        "database.user": "root",
         "database.password": "1234",
         "topic.prefix": "mysql-president",
         "database.server.id": "184054",
         "database.include.list": "member",
         "table.include.list": "member.president",
-        "schema.history.internal.kafka.bootstrap.servers": "kafka:29092",
+        "schema.history.internal.kafka.bootstrap.servers": "kafka-service:9092",
         "schema.history.internal.kafka.topic": "schema-changes.member.president",
         "include.schema.changes": "true",
         "database.connectionTimeZone": "Asia/Seoul",
@@ -33,15 +33,15 @@ curl -X POST -H "Content-Type: application/json" localhost:8083/connectors -d '{
     "config": {
         "connector.class": "io.debezium.connector.mysql.MySqlConnector",
         "tasks.max": "1",
-        "database.hostname": "host.docker.internal",
+        "database.hostname": "mysql",
         "database.port": "3306",
-        "database.user": "user",
+        "database.user": "root",
         "database.password": "1234",
         "topic.prefix": "mysql-store",
         "database.server.id": "184055",
         "database.include.list": "member",
         "table.include.list": "member.store",
-        "schema.history.internal.kafka.bootstrap.servers": "kafka:29092",
+        "schema.history.internal.kafka.bootstrap.servers": "kafka-service:9092",
         "schema.history.internal.kafka.topic": "schema-changes.member.store",
         "include.schema.changes": "true",
         "database.connectionTimeZone": "Asia/Seoul",
@@ -59,15 +59,15 @@ curl -X POST -H "Content-Type: application/json" localhost:8083/connectors -d '{
     "config": {
         "connector.class": "io.debezium.connector.mysql.MySqlConnector",
         "tasks.max": "1",
-        "database.hostname": "host.docker.internal",
+        "database.hostname": "mysql",
         "database.port": "3306",
-        "database.user": "user",
+        "database.user": "root",
         "database.password": "1234",
         "topic.prefix": "mysql-store-employee",
         "database.server.id": "184056",
         "database.include.list": "member",
         "table.include.list": "member.store_employee",
-        "schema.history.internal.kafka.bootstrap.servers": "kafka:29092",
+        "schema.history.internal.kafka.bootstrap.servers": "kafka-service:9092",
         "schema.history.internal.kafka.topic": "schema-changes.member.store_employee",
         "include.schema.changes": "true",
         "database.connectionTimeZone": "Asia/Seoul",
