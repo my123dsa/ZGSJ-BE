@@ -1,17 +1,12 @@
-spring:
-  application:
-    name: API-Gateway
-  cloud:
-    config:
-      uri: http://localhost:7777
-      fail-fast: true
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-
-logging:
-  level:
-    org.springframework.cloud.config: DEBUG
+#spring:
+#  application:
+#    name: API-Gateway
+#  cloud:
+#    config:
+#      import: "optional:configserver:http://config-server:7777"
+#      fail-fast: true
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"

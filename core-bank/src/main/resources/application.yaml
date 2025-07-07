@@ -23,6 +23,14 @@ spring:
           timeout: 5000 # 6
           starttls:
             enable: true # 7
+  cloud:
+    config:
+      enabled: false
 
+jwt:
+  jwe:
+    key: ${JWE_KEY}
+  jws:
+    key: ${JWS_KEY}
 server:
   port: 3030
