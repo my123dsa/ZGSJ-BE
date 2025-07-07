@@ -8,3 +8,7 @@
 
 ### macOS Patch ###
 *.icloud
+
+k8s/attendance/attendance-secret.yaml
+k8s/core-bank/corebank-secret.yaml
+k8s/user/user-secret.yaml
