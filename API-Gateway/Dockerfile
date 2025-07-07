@@ -1,0 +1,7 @@
+# Run stage
+FROM eclipse-temurin:17-jre
+WORKDIR /app
+COPY  build/libs/API-Gateway-0.0.1-SNAPSHOT.jar app.jar
+
+EXPOSE 8888
+ENTRYPOINT ["java", "-Xms256m", "-Xmx1024m", "-jar", "app.jar"]
