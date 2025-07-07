@@ -50,10 +50,12 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+
 bootJar {
-	enabled = false
+	enabled = true
+	archiveClassifier.set('')
 }
 
 jar {
-	enabled = true
+	enabled = false
 }
