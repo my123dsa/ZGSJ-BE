@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-server
+spec:
+  selector:
+    matchLabels:
+      app: config-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: config-server
+    spec:
+      containers:
+        - name: config-server
+          image: parkjunhyeon/msa_config_server:v1
+          imagePullPolicy: Always  # ⭐ 추가된 부분
+          ports:
+            - containerPort: 7777
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: config-server
+spec:
+  selector:
+    app: config-server
+  ports:
+    - port: 7777
+      targetPort: 7777
+  type: ClusterIP
