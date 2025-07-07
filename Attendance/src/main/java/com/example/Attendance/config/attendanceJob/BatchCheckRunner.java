@@ -48,7 +48,7 @@ public class BatchCheckRunner {
 //            if (lastExecution == null) {
             if (lastExecution == null || lastExecution.getStatus().isUnsuccessful()) {
                 log.info("오늘 배치 미실행. 배치 실행");
-                jobLauncher.run(attendanceJob, params);
+//                jobLauncher.run(attendanceJob, params);
             }
         } catch (Exception e) {
             log.error("서버 시작시 배치 체크 실패: {}", e.getMessage());
