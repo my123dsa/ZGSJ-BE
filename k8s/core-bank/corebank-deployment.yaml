@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: corebank-service
+spec:
+  selector:
+    matchLabels:
+      app: corebank-service
+  template:
+    metadata:
+      labels:
+        app: corebank-service
+    spec:
+      containers:
+        - name: corebank-service
+          image: parkjunhyeon/msa_bank:v1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3030
+          envFrom:
+            - secretRef:
+                name: corebank-secret
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: corebank-service
+spec:
+  selector:
+    app: corebank-service
+  ports:
+    - port: 3030
+      targetPort: 3030
+  type: ClusterIP
