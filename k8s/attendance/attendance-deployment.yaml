@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: attendance-service
+spec:
+  selector:
+    matchLabels:
+      app: attendance-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: attendance-service
+    spec:
+      containers:
+        - name: attendance-service
+          image: parkjunhyeon/msa_attendance:v1
+          imagePullPolicy: Always  # ⭐ 추가된 부분
+          ports:
+            - containerPort: 6060
+          env:
+            - name: AES_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: attendance-secret
+                  key: AES_KEY
+            - name: EMAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: attendance-secret
+                  key: EMAIL_PASSWORD
+            - name: EMAIL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: attendance-secret
+                  key: EMAIL_USERNAME
+            - name: GCP_JSON
+              valueFrom:
+                secretKeyRef:
+                  name: attendance-secret
+                  key: GCP_JSON
+            - name: GCP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: attendance-secret
+                  key: GCP_KEY
+            - name: MAP_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: attendance-secret
+                  key: MAP_API_KEY
+            - name: PROJECT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: attendance-secret
+                  key: PROJECT_ID
+            - name: PROJECT_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: attendance-secret
+                  key: PROJECT_NAME
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: attendance-service
+spec:
+  selector:
+    app: attendance-service
+  ports:
+    - port: 6060
+      targetPort: 6060
+  type: ClusterIP
