@@ -1,0 +1,37 @@
+# sync-service-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: sync-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5000
+      targetPort: 5000
+  selector:
+    app: sync-service
+---
+# sync-service-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sync-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sync-service
+  template:
+    metadata:
+      labels:
+        app: sync-service
+    spec:
+      containers:
+        - name: sync-service
+          image: parkjunhyeon/msa_sync_service:v1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
