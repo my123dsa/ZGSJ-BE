@@ -18,47 +18,9 @@ spec:
           imagePullPolicy: Always  # ⭐ 추가된 부분
           ports:
             - containerPort: 6060
-          env:
-            - name: AES_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: attendance-secret
-                  key: AES_KEY
-            - name: EMAIL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: attendance-secret
-                  key: EMAIL_PASSWORD
-            - name: EMAIL_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: attendance-secret
-                  key: EMAIL_USERNAME
-            - name: GCP_JSON
-              valueFrom:
-                secretKeyRef:
-                  name: attendance-secret
-                  key: GCP_JSON
-            - name: GCP_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: attendance-secret
-                  key: GCP_KEY
-            - name: MAP_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: attendance-secret
-                  key: MAP_API_KEY
-            - name: PROJECT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: attendance-secret
-                  key: PROJECT_ID
-            - name: PROJECT_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: attendance-secret
-                  key: PROJECT_NAME
+          envFrom:
+            - secretRef:
+                name: attendance-secret
 ---
 apiVersion: v1
 kind: Service
