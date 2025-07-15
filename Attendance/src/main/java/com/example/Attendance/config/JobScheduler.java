@@ -1,5 +1,6 @@
 package com.example.Attendance.config;
 
+import com.example.Attendance.annotation.DistributedScheduled;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.*;
@@ -26,8 +27,9 @@ public class JobScheduler {
     private final JobLauncher jobLauncher;
     private final Job attendanceJob; //job이 하나라 자동으로 해당 job주입
 
-    @Scheduled(cron = "0 * * * * *")  // 매일 새벽 4시 실행
-//@Scheduled(cron = "0 0 4 * * *")
+    @DistributedScheduled(lockKey ="spring:job:with:db")
+//    @Scheduled(cron = "0 * * * * *")  // 매일 새벽 4시 실행
+    @Scheduled(cron = "0 0 4 * * *")
     public void runJob() {
         String dateParam = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
