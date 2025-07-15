@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.data.redis.core.script.DefaultRedisScript;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -40,8 +39,6 @@ class RedisServiceTest {
     private JWTUtil jwtUtil;
     @Mock
     private JWEUtil jweUtil;
-    @Mock
-    private DefaultRedisScript<Long> redisScript;
 
     @InjectMocks
     private RedisTokenService redisTokenService;
@@ -51,7 +48,7 @@ class RedisServiceTest {
         when(redisTemplate.opsForValue()).thenReturn(valueOps);
 
         // RedisTokenService를 직접 생성해서 valueOps 설정
-        redisTokenService = new RedisTokenService(redisTemplate, jwtUtil,jweUtil,redisScript);
+        redisTokenService = new RedisTokenService(redisTemplate, jwtUtil,cryptoUtil,jweUtil);
     }
 
     @Test
